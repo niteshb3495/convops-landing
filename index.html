@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConvOps - Manage Your Infrastructure From Your Phone</title>
+    <title>ConvOps - Your Infrastructure, in WhatsApp
     <style>
         * {
             margin: 0;
@@ -181,12 +181,19 @@
 <body>
     <header>
         <div class="container">
-            <h1>Manage Your Infrastructure From Your Phone</h1>
-            <p class="subhead">Stop logging into dashboards. Just text your infrastructure like you'd text a coworker.</p>
+            <h1>Your Infrastructure, in WhatsApp</h1>
+            <p class="subhead">Stop logging into dashboards. Ask questions, get evidence, approve actions—all from your phone.</p>
         </div>
     </header>
 
     <div class="hero container">
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 30px; text-align: center; border: 2px dashed #667eea;">
+            <p style="font-size: 1.2em; margin-bottom: 15px;"><strong>📹 See ConvOps In Action</strong></p>
+            <p style="color: #666; margin-bottom: 20px;">5-minute demo: Real WhatsApp conversation managing AWS infrastructure</p>
+            <a href="mailto:nitz@convops.io?subject=Demo Video Request" style="display: inline-block; background: #667eea; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Request Demo Video</a>
+            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">(Available within 24 hours)</p>
+        </div>
+        
         <p><strong>Last week at 10 PM, my ECS service needed a restart.</strong></p>
         <p>I didn't open my laptop.</p>
         
@@ -279,16 +286,26 @@
         <h2>Pricing</h2>
         
         <div class="pricing-box">
-            <h3>Setup Service</h3>
-            <div class="price">$2,500 - $5,000</div>
-            <p>We build it for you. 3-day setup, 30-day support, full training.</p>
+            <h3>Setup Service (Live Now)</h3>
             
-            <p style="margin-top: 30px;"><strong>Includes:</strong></p>
+            <p style="margin-bottom: 30px;">We build it for you. 3-day setup, 30-day support, full training.</p>
+            
+            <div style="text-align: left; max-width: 600px; margin: 20px auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+                <p><strong>Starter: $2,500</strong></p>
+                <p style="font-size: 0.9em; margin: 10px 0 20px 0;">1-2 services, 1 region, WhatsApp, 3-day setup</p>
+                
+                <p><strong>Standard: $3,500</strong></p>
+                <p style="font-size: 0.9em; margin: 10px 0 20px 0;">5-10 services, multi-region, Slack + WhatsApp, custom workflows</p>
+                
+                <p><strong>Enterprise: $5,000</strong></p>
+                <p style="font-size: 0.9em; margin: 10px 0;">15+ services, multi-cloud, team training, 60-day support</p>
+            </div>
+            
+            <p style="margin-top: 30px;"><strong>All tiers include:</strong></p>
             <ul style="text-align: left; max-width: 400px; margin: 20px auto;">
-                <li>WhatsApp or Slack integration</li>
-                <li>AWS/GCP connection</li>
-                <li>Custom workflows for your stack</li>
-                <li>Approval guardrails</li>
+                <li>Approval workflow setup</li>
+                <li>AWS IAM role configuration</li>
+                <li>Full audit logging</li>
                 <li>Team training session</li>
             </ul>
             
@@ -311,6 +328,27 @@
         <p style="margin-top: 30px;"><span class="xmark">❌</span> Enterprises with 50+ person SRE teams (you need Datadog)</p>
         <p><span class="xmark">❌</span> Companies requiring 99.999% SLA guarantees</p>
         <p><span class="xmark">❌</span> Anyone uncomfortable with AI + infrastructure</p>
+    </section>
+
+    <section class="container">
+        <h2>Security & Control</h2>
+        
+        <p style="margin-bottom: 20px;"><strong>ConvOps is an AI agent with cloud access. Here's how we keep it safe:</strong></p>
+        
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Read-only by default</strong> - You explicitly grant write permissions per resource</p>
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Approval workflow</strong> - ALL destructive actions require human confirmation</p>
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Full audit log</strong> - Every command, approval, and execution logged with timestamps</p>
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>AWS IAM roles</strong> - No long-lived credentials stored. Session tokens only.</p>
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Encrypted everything</strong> - TLS in transit, AES-256 at rest</p>
+            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Self-hosted option</strong> - Runs in YOUR AWS account (your cloud, your data)</p>
+        </div>
+        
+        <p style="margin-top: 20px;"><strong>What We DON'T Do:</strong></p>
+        <p style="margin: 10px 0;"><span class="xmark">❌</span> No autonomous actions without approval</p>
+        <p style="margin: 10px 0;"><span class="xmark">❌</span> No training on your data</p>
+        <p style="margin: 10px 0;"><span class="xmark">❌</span> No credential storage (IAM roles only)</p>
+        <p style="margin: 10px 0;"><span class="xmark">❌</span> No third-party data sharing</p>
     </section>
 
     <section class="container">
@@ -339,9 +377,26 @@
         <p style="margin-top: 20px; opacity: 0.9;">or email: nitz@convops.io</p>
     </section>
 
+    <section class="container" style="text-align: center;">
+        <h2>Built By DevOps Engineers, For DevOps Engineers</h2>
+        
+        <p style="margin: 20px 0;"><strong>Nitesh Bhavsar</strong> • Berlin, Germany<br>
+        10+ years in DevOps • 5,000+ LinkedIn followers</p>
+        
+        <p style="margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <strong>Tested on Real Infrastructure:</strong><br>
+            6 EC2 • 8 RDS • 30 ECS • 90 Lambda<br>
+            0 downtime incidents
+        </p>
+        
+        <p style="margin: 20px 0;">
+            <a href="https://linkedin.com/in/niteshbhavsar" style="color: #667eea; text-decoration: none;">Connect on LinkedIn →</a>
+        </p>
+    </section>
+
     <footer>
         <p><strong>ConvOps</strong></p>
-        <p>Built by DevOps engineers who were tired of being on-call with a laptop.</p>
+        <p>Conversational DevOps for the WhatsApp generation.</p>
         <p style="margin-top: 20px; font-size: 0.9em;">© 2026 ConvOps. All rights reserved.</p>
     </footer>
 </body>
