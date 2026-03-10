@@ -10,394 +10,658 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
             color: #333;
             background: #f8f9fa;
         }
-        
+
         .container {
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
         }
-        
+
+        /* ── HEADER ── */
         header {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 70px 24px 80px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
+
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.3em;
+            font-size: 2.6em;
+            margin-bottom: 0.4em;
             font-weight: 700;
         }
-        
+
         .subhead {
-            font-size: 1.3em;
-            opacity: 0.95;
+            font-size: 1.2em;
+            opacity: 0.92;
             font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        
-        .hero {
+
+        /* ── HERO CARD ── */
+        .hero-card {
+            max-width: 860px;
+            margin: -48px auto 40px;
+            padding: 0 24px;
+        }
+
+        .hero-inner {
             background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
             padding: 40px;
-            margin: -40px 20px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .chat-example {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
+
+        .demo-box {
+            background: #f4f3ff;
+            padding: 28px;
+            border-radius: 10px;
+            margin-bottom: 32px;
+            text-align: center;
+            border: 2px dashed #667eea;
+        }
+
+        .demo-box p:first-child {
+            font-size: 1.15em;
+            margin-bottom: 10px;
+        }
+
+        .demo-box .sub {
+            color: #666;
+            margin-bottom: 18px;
             font-size: 0.95em;
         }
-        
-        .message {
-            margin: 10px 0;
-            padding: 8px;
-        }
-        
-        .user {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        .agent {
-            color: #764ba2;
-            font-weight: 600;
-        }
-        
-        section {
-            background: white;
-            margin: 40px 20px;
-            padding: 40px;
-            border-radius: 8px;
-        }
-        
-        h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
-        
-        .problem-box {
-            background: #fff3cd;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
-            margin: 20px 0;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .feature {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .checkmark {
-            color: #28a745;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .xmark {
-            color: #dc3545;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .pricing-box {
+
+        .btn-primary {
+            display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .price {
-            font-size: 3em;
-            font-weight: 700;
-            margin: 20px 0;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 15px 40px;
+            padding: 12px 32px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
+            font-size: 1em;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .demo-box .note {
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .hero-intro {
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        /* WhatsApp-style chat */
+        .chat-window {
+            background: #e5ddd5;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .chat-header {
+            background: #075e54;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 16px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: -16px -16px 12px -16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            background: #128c7e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 6px 0;
+            font-size: 0.93em;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .bubble .time {
+            font-size: 0.72em;
+            opacity: 0.6;
+            margin-top: 2px;
+            text-align: right;
+        }
+
+        .bubble.agent {
+            background: white;
+            border-radius: 0 8px 8px 8px;
+            margin-right: auto;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .bubble.user {
+            background: #dcf8c6;
+            border-radius: 8px 0 8px 8px;
+            margin-left: auto;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .hero-tagline {
             font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* ── SECTIONS ── */
+        .section {
+            max-width: 860px;
+            margin: 0 auto 32px;
+            padding: 0 24px;
+        }
+
+        .section-inner {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.7em;
+        }
+
+        .problem-box {
+            background: #fff8e1;
+            padding: 20px 24px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 16px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
             margin: 20px 0;
-            transition: transform 0.2s;
         }
-        
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .testimonial {
-            font-style: italic;
+
+        .step {
+            background: #f4f3ff;
+            border-radius: 10px;
             padding: 20px;
-            border-left: 4px solid #667eea;
-            background: #f8f9fa;
+        }
+
+        .step-num {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 6px;
+        }
+
+        .step h3 {
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+
+        .step p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
             margin: 20px 0;
         }
-        
+
+        .feature {
+            padding: 14px 16px;
+            background: #f4f3ff;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        .checkmark { color: #28a745; font-weight: bold; margin-right: 6px; }
+        .xmark     { color: #dc3545; font-weight: bold; margin-right: 6px; }
+
+        /* ── PRICING ── */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .pricing-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .pricing-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .pricing-card.featured {
+            border-color: #667eea;
+            background: #f4f3ff;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .pricing-card .amount {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0 6px;
+        }
+
+        .pricing-card .desc {
+            font-size: 0.85em;
+            color: #666;
+            min-height: 48px;
+        }
+
+        .pricing-includes {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-top: 20px;
+        }
+
+        .pricing-includes ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .pricing-includes li::before {
+            content: "✅ ";
+        }
+
+        .saas-note {
+            text-align: center;
+            margin-top: 24px;
+            padding: 16px;
+            background: #f4f3ff;
+            border-radius: 8px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        /* ── CTA SECTION ── */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cta-section h2 {
+            color: white;
+        }
+
+        .btn-white {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 14px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05em;
+            margin: 20px 0 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        /* ── SECURITY ── */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .security-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.95em;
+        }
+
+        /* ── FAQ ── */
+        .faq-item {
+            border-bottom: 1px solid #e9ecef;
+            padding: 18px 0;
+        }
+
+        .faq-item:last-child { border-bottom: none; }
+
+        .faq-item strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        /* ── FOOTER ── */
         footer {
             text-align: center;
-            padding: 40px 20px;
-            color: #666;
+            padding: 40px 24px;
+            color: #888;
+            font-size: 0.9em;
         }
-        
-        ul {
-            margin: 20px 0;
-            padding-left: 20px;
+
+        footer strong {
+            color: #444;
+            font-size: 1.1em;
         }
-        
-        li {
-            margin: 10px 0;
-        }
+
+        ul { padding-left: 20px; }
+        li { margin: 8px 0; }
+        p  { margin-bottom: 12px; }
+        p:last-child { margin-bottom: 0; }
     </style>
 </head>
 <body>
+
+    <!-- HEADER -->
     <header>
         <div class="container">
             <h1>Your Infrastructure, in WhatsApp</h1>
-            <p class="subhead">Stop logging into dashboards. Ask questions, get evidence, approve actions—all from your phone.</p>
+            <p class="subhead">Stop logging into dashboards. Ask questions, get evidence, approve actions — all from your phone.</p>
         </div>
     </header>
 
-    <div class="hero container">
-        <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 30px; text-align: center; border: 2px dashed #667eea;">
-            <p style="font-size: 1.2em; margin-bottom: 15px;"><strong>📹 See ConvOps In Action</strong></p>
-            <p style="color: #666; margin-bottom: 20px;">5-minute demo: Real WhatsApp conversation managing AWS infrastructure</p>
-            <a href="mailto:nitz@convops.io?subject=Demo Video Request" style="display: inline-block; background: #667eea; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Request Demo Video</a>
-            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">(Available within 24 hours)</p>
-        </div>
-        
-        <p><strong>Last week at 10 PM, my ECS service needed a restart.</strong></p>
-        <p>I didn't open my laptop.</p>
-        
-        <div class="chat-example">
-            <div class="message">
-                <span class="agent">Agent:</span> translate-service running slow. Want me to check?
+    <!-- HERO -->
+    <div class="hero-card">
+        <div class="hero-inner">
+            <div class="demo-box">
+                <p><strong>📹 See ConvOps In Action</strong></p>
+                <p class="sub">5-minute demo: Real WhatsApp conversation managing AWS infrastructure</p>
+                <a href="mailto:nitz@convops.io?subject=Demo Video Request" class="btn-primary">Request Demo Video</a>
+                <p class="note">Available within 24 hours</p>
             </div>
-            <div class="message">
-                <span class="user">Me:</span> What's the load?
-            </div>
-            <div class="message">
-                <span class="agent">Agent:</span> CPU 2.5%, Memory 26%, 1/1 tasks healthy. Very light.
-            </div>
-            <div class="message">
-                <span class="user">Me:</span> Show me restart plan
-            </div>
-            <div class="message">
-                <span class="agent">Agent:</span> Force new deployment → drain old task → start fresh → zero downtime. Approve?
-            </div>
-            <div class="message">
-                <span class="user">Me:</span> Yes
-            </div>
-            <div class="message">
-                <span class="agent">Agent:</span> Deploying... Done. Service healthy.
-            </div>
-        </div>
 
-        <p><strong>That's ConvOps. Infrastructure that speaks human.</strong></p>
+            <p class="hero-intro"><strong>Last week at 10 PM, my ECS service needed a restart.</strong><br>I didn't open my laptop.</p>
+
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-avatar">🤖</div>
+                    <span>ConvOps Agent</span>
+                </div>
+                <div class="bubble agent">
+                    translate-service running slow. Want me to check?
+                    <div class="time">22:07</div>
+                </div>
+                <div class="bubble user">
+                    What's the load?
+                    <div class="time">22:08</div>
+                </div>
+                <div class="bubble agent">
+                    CPU 2.5%, Memory 26%, 1/1 tasks healthy. Very light.
+                    <div class="time">22:08</div>
+                </div>
+                <div class="bubble user">
+                    Show me restart plan
+                    <div class="time">22:09</div>
+                </div>
+                <div class="bubble agent">
+                    Force new deployment → drain old task → start fresh → zero downtime. Approve?
+                    <div class="time">22:09</div>
+                </div>
+                <div class="bubble user">
+                    Yes
+                    <div class="time">22:09</div>
+                </div>
+                <div class="bubble agent">
+                    ✅ Deploying... Done. Service healthy.
+                    <div class="time">22:11</div>
+                </div>
+            </div>
+
+            <p class="hero-tagline">That's ConvOps. Infrastructure that speaks human.</p>
+        </div>
     </div>
 
-    <section class="container">
-        <h2>The Problem</h2>
-        <div class="problem-box">
-            <p>You're paying <strong>$2,000-3,000/month</strong> for:</p>
-            <ul>
-                <li>Dashboards you hate opening</li>
-                <li>Alerts you ignore (because there are 500 of them)</li>
-                <li>Tools that need a laptop</li>
-            </ul>
-            <p>Meanwhile, production breaks at 2 AM and you're fumbling with 5 browser tabs.</p>
-        </div>
-    </section>
-
-    <section class="container">
-        <h2>How ConvOps Works</h2>
-        
-        <p><strong>1. Connect Your Cloud</strong><br>
-        AWS, GCP, or Azure. Read-only by default.</p>
-        
-        <p><strong>2. Choose Your Channel</strong><br>
-        WhatsApp, Slack, or Telegram. Where you already are.</p>
-        
-        <p><strong>3. Just Ask</strong></p>
-        <ul>
-            <li>"What's the status?"</li>
-            <li>"What's slow today?"</li>
-            <li>"Restart the trainer service"</li>
-            <li>"What's our cost this month?"</li>
-        </ul>
-        
-        <p>AI figures it out. Shows you evidence. <strong>Asks permission.</strong> Executes. Reports back.</p>
-    </section>
-
-    <section class="container">
-        <h2>What You Can Do</h2>
-        <div class="feature-grid">
-            <div class="feature">
-                <span class="checkmark">✅</span> Check infrastructure health
-            </div>
-            <div class="feature">
-                <span class="checkmark">✅</span> Investigate incidents
-            </div>
-            <div class="feature">
-                <span class="checkmark">✅</span> Restart services safely
-            </div>
-            <div class="feature">
-                <span class="checkmark">✅</span> Get cost alerts
-            </div>
-            <div class="feature">
-                <span class="checkmark">✅</span> Monitor deployments
-            </div>
-            <div class="feature">
-                <span class="checkmark">✅</span> Check autoscaling
+    <!-- THE PROBLEM -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>The Problem</h2>
+            <div class="problem-box">
+                <p>You're paying <strong>$2,000–3,000/month</strong> for:</p>
+                <ul>
+                    <li>Dashboards you hate opening</li>
+                    <li>Alerts you ignore (because there are 500 of them)</li>
+                    <li>Tools that need a laptop</li>
+                </ul>
+                <p style="margin-top:12px">Meanwhile, production breaks at 2 AM and you're fumbling with 5 browser tabs.</p>
             </div>
         </div>
-        <p><strong>All from your phone. No VPN. No dashboards.</strong></p>
-    </section>
+    </div>
 
-    <section class="container">
-        <h2>Pricing</h2>
-        
-        <div class="pricing-box">
-            <h3>Setup Service (Live Now)</h3>
-            
-            <p style="margin-bottom: 30px;">We build it for you. 3-day setup, 30-day support, full training.</p>
-            
-            <div style="text-align: left; max-width: 600px; margin: 20px auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
-                <p><strong>Starter: $2,500</strong></p>
-                <p style="font-size: 0.9em; margin: 10px 0 20px 0;">1-2 services, 1 region, WhatsApp, 3-day setup</p>
-                
-                <p><strong>Standard: $3,500</strong></p>
-                <p style="font-size: 0.9em; margin: 10px 0 20px 0;">5-10 services, multi-region, Slack + WhatsApp, custom workflows</p>
-                
-                <p><strong>Enterprise: $5,000</strong></p>
-                <p style="font-size: 0.9em; margin: 10px 0;">15+ services, multi-cloud, team training, 60-day support</p>
+    <!-- HOW IT WORKS -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>How ConvOps Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Connect Your Cloud</h3>
+                    <p>AWS, GCP, or Azure. Read-only by default.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Choose Your Channel</h3>
+                    <p>WhatsApp, Slack, or Telegram. Where you already are.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Just Ask</h3>
+                    <p>"What's slow?" · "Restart service" · "What's our cost?"</p>
+                </div>
             </div>
-            
-            <p style="margin-top: 30px;"><strong>All tiers include:</strong></p>
-            <ul style="text-align: left; max-width: 400px; margin: 20px auto;">
-                <li>Approval workflow setup</li>
-                <li>AWS IAM role configuration</li>
-                <li>Full audit logging</li>
-                <li>Team training session</li>
-            </ul>
-            
-            <a href="mailto:nitz@convops.io" class="cta-button">Book a Demo</a>
+            <p>AI figures it out. Shows you evidence. <strong>Asks permission.</strong> Executes. Reports back.</p>
         </div>
-        
-        <p style="text-align: center; margin-top: 30px; color: #666;">
-            <em>Self-service platform coming Q3 2026: $299/month (connect your AWS yourself, no human setup needed)</em>
-        </p>
-    </section>
+    </div>
 
-    <section class="container">
-        <h2>Who This Is For</h2>
-        
-        <p><span class="checkmark">✅</span> DevOps teams tired of being laptop-bound</p>
-        <p><span class="checkmark">✅</span> Startups with small on-call rotations</p>
-        <p><span class="checkmark">✅</span> Agencies managing multiple client infrastructures</p>
-        <p><span class="checkmark">✅</span> Remote-first companies needing mobile ops</p>
-        
-        <p style="margin-top: 30px;"><span class="xmark">❌</span> Enterprises with 50+ person SRE teams (you need Datadog)</p>
-        <p><span class="xmark">❌</span> Companies requiring 99.999% SLA guarantees</p>
-        <p><span class="xmark">❌</span> Anyone uncomfortable with AI + infrastructure</p>
-    </section>
-
-    <section class="container">
-        <h2>Security & Control</h2>
-        
-        <p style="margin-bottom: 20px;"><strong>ConvOps is an AI agent with cloud access. Here's how we keep it safe:</strong></p>
-        
-        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 20px 0;">
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Read-only by default</strong> - You explicitly grant write permissions per resource</p>
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Approval workflow</strong> - ALL destructive actions require human confirmation</p>
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Full audit log</strong> - Every command, approval, and execution logged with timestamps</p>
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>AWS IAM roles</strong> - No long-lived credentials stored. Session tokens only.</p>
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Encrypted everything</strong> - TLS in transit, AES-256 at rest</p>
-            <p style="margin: 10px 0;"><span class="checkmark">✅</span> <strong>Self-hosted option</strong> - Runs in YOUR AWS account (your cloud, your data)</p>
+    <!-- WHAT YOU CAN DO -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>What You Can Do</h2>
+            <div class="feature-grid">
+                <div class="feature"><span class="checkmark">✅</span> Check infrastructure health</div>
+                <div class="feature"><span class="checkmark">✅</span> Investigate incidents</div>
+                <div class="feature"><span class="checkmark">✅</span> Restart services safely</div>
+                <div class="feature"><span class="checkmark">✅</span> Get cost alerts</div>
+                <div class="feature"><span class="checkmark">✅</span> Monitor deployments</div>
+                <div class="feature"><span class="checkmark">✅</span> Check autoscaling</div>
+            </div>
+            <p><strong>All from your phone. No VPN. No dashboards.</strong></p>
         </div>
-        
-        <p style="margin-top: 20px;"><strong>What We DON'T Do:</strong></p>
-        <p style="margin: 10px 0;"><span class="xmark">❌</span> No autonomous actions without approval</p>
-        <p style="margin: 10px 0;"><span class="xmark">❌</span> No training on your data</p>
-        <p style="margin: 10px 0;"><span class="xmark">❌</span> No credential storage (IAM roles only)</p>
-        <p style="margin: 10px 0;"><span class="xmark">❌</span> No third-party data sharing</p>
-    </section>
+    </div>
 
-    <section class="container">
-        <h2>FAQ</h2>
-        
-        <p><strong>Is this safe?</strong><br>
-        AI asks permission before any write actions. Everything is logged. Read-only mode available.</p>
-        
-        <p><strong>What if I don't trust AI?</strong><br>
-        You shouldn't. That's why it shows evidence and waits for approval.</p>
-        
-        <p><strong>How much does it cost to run?</strong><br>
-        AWS/Anthropic API costs ~$50-200/month depending on usage.</p>
-        
-        <p><strong>Can it break my infrastructure?</strong><br>
-        Only if you approve it. Same risk as you running commands manually.</p>
-        
-        <p><strong>What clouds do you support?</strong><br>
-        AWS now. GCP and Azure by Q2 2026.</p>
-    </section>
+    <!-- PRICING -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>Pricing</h2>
+            <p style="margin-bottom:24px">We build it for you. 3-day setup, 30-day support, full training.</p>
 
-    <section class="container" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-        <h2 style="color: white;">Ready to Stop Opening Dashboards?</h2>
-        <p style="font-size: 1.2em; margin: 20px 0;">Book a 30-minute demo. See it work on your infrastructure.</p>
-        <a href="mailto:nitz@convops.io?subject=ConvOps Demo Request" class="cta-button">Get Started</a>
-        <p style="margin-top: 20px; opacity: 0.9;">or email: nitz@convops.io</p>
-    </section>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="amount">$2,500</div>
+                    <p class="desc">1–2 services · 1 region · WhatsApp · 3-day setup</p>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Standard</h3>
+                    <div class="amount">$3,500</div>
+                    <p class="desc">5–10 services · multi-region · Slack + WhatsApp · custom workflows</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="amount">$5,000</div>
+                    <p class="desc">15+ services · multi-cloud · team training · 60-day support</p>
+                </div>
+            </div>
 
-    <section class="container" style="text-align: center;">
-        <h2>Built By DevOps Engineers, For DevOps Engineers</h2>
-        
-        <p style="margin: 20px 0;"><strong>Nitesh Bhavsar</strong> • Berlin, Germany<br>
-        10+ years in DevOps • 5,000+ LinkedIn followers</p>
-        
-        <p style="margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-            <strong>Tested on Real Infrastructure:</strong><br>
-            6 EC2 • 8 RDS • 30 ECS • 90 Lambda<br>
-            0 downtime incidents
-        </p>
-        
-        <p style="margin: 20px 0;">
-            <a href="https://linkedin.com/in/niteshbhavsar" style="color: #667eea; text-decoration: none;">Connect on LinkedIn →</a>
-        </p>
-    </section>
+            <div class="pricing-includes">
+                <strong>All tiers include:</strong>
+                <ul>
+                    <li>Approval workflow setup</li>
+                    <li>AWS IAM role configuration</li>
+                    <li>Full audit logging</li>
+                    <li>Team training session</li>
+                </ul>
+            </div>
 
+            <div class="saas-note">
+                🚀 Self-service platform coming Q3 2026: <strong>$299/month</strong> — connect your AWS yourself, no human setup needed
+            </div>
+
+            <div style="text-align:center; margin-top:28px">
+                <a href="mailto:nitz@convops.io" class="btn-primary">Book a Demo</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHO IT'S FOR -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>Who This Is For</h2>
+            <p><span class="checkmark">✅</span> DevOps teams tired of being laptop-bound</p>
+            <p><span class="checkmark">✅</span> Startups with small on-call rotations</p>
+            <p><span class="checkmark">✅</span> Agencies managing multiple client infrastructures</p>
+            <p><span class="checkmark">✅</span> Remote-first companies needing mobile ops</p>
+            <div style="margin-top:20px">
+                <p><span class="xmark">❌</span> Enterprises with 50+ person SRE teams (you need Datadog)</p>
+                <p><span class="xmark">❌</span> Companies requiring 99.999% SLA guarantees</p>
+                <p><span class="xmark">❌</span> Anyone uncomfortable with AI + infrastructure</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>Security & Control</h2>
+            <p style="margin-bottom:20px"><strong>ConvOps is an AI agent with cloud access. Here's how we keep it safe:</strong></p>
+            <div class="security-grid">
+                <div class="security-item"><span class="checkmark">✅</span> <strong>Read-only by default</strong> — you explicitly grant write permissions per resource</div>
+                <div class="security-item"><span class="checkmark">✅</span> <strong>Approval workflow</strong> — ALL destructive actions require human confirmation</div>
+                <div class="security-item"><span class="checkmark">✅</span> <strong>Full audit log</strong> — every command, approval, and execution logged</div>
+                <div class="security-item"><span class="checkmark">✅</span> <strong>AWS IAM roles</strong> — no long-lived credentials. Session tokens only.</div>
+                <div class="security-item"><span class="checkmark">✅</span> <strong>Encrypted everything</strong> — TLS in transit, AES-256 at rest</div>
+                <div class="security-item"><span class="checkmark">✅</span> <strong>Self-hosted</strong> — runs in YOUR AWS account. Your cloud, your data.</div>
+            </div>
+            <div style="margin-top:20px">
+                <p><span class="xmark">❌</span> No autonomous actions without approval</p>
+                <p><span class="xmark">❌</span> No training on your data</p>
+                <p><span class="xmark">❌</span> No credential storage (IAM roles only)</p>
+                <p><span class="xmark">❌</span> No third-party data sharing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>FAQ</h2>
+            <div class="faq-item">
+                <strong>Is this safe?</strong>
+                AI asks permission before any write actions. Everything is logged. Read-only mode available.
+            </div>
+            <div class="faq-item">
+                <strong>What if I don't trust AI?</strong>
+                You shouldn't. That's why it shows evidence and waits for approval.
+            </div>
+            <div class="faq-item">
+                <strong>How much does it cost to run?</strong>
+                AWS/Anthropic API costs ~$50–200/month depending on usage.
+            </div>
+            <div class="faq-item">
+                <strong>Can it break my infrastructure?</strong>
+                Only if you approve it. Same risk as you running commands manually.
+            </div>
+            <div class="faq-item">
+                <strong>What clouds do you support?</strong>
+                AWS now. GCP and Azure by Q2 2026.
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section">
+        <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
+            <h2>Ready to Stop Opening Dashboards?</h2>
+            <p style="font-size:1.15em; margin:16px 0; opacity:0.95">Book a 30-minute demo. See it work on your infrastructure.</p>
+            <a href="mailto:nitz@convops.io?subject=ConvOps Demo Request" class="btn-white">Get Started</a>
+            <p style="opacity:0.85; font-size:0.95em">or email: nitz@convops.io</p>
+        </div>
+    </div>
+
+    <!-- BUILT BY -->
+    <div class="section">
+        <div class="section-inner" style="text-align:center">
+            <h2>Built By DevOps Engineers, For DevOps Engineers</h2>
+            <p style="margin:16px 0"><strong>Nitesh Bhavsar</strong> · Berlin, Germany<br>10+ years in DevOps · 5,000+ LinkedIn followers</p>
+            <div style="margin:24px 0; padding:20px; background:#f8f9fa; border-radius:8px; display:inline-block">
+                <strong>Tested on Real Infrastructure:</strong><br>
+                6 EC2 &nbsp;·&nbsp; 8 RDS &nbsp;·&nbsp; 30 ECS &nbsp;·&nbsp; 90 Lambda<br>
+                0 downtime incidents
+            </div>
+            <p style="margin-top:20px">
+                <a href="https://linkedin.com/in/niteshbhavsar" style="color:#667eea; text-decoration:none; font-weight:600">Connect on LinkedIn →</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
-        <p><strong>ConvOps</strong></p>
-        <p>Conversational DevOps for the WhatsApp generation.</p>
-        <p style="margin-top: 20px; font-size: 0.9em;">© 2026 ConvOps. All rights reserved.</p>
+        <strong>ConvOps</strong>
+        <p style="margin-top:6px">Conversational DevOps for the WhatsApp generation.</p>
+        <p style="margin-top:16px">© 2026 ConvOps. All rights reserved.</p>
     </footer>
+
 </body>
 </html>
