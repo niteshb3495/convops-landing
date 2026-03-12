@@ -211,8 +211,8 @@
             </div>
             <div class="step">
                 <div class="step-num">4</div>
-                <h3>Complete Onboarding</h3>
-                <p>Paste Role ARN, add your number. ~1 min.</p>
+                <h3>Onboard with Us</h3>
+                <p>Email Role ARN — we handle the rest.</p>
             </div>
         </div>
         <div class="info-box">
@@ -490,12 +490,14 @@ aws cloudwatch put-metric-alarm \
 <!-- STEP 4 -->
 <div class="section">
     <div class="section-inner">
-        <h2>Step 4 — Complete Onboarding on ConvOps</h2>
+        <h2>Step 4 — Complete Onboarding with ConvOps</h2>
+        <p>Onboarding is currently handled directly with the ConvOps team — no self-serve signup yet.</p>
         <ol class="numbered-list">
-            <li>Go to <strong>convops.io</strong> and register your account</li>
-            <li>Paste the <strong>IAM Role ARN</strong> from your CloudFormation stack outputs</li>
-            <li>Add your <strong>WhatsApp number</strong> to receive alerts</li>
-            <li>Trigger a test alarm manually — you should receive a WhatsApp message within 30 seconds</li>
+            <li>Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> to start onboarding — we'll send you your <strong>ExternalId</strong> and <strong>API key</strong></li>
+            <li>Deploy the CloudFormation template from Step 1 using those values</li>
+            <li>Reply with the <strong>IAM Role ARN</strong> from your stack outputs — we'll confirm the SNS subscription on our end</li>
+            <li>Send us your <strong>WhatsApp number</strong> — we'll register it to receive alerts</li>
+            <li>We'll trigger a test alert together to confirm end-to-end delivery</li>
         </ol>
         <div class="note-box">
             <strong>Having trouble?</strong> Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your CloudFormation stack name and we'll help you debug within a few hours.
