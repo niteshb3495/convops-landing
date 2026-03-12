@@ -23,7 +23,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-
         .back-link {
             display: inline-block;
             color: rgba(255,255,255,0.8);
@@ -32,22 +31,11 @@
             margin-bottom: 24px;
         }
         .back-link:hover { color: white; }
-
         h1 { font-size: 2.6em; margin-bottom: 0.4em; font-weight: 700; }
         .subhead { font-size: 1.2em; opacity: 0.92; font-weight: 300; max-width: 600px; margin: 0 auto; }
 
-        /* ── SECTIONS ── */
-        .section { max-width: 860px; margin: 0 auto 32px; padding: 0 24px; }
-        .section-inner { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        h2 { color: #667eea; margin-bottom: 20px; font-size: 1.7em; }
-        h3 { color: #444; margin: 24px 0 10px; font-size: 1.15em; }
-
         /* ── OVERVIEW CARD ── */
-        .overview-card {
-            max-width: 860px;
-            margin: -48px auto 40px;
-            padding: 0 24px;
-        }
+        .overview-card { max-width: 860px; margin: -48px auto 40px; padding: 0 24px; }
         .overview-inner {
             background: white;
             border-radius: 12px;
@@ -55,30 +43,18 @@
             padding: 40px;
         }
 
-        /* ── STEPS ── */
+        /* ── SECTIONS ── */
+        .section { max-width: 860px; margin: 0 auto 32px; padding: 0 24px; }
+        .section-inner { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        h2 { color: #667eea; margin-bottom: 20px; font-size: 1.7em; }
+        h3 { color: #444; margin: 24px 0 10px; font-size: 1.1em; }
+
+        /* ── STEP CARDS ── */
         .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 20px 0; }
         .step { background: #f4f3ff; border-radius: 10px; padding: 20px; }
         .step-num { font-size: 1.5em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
         .step h3 { font-size: 1em; margin: 0 0 6px; color: #333; }
         .step p { font-size: 0.9em; color: #555; margin: 0; }
-
-        /* ── NUMBERED STEPS ── */
-        .step-block {
-            border-left: 4px solid #667eea;
-            padding: 20px 24px;
-            margin: 24px 0;
-            background: #f4f3ff;
-            border-radius: 0 10px 10px 0;
-        }
-        .step-block .step-label {
-            font-size: 0.8em;
-            font-weight: 700;
-            color: #667eea;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 6px;
-        }
-        .step-block h3 { margin: 0 0 10px; color: #333; font-size: 1.1em; }
 
         /* ── CODE BLOCKS ── */
         pre {
@@ -88,7 +64,7 @@
             padding: 20px 24px;
             overflow-x: auto;
             font-size: 0.85em;
-            line-height: 1.6;
+            line-height: 1.7;
             margin: 16px 0;
         }
         code {
@@ -103,35 +79,53 @@
         /* ── TABLES ── */
         table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95em; }
         th { background: #f4f3ff; color: #667eea; font-weight: 600; text-align: left; padding: 10px 14px; border-bottom: 2px solid #e0deff; }
-        td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
+        td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
         tr:last-child td { border-bottom: none; }
+
+        /* ── BULLET LISTS ── */
+        .bullet-list { list-style: none; padding: 0; margin: 12px 0; }
+        .bullet-list li {
+            padding: 7px 0 7px 24px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.97em;
+        }
+        .bullet-list li:last-child { border-bottom: none; }
+        .bullet-list li::before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 6px;
+        }
+
+        .check-list { list-style: none; padding: 0; margin: 12px 0; }
+        .check-list li { padding: 6px 0; font-size: 0.97em; }
+        .check-list li::before { content: "✅ "; }
+
+        .cross-list { list-style: none; padding: 0; margin: 12px 0; }
+        .cross-list li { padding: 6px 0; font-size: 0.97em; }
+        .cross-list li::before { content: "❌ "; }
+
+        .numbered-list { padding-left: 22px; margin: 12px 0; }
+        .numbered-list li { padding: 8px 0; font-size: 0.97em; border-bottom: 1px solid #f5f5f5; }
+        .numbered-list li:last-child { border-bottom: none; }
 
         /* ── CAN/CANNOT ── */
         .can-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-        .can-box { border-radius: 10px; padding: 20px; }
+        .can-box { border-radius: 10px; padding: 20px 24px; }
         .can-box.yes { background: #f0fff4; border: 1px solid #b7ebc8; }
         .can-box.no  { background: #fff5f5; border: 1px solid #ffc9c9; }
         .can-box h3  { margin: 0 0 12px; font-size: 1em; }
         .can-box h3.yes-h { color: #28a745; }
         .can-box h3.no-h  { color: #dc3545; }
-        .can-box p   { font-size: 0.9em; margin: 6px 0; }
+        .can-box ul { list-style: none; padding: 0; }
+        .can-box ul li { padding: 5px 0; font-size: 0.92em; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .can-box ul li:last-child { border-bottom: none; }
+        .can-box.yes ul li::before { content: "✅ "; }
+        .can-box.no  ul li::before { content: "❌ "; }
 
-        /* ── BADGE ── */
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            border-radius: 20px;
-            padding: 3px 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        .badge.green { background: #28a745; }
-        .badge.orange { background: #fd7e14; }
-
-        /* ── NOTE BOX ── */
+        /* ── NOTE / INFO BOXES ── */
         .note-box {
             background: #fff8e1;
             border-left: 4px solid #ffc107;
@@ -149,9 +143,16 @@
             font-size: 0.95em;
         }
 
-        /* ── SECURITY ── */
+        /* ── SECURITY GRID ── */
         .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
-        .security-item { background: #f8f9fa; border-radius: 8px; padding: 16px; font-size: 0.95em; }
+        .security-item { background: #f8f9fa; border-radius: 8px; padding: 16px; font-size: 0.92em; }
+        .security-item strong { display: block; margin-bottom: 4px; color: #444; }
+
+        /* ── TROUBLESHOOTING ── */
+        .faq-item { border-bottom: 1px solid #e9ecef; padding: 18px 0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-item strong { display: block; margin-bottom: 6px; color: #444; font-size: 1em; }
+        .faq-item p { color: #555; font-size: 0.95em; margin: 0; }
 
         /* ── CTA ── */
         .cta-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -164,105 +165,108 @@
         }
         .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
 
-        .checkmark { color: #28a745; font-weight: bold; margin-right: 6px; }
-        .xmark     { color: #dc3545; font-weight: bold; margin-right: 6px; }
-
         /* ── FOOTER ── */
         footer { text-align: center; padding: 40px 24px; color: #888; font-size: 0.9em; }
         footer strong { color: #444; font-size: 1.1em; }
 
-        ul { padding-left: 20px; }
-        li { margin: 8px 0; }
-        p  { margin-bottom: 12px; }
+        p { margin-bottom: 12px; }
         p:last-child { margin-bottom: 0; }
 
         @media (max-width: 600px) {
             h1 { font-size: 1.9em; }
             .can-grid { grid-template-columns: 1fr; }
-            pre { font-size: 0.78em; }
+            pre { font-size: 0.76em; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <div class="container">
-            <a href="/" class="back-link">← Back to convops.io</a>
-            <h1>Customer Onboarding Guide</h1>
-            <p class="subhead">Everything you need to connect your AWS infrastructure to ConvOps. Takes about 5 minutes.</p>
-        </div>
-    </header>
+<!-- HEADER -->
+<header>
+    <div class="container">
+        <a href="/" class="back-link">← Back to convops.io</a>
+        <h1>Customer Onboarding Guide</h1>
+        <p class="subhead">Connect your AWS infrastructure to ConvOps in about 5 minutes. No code changes required.</p>
+    </div>
+</header>
 
-    <!-- OVERVIEW -->
-    <div class="overview-card">
-        <div class="overview-inner">
-            <div class="steps">
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <h3>Deploy CloudFormation</h3>
-                    <p>IAM Role + SNS Topic. ~2 min.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <h3>Tag Your Resources</h3>
-                    <p>Mark what ConvOps can act on. ~1 min.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <h3>Connect CloudWatch</h3>
-                    <p>Point alarms at the SNS topic. ~1 min.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">4</div>
-                    <h3>Complete Onboarding</h3>
-                    <p>Paste Role ARN, add your number. ~1 min.</p>
-                </div>
+<!-- OVERVIEW -->
+<div class="overview-card">
+    <div class="overview-inner">
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Deploy CloudFormation</h3>
+                <p>IAM Role + SNS Topic. ~2 min.</p>
             </div>
-            <div class="info-box">
-                <strong>No Lambda functions. No code changes. No agents in your account.</strong><br>
-                ConvOps only needs an IAM role (to read and act) and an SNS topic (to receive alarm notifications).
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Tag Your Resources</h3>
+                <p>Mark what ConvOps can act on. ~1 min.</p>
             </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Connect CloudWatch</h3>
+                <p>Point alarms at the SNS topic. ~1 min.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <h3>Complete Onboarding</h3>
+                <p>Paste Role ARN, add your number. ~1 min.</p>
+            </div>
+        </div>
+        <div class="info-box">
+            <strong>No Lambda functions. No code changes. No agents in your account.</strong><br>
+            ConvOps only needs two resources:
+            <ul class="bullet-list" style="margin-top:8px">
+                <li>An <strong>IAM Role</strong> — so ConvOps can read metrics and take approved actions</li>
+                <li>An <strong>SNS Topic</strong> — so CloudWatch alarms can notify ConvOps</li>
+            </ul>
         </div>
     </div>
+</div>
 
-    <!-- WHAT YOU'LL DEPLOY -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>What You'll Deploy</h2>
-            <table>
-                <thead>
-                    <tr><th>Resource</th><th>Type</th><th>Purpose</th></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>ConvOpsAccessRole</code></td>
-                        <td>IAM Role</td>
-                        <td>Allows ConvOps to read your metrics and take approved actions</td>
-                    </tr>
-                    <tr>
-                        <td><code>ConvOpsAlertTopic</code></td>
-                        <td>SNS Topic</td>
-                        <td>Receives CloudWatch alarms and forwards them to ConvOps</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>That's it. No changes to existing resources.</p>
-        </div>
+<!-- WHAT YOU'LL DEPLOY -->
+<div class="section">
+    <div class="section-inner">
+        <h2>What You'll Deploy</h2>
+        <table>
+            <thead>
+                <tr><th>Resource</th><th>Type</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ConvOpsAccessRole</code></td>
+                    <td>IAM Role</td>
+                    <td>Allows ConvOps to read your metrics and take approved actions on tagged resources</td>
+                </tr>
+                <tr>
+                    <td><code>ConvOpsAlertTopic</code></td>
+                    <td>SNS Topic</td>
+                    <td>Receives CloudWatch alarms and forwards them securely to ConvOps</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>That's it — no changes to existing resources, no code, no agents.</p>
     </div>
+</div>
 
-    <!-- STEP 1: CLOUDFORMATION -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Step 1 — Deploy the CloudFormation Template</h2>
-            <p>This creates the IAM Role and SNS Topic ConvOps needs. Replace the placeholder values with the credentials provided during onboarding.</p>
+<!-- STEP 1 -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Step 1 — Deploy the CloudFormation Template</h2>
+        <p>This creates the IAM Role and SNS Topic ConvOps needs.</p>
 
-            <div class="note-box">
-                <strong>Before deploying:</strong> Replace <code>YOUR_CUSTOMER_EXTERNAL_ID</code> and <code>YOUR_CONVOPS_API_KEY</code> with the values provided by ConvOps.
-            </div>
+        <div class="note-box">
+            <strong>Before you deploy, replace these two values:</strong>
+            <ul class="bullet-list" style="margin-top:8px">
+                <li><code>YOUR_CUSTOMER_EXTERNAL_ID</code> — provided by ConvOps during onboarding</li>
+                <li><code>YOUR_CONVOPS_API_KEY</code> — provided by ConvOps during onboarding</li>
+            </ul>
+        </div>
 
-            <h3>The Template</h3>
-            <pre><code>AWSTemplateFormatVersion: '2010-09-09'
+        <h3>The CloudFormation Template</h3>
+        <pre><code>AWSTemplateFormatVersion: '2010-09-09'
 Description: ConvOps Infrastructure Setup — IAM Role + Alert Topic
 
 Parameters:
@@ -279,7 +283,7 @@ Parameters:
 
 Resources:
 
-  # SNS Topic: receives CloudWatch alarms → forwards to ConvOps
+  # SNS Topic: receives CloudWatch alarms and forwards to ConvOps
   ConvOpsAlertTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -386,8 +390,8 @@ Outputs:
     Description: Use this as your CloudWatch alarm action
     Value: !Ref ConvOpsAlertTopic</code></pre>
 
-            <h3>Deploy via AWS CLI</h3>
-            <pre><code>aws cloudformation deploy \
+        <h3>Deploy via AWS CLI</h3>
+        <pre><code>aws cloudformation deploy \
   --template-file customer-convops-setup.yaml \
   --stack-name convops-setup \
   --capabilities CAPABILITY_NAMED_IAM \
@@ -395,63 +399,68 @@ Outputs:
     CustomerExternalId=YOUR_EXTERNAL_ID \
     ConvOpsApiKey=YOUR_API_KEY</code></pre>
 
-            <h3>Or via AWS Console</h3>
-            <p>CloudFormation → Create Stack → Upload template file → Follow wizard.</p>
+        <h3>Or via AWS Console</h3>
+        <ol class="numbered-list">
+            <li>Go to <strong>CloudFormation → Create Stack → Upload template file</strong></li>
+            <li>Paste your <code>CustomerExternalId</code> and <code>ConvOpsApiKey</code> when prompted</li>
+            <li>Check <strong>I acknowledge that AWS CloudFormation might create IAM resources with custom names</strong></li>
+            <li>Click <strong>Create Stack</strong> and wait ~60 seconds</li>
+        </ol>
 
-            <div class="info-box">
-                After deployment, note the <strong>RoleArn</strong> and <strong>SNSTopicArn</strong> from the stack Outputs tab. You'll need them in Steps 3 and 4.
-            </div>
+        <div class="info-box">
+            After deployment, open the stack's <strong>Outputs</strong> tab. Copy the <strong>RoleArn</strong> and <strong>SNSTopicArn</strong> — you'll need them in Steps 3 and 4.
         </div>
     </div>
+</div>
 
-    <!-- STEP 2: TAGGING -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Step 2 — Tag Resources You Want ConvOps to Manage</h2>
-            <p>ConvOps will <strong>only take actions</strong> on resources you explicitly tag. Investigation (reading metrics and logs) works on all resources — actions only on tagged ones.</p>
+<!-- STEP 2 -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Step 2 — Tag Resources You Want ConvOps to Manage</h2>
+        <p>ConvOps uses tags to determine what it can act on. <strong>Investigation (reading metrics and logs) works on all resources</strong> — but actions like restarts and reboots are restricted to tagged resources only.</p>
 
-            <table>
-                <thead><tr><th>Tag Key</th><th>Tag Value</th></tr></thead>
-                <tbody>
-                    <tr><td><code>ConvOpsManaged</code></td><td><code>true</code></td></tr>
-                </tbody>
-            </table>
+        <table>
+            <thead><tr><th>Tag Key</th><th>Tag Value</th></tr></thead>
+            <tbody>
+                <tr><td><code>ConvOpsManaged</code></td><td><code>true</code></td></tr>
+            </tbody>
+        </table>
 
-            <h3>Tag an ECS service</h3>
-            <pre><code>aws ecs tag-resource \
+        <div class="note-box">
+            Resources <strong>without</strong> this tag: ConvOps can investigate but cannot take any action. This is by design — you control exactly what's actionable.
+        </div>
+
+        <h3>Tag an ECS service</h3>
+        <pre><code>aws ecs tag-resource \
   --resource-arn arn:aws:ecs:eu-central-1:YOUR_ACCOUNT:service/my-cluster/my-service \
   --tags key=ConvOpsManaged,value=true</code></pre>
 
-            <h3>Tag an EC2 instance</h3>
-            <pre><code>aws ec2 create-tags \
+        <h3>Tag an EC2 instance</h3>
+        <pre><code>aws ec2 create-tags \
   --resources i-0abc123def456 \
   --tags Key=ConvOpsManaged,Value=true</code></pre>
 
-            <h3>Tag an RDS instance</h3>
-            <pre><code>aws rds add-tags-to-resource \
+        <h3>Tag an RDS instance</h3>
+        <pre><code>aws rds add-tags-to-resource \
   --resource-name arn:aws:rds:eu-central-1:YOUR_ACCOUNT:db:my-db \
   --tags Key=ConvOpsManaged,Value=true</code></pre>
-
-            <div class="note-box">
-                <strong>Resources without this tag:</strong> ConvOps can investigate (read logs/metrics) but cannot take any action. You stay in full control of what's actionable.
-            </div>
-        </div>
     </div>
+</div>
 
-    <!-- STEP 3: CLOUDWATCH -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Step 3 — Connect Your CloudWatch Alarms</h2>
-            <p>Add the <code>ConvOpsAlerts</code> SNS topic as an alarm action on any alarm you want ConvOps to monitor.</p>
+<!-- STEP 3 -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Step 3 — Connect Your CloudWatch Alarms</h2>
+        <p>Add the <code>ConvOpsAlerts</code> SNS topic as an action on any alarm you want ConvOps to monitor.</p>
 
-            <h3>Via AWS CLI</h3>
-            <pre><code># Get your SNS topic ARN from CloudFormation outputs
+        <h3>Via AWS CLI</h3>
+        <pre><code># Get your SNS Topic ARN from the CloudFormation stack outputs
 SNS_ARN=$(aws cloudformation describe-stacks \
   --stack-name convops-setup \
   --query "Stacks[0].Outputs[?OutputKey=='SNSTopicArn'].OutputValue" \
   --output text)
 
-# Add to an existing alarm
+# Add ConvOps as an alarm action on an existing alarm
 aws cloudwatch put-metric-alarm \
   --alarm-name "prod-api-cpu-high" \
   --alarm-actions $SNS_ARN \
@@ -463,132 +472,161 @@ aws cloudwatch put-metric-alarm \
   --comparison-operator GreaterThanThreshold \
   --evaluation-periods 2</code></pre>
 
-            <h3>Via AWS Console</h3>
-            <p>CloudWatch → Alarms → select your alarm → Edit → <strong>Notification</strong> section → Add action → SNS topic → select <code>ConvOpsAlerts</code> → Save.</p>
+        <h3>Via AWS Console</h3>
+        <ol class="numbered-list">
+            <li>Go to <strong>CloudWatch → Alarms</strong></li>
+            <li>Select an alarm → click <strong>Edit</strong></li>
+            <li>Under <strong>Notification</strong>, click <strong>Add notification</strong></li>
+            <li>Select <strong>In alarm</strong> state → SNS topic → choose <code>ConvOpsAlerts</code></li>
+            <li>Click <strong>Update alarm</strong></li>
+        </ol>
 
-            <div class="info-box">
-                <strong>Confirm the SNS subscription:</strong> After deployment, check SNS → Subscriptions in the console. The HTTPS subscription to ConvOps should show <strong>Confirmed</strong>. If it shows Pending, contact <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a>.
+        <div class="info-box">
+            <strong>Confirm the SNS subscription:</strong> Go to <strong>SNS → Subscriptions</strong> in the console. The HTTPS subscription should show <strong>Confirmed</strong>. If it shows Pending, email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your Topic ARN.
+        </div>
+    </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Step 4 — Complete Onboarding on ConvOps</h2>
+        <ol class="numbered-list">
+            <li>Go to <strong>convops.io</strong> and register your account</li>
+            <li>Paste the <strong>IAM Role ARN</strong> from your CloudFormation stack outputs</li>
+            <li>Add your <strong>WhatsApp number</strong> to receive alerts</li>
+            <li>Trigger a test alarm manually — you should receive a WhatsApp message within 30 seconds</li>
+        </ol>
+        <div class="note-box">
+            <strong>Having trouble?</strong> Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your CloudFormation stack name and we'll help you debug within a few hours.
+        </div>
+    </div>
+</div>
+
+<!-- CAN / CANNOT -->
+<div class="section">
+    <div class="section-inner">
+        <h2>What ConvOps Can and Cannot Do</h2>
+        <div class="can-grid">
+            <div class="can-box yes">
+                <h3 class="yes-h">ConvOps CAN</h3>
+                <ul>
+                    <li>Read CloudWatch metrics and alarms (all resources)</li>
+                    <li>Read CloudWatch Logs (all log groups)</li>
+                    <li>Describe EC2, ECS, RDS, Lambda resources</li>
+                    <li>Restart ECS services <em>(tagged only)</em></li>
+                    <li>Reboot EC2 instances <em>(tagged only)</em></li>
+                    <li>Reboot RDS instances <em>(tagged only)</em></li>
+                    <li>Run specific SSM documents <em>(tagged only)</em></li>
+                </ul>
+            </div>
+            <div class="can-box no">
+                <h3 class="no-h">ConvOps CANNOT</h3>
+                <ul>
+                    <li>Terminate or delete any resource</li>
+                    <li>Modify security groups, VPCs, or IAM policies</li>
+                    <li>Access S3, Secrets Manager, or any secrets</li>
+                    <li>Take any action without your WhatsApp confirmation</li>
+                    <li>Act on resources without the <code>ConvOpsManaged: true</code> tag</li>
+                </ul>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- STEP 4: ONBOARDING -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Step 4 — Complete Onboarding on ConvOps</h2>
-            <ol style="padding-left: 20px; margin-top: 12px;">
-                <li style="margin-bottom: 12px">Go to <strong>convops.io</strong> → register your account</li>
-                <li style="margin-bottom: 12px">Paste the <strong>IAM Role ARN</strong> from CloudFormation stack outputs</li>
-                <li style="margin-bottom: 12px">Add your <strong>WhatsApp number</strong> to receive alerts</li>
-                <li style="margin-bottom: 12px">Test: manually trigger a CloudWatch alarm → you should receive a WhatsApp message within 30 seconds</li>
-            </ol>
-
-            <div class="note-box">
-                <strong>Having trouble?</strong> Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your CloudFormation stack name and we'll help you debug within a few hours.
+<!-- SECURITY -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Security Notes</h2>
+        <div class="security-grid">
+            <div class="security-item">
+                <strong>ExternalId</strong>
+                Your unique ExternalId prevents other AWS accounts from assuming your ConvOps role (confused deputy protection). Treat it like a password — keep it secret.
+            </div>
+            <div class="security-item">
+                <strong>Revoke access instantly</strong>
+                Delete the <code>ConvOpsAccessRole</code> IAM role at any time. ConvOps immediately and permanently loses all access to your account.
+            </div>
+            <div class="security-item">
+                <strong>Confirmation gate</strong>
+                Every action (restart, reboot, scale) requires an explicit "YES" reply on WhatsApp before execution. Nothing happens automatically.
+            </div>
+            <div class="security-item">
+                <strong>Data handling</strong>
+                ConvOps never stores your logs or metrics. They're fetched on-demand, used for analysis, then discarded. Operational metadata (alarm names, action history) is retained for 90 days.
+            </div>
+            <div class="security-item">
+                <strong>Session tokens only</strong>
+                No long-lived credentials stored. All cross-account operations use STS session tokens with a 15-minute TTL.
+            </div>
+            <div class="security-item">
+                <strong>Audit trail</strong>
+                Every action is logged with timestamp, phone number, and outcome. Full log available on request.
             </div>
         </div>
     </div>
+</div>
 
-    <!-- WHAT CONVOPS CAN/CANNOT DO -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>What ConvOps Can and Cannot Do</h2>
-            <div class="can-grid">
-                <div class="can-box yes">
-                    <h3 class="yes-h">✅ ConvOps CAN</h3>
-                    <p>Read CloudWatch metrics and alarms</p>
-                    <p>Read CloudWatch Logs</p>
-                    <p>Describe EC2, ECS, RDS, Lambda resources</p>
-                    <p>Restart ECS services <em>(tagged only)</em></p>
-                    <p>Reboot EC2 instances <em>(tagged only)</em></p>
-                    <p>Reboot RDS instances <em>(tagged only)</em></p>
-                    <p>Run specific SSM documents <em>(tagged only)</em></p>
-                </div>
-                <div class="can-box no">
-                    <h3 class="no-h">❌ ConvOps CANNOT</h3>
-                    <p>Terminate or delete any resource</p>
-                    <p>Modify security groups, VPCs, or IAM policies</p>
-                    <p>Access S3, Secrets Manager, or any secrets</p>
-                    <p>Act without your explicit WhatsApp confirmation</p>
-                    <p>Act on resources without <code>ConvOpsManaged: true</code></p>
-                </div>
-            </div>
+<!-- TROUBLESHOOTING -->
+<div class="section">
+    <div class="section-inner">
+        <h2>Troubleshooting</h2>
+
+        <div class="faq-item">
+            <strong>Not receiving alerts?</strong>
+            <p>Check the following:</p>
+            <ul class="bullet-list" style="margin-top:8px">
+                <li>SNS subscription shows <strong>Confirmed</strong> (not Pending) in SNS → Subscriptions console</li>
+                <li>CloudWatch alarm has the SNS topic set as the <strong>alarm action</strong> (not just the OK action)</li>
+                <li>The alarm is actually in <strong>ALARM</strong> state — test by lowering the threshold temporarily</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <strong>Action failed with permission denied?</strong>
+            <p>Check the following:</p>
+            <ul class="bullet-list" style="margin-top:8px">
+                <li>The target resource has the <code>ConvOpsManaged: true</code> tag applied</li>
+                <li>The tag key and value match exactly (case-sensitive)</li>
+                <li>The resource is in the same account as the deployed IAM role</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <strong>CloudFormation deploy failed?</strong>
+            <p>Ensure your deploying IAM user/role has these permissions:</p>
+            <ul class="bullet-list" style="margin-top:8px">
+                <li><code>cloudformation:*</code></li>
+                <li><code>iam:CreateRole</code>, <code>iam:PutRolePolicy</code>, <code>iam:AttachRolePolicy</code></li>
+                <li><code>sns:CreateTopic</code>, <code>sns:SetTopicAttributes</code></li>
+            </ul>
+            <p style="margin-top:8px">Also ensure you included the <code>--capabilities CAPABILITY_NAMED_IAM</code> flag.</p>
+        </div>
+
+        <div class="faq-item">
+            <strong>SNS subscription stuck on Pending?</strong>
+            <p>ConvOps needs to confirm the HTTPS subscription from our side. Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your SNS Topic ARN and we'll confirm it manually within a few hours.</p>
         </div>
     </div>
+</div>
 
-    <!-- SECURITY -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Security Notes</h2>
-            <div class="security-grid">
-                <div class="security-item">
-                    <strong>ExternalId</strong><br>
-                    Your unique ExternalId prevents other AWS accounts from assuming your ConvOps role. Treat it like a password — keep it secret.
-                </div>
-                <div class="security-item">
-                    <strong>Revoke access instantly</strong><br>
-                    Delete the <code>ConvOpsAccessRole</code> IAM role at any time. ConvOps immediately and permanently loses all access.
-                </div>
-                <div class="security-item">
-                    <strong>Confirmation gate</strong><br>
-                    Every action requires an explicit "YES" reply on WhatsApp before execution. Nothing happens automatically.
-                </div>
-                <div class="security-item">
-                    <strong>Data handling</strong><br>
-                    ConvOps never stores your logs or metrics. Fetched on-demand, used, discarded. Operational metadata (alarm names, action history) retained 90 days.
-                </div>
-                <div class="security-item">
-                    <strong>Audit trail</strong><br>
-                    All actions logged with timestamp, phone number, and outcome. Available on request.
-                </div>
-                <div class="security-item">
-                    <strong>Session tokens only</strong><br>
-                    No long-lived credentials stored. ConvOps uses STS session tokens (15-min TTL) for all cross-account operations.
-                </div>
-            </div>
-        </div>
+<!-- CTA -->
+<div class="section">
+    <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
+        <h2>Need Help?</h2>
+        <p style="font-size:1.15em; margin:16px 0; opacity:0.95">We'll walk you through setup on a 15-minute call.</p>
+        <a href="mailto:nitz@convops.io?subject=ConvOps Onboarding Help" class="btn-white">Email Us</a>
+        <p style="opacity:0.85; font-size:0.95em">nitz@convops.io · Usually responds within a few hours</p>
     </div>
+</div>
 
-    <!-- TROUBLESHOOTING -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Troubleshooting</h2>
-            <div style="border-bottom: 1px solid #e9ecef; padding: 18px 0;">
-                <strong>Not receiving alerts?</strong>
-                <p style="margin-top:6px; color:#555;">Check that the SNS subscription shows <strong>Confirmed</strong> (not Pending) in the SNS console. Also verify your CloudWatch alarm has the SNS topic set as the alarm action — not just the OK action.</p>
-            </div>
-            <div style="border-bottom: 1px solid #e9ecef; padding: 18px 0;">
-                <strong>Action failed with permission denied?</strong>
-                <p style="margin-top:6px; color:#555;">Verify the target resource has the <code>ConvOpsManaged: true</code> tag. IAM actions are blocked on untagged resources by design.</p>
-            </div>
-            <div style="border-bottom: 1px solid #e9ecef; padding: 18px 0;">
-                <strong>CloudFormation deploy failed?</strong>
-                <p style="margin-top:6px; color:#555;">Ensure your IAM user/role has <code>cloudformation:*</code>, <code>iam:CreateRole</code>, <code>iam:PutRolePolicy</code>, and <code>sns:CreateTopic</code> permissions. Add the <code>--capabilities CAPABILITY_NAMED_IAM</code> flag to the CLI command.</p>
-            </div>
-            <div style="padding: 18px 0;">
-                <strong>SNS subscription stuck on Pending?</strong>
-                <p style="margin-top:6px; color:#555;">ConvOps needs to confirm the HTTPS subscription from our side. Email <a href="mailto:nitz@convops.io" style="color:#667eea">nitz@convops.io</a> with your SNS Topic ARN and we'll confirm it manually within a few hours.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- CTA -->
-    <div class="section">
-        <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
-            <h2>Need Help?</h2>
-            <p style="font-size:1.15em; margin:16px 0; opacity:0.95">We'll walk you through setup on a 15-minute call.</p>
-            <a href="mailto:nitz@convops.io?subject=ConvOps Onboarding Help" class="btn-white">Email Us</a>
-            <p style="opacity:0.85; font-size:0.95em">nitz@convops.io · Usually responds within a few hours</p>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <strong>ConvOps</strong>
-        <p style="margin-top:6px">Conversational DevOps for the WhatsApp generation.</p>
-        <p style="margin-top:16px"><a href="/" style="color:#667eea; text-decoration:none">← Back to convops.io</a></p>
-        <p style="margin-top:16px">© 2026 ConvOps. All rights reserved.</p>
-    </footer>
+<!-- FOOTER -->
+<footer>
+    <strong>ConvOps</strong>
+    <p style="margin-top:6px">Conversational DevOps for the WhatsApp generation.</p>
+    <p style="margin-top:16px"><a href="/" style="color:#667eea; text-decoration:none">← Back to convops.io</a></p>
+    <p style="margin-top:16px">© 2026 ConvOps. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
