@@ -177,6 +177,114 @@
             margin-top: 8px;
         }
 
+
+        /* ── CHANNEL TABS ── */
+        .channel-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .channel-tab {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            font-size: 0.88em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .channel-tab.active-wa {
+            background: #075e54;
+            border-color: #075e54;
+            color: white;
+        }
+        .channel-tab.active-slack {
+            background: #4A154B;
+            border-color: #4A154B;
+            color: white;
+        }
+        .chat-demo { display: none; }
+        .chat-demo.active { display: block; }
+
+        /* Slack-style chat */
+        .slack-window {
+            background: #1a1d21;
+            border-radius: 12px;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+        }
+        .slack-header {
+            background: #4A154B;
+            color: white;
+            padding: 10px 16px;
+            font-size: 0.9em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .slack-header .channel-name { opacity: 0.95; }
+        .slack-body {
+            padding: 16px;
+        }
+        .slack-msg {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0;
+            align-items: flex-start;
+        }
+        .slack-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+        .slack-avatar.bot { background: #4A154B; }
+        .slack-avatar.user { background: #1164A3; }
+        .slack-msg-content { flex: 1; }
+        .slack-sender {
+            font-size: 0.82em;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .slack-sender.bot-name { color: #E8A0D8; }
+        .slack-sender.user-name { color: #6FB3F2; }
+        .slack-sender .ts {
+            font-weight: 400;
+            opacity: 0.5;
+            font-size: 0.9em;
+            margin-left: 6px;
+        }
+        .slack-text {
+            color: #D1D2D3;
+            font-size: 0.92em;
+            line-height: 1.5;
+        }
+        .slack-text .action-btn {
+            display: inline-block;
+            background: #4A154B;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+        .slack-divider {
+            border: none;
+            border-top: 1px solid #2d2f33;
+            margin: 4px 0;
+        }
+
         /* ── SECTIONS ── */
         .section {
             max-width: 860px;
@@ -425,38 +533,97 @@
 
             <p class="hero-intro"><strong>Last week at 10 PM, my ECS service needed a restart.</strong><br>I didn't open my laptop.</p>
 
-            <div class="chat-window">
-                <div class="chat-header">
-                    <div class="chat-avatar">🤖</div>
-                    <span>ConvOps Agent</span>
+            <!-- Channel toggle tabs -->
+            <div class="channel-tabs">
+                <button class="channel-tab active-wa" onclick="showChannel('wa')">💬 WhatsApp</button>
+                <button class="channel-tab" onclick="showChannel('slack')" id="tab-slack"># Slack</button>
+            </div>
+
+            <!-- WhatsApp demo -->
+            <div class="chat-demo active" id="demo-wa">
+                <div class="chat-window">
+                    <div class="chat-header">
+                        <div class="chat-avatar">🤖</div>
+                        <span>ConvOps Agent</span>
+                    </div>
+                    <div class="bubble agent">
+                        translate-service running slow. Want me to check?
+                        <div class="time">22:07</div>
+                    </div>
+                    <div class="bubble user">
+                        What's the load?
+                        <div class="time">22:08</div>
+                    </div>
+                    <div class="bubble agent">
+                        CPU 2.5%, Memory 26%, 1/1 tasks healthy. Very light.
+                        <div class="time">22:08</div>
+                    </div>
+                    <div class="bubble user">
+                        Show me restart plan
+                        <div class="time">22:09</div>
+                    </div>
+                    <div class="bubble agent">
+                        Force new deployment → drain old task → start fresh → zero downtime. Approve?
+                        <div class="time">22:09</div>
+                    </div>
+                    <div class="bubble user">
+                        Yes
+                        <div class="time">22:09</div>
+                    </div>
+                    <div class="bubble agent">
+                        ✅ Deploying... Done. Service healthy.
+                        <div class="time">22:11</div>
+                    </div>
                 </div>
-                <div class="bubble agent">
-                    translate-service running slow. Want me to check?
-                    <div class="time">22:07</div>
-                </div>
-                <div class="bubble user">
-                    What's the load?
-                    <div class="time">22:08</div>
-                </div>
-                <div class="bubble agent">
-                    CPU 2.5%, Memory 26%, 1/1 tasks healthy. Very light.
-                    <div class="time">22:08</div>
-                </div>
-                <div class="bubble user">
-                    Show me restart plan
-                    <div class="time">22:09</div>
-                </div>
-                <div class="bubble agent">
-                    Force new deployment → drain old task → start fresh → zero downtime. Approve?
-                    <div class="time">22:09</div>
-                </div>
-                <div class="bubble user">
-                    Yes
-                    <div class="time">22:09</div>
-                </div>
-                <div class="bubble agent">
-                    ✅ Deploying... Done. Service healthy.
-                    <div class="time">22:11</div>
+            </div>
+
+            <!-- Slack demo -->
+            <div class="chat-demo" id="demo-slack">
+                <div class="slack-window">
+                    <div class="slack-header">
+                        <span>#</span>
+                        <span class="channel-name">infra-alerts</span>
+                    </div>
+                    <div class="slack-body">
+                        <div class="slack-msg">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:07 PM</span></div>
+                                <div class="slack-text">🔴 <strong>translate-service</strong> running slow on <strong>prod-cluster</strong>. Want me to check?</div>
+                            </div>
+                        </div>
+                        <hr class="slack-divider">
+                        <div class="slack-msg">
+                            <div class="slack-avatar user">N</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender user-name">nitz<span class="ts">10:08 PM</span></div>
+                                <div class="slack-text">What's the load?</div>
+                            </div>
+                        </div>
+                        <div class="slack-msg">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:08 PM</span></div>
+                                <div class="slack-text">CPU 2.5% · Memory 26% · 1/1 tasks healthy. Very light. Likely a cold connection pool.<br><br>
+                                <span class="action-btn">↩ Restart Service</span></div>
+                            </div>
+                        </div>
+                        <hr class="slack-divider">
+                        <div class="slack-msg">
+                            <div class="slack-avatar user">N</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender user-name">nitz<span class="ts">10:09 PM</span></div>
+                                <div class="slack-text">Yes, restart it</div>
+                            </div>
+                        </div>
+                        <div class="slack-msg">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:11 PM</span></div>
+                                <div class="slack-text">✅ Done. New deployment live. Service healthy.</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -663,5 +830,20 @@
         <p style="margin-top:16px">© 2026 ConvOps. All rights reserved.</p>
     </footer>
 
+
+    <script>
+    function showChannel(ch) {
+        document.querySelectorAll('.chat-demo').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.channel-tab').forEach(el => {
+            el.classList.remove('active-wa', 'active-slack');
+        });
+        document.getElementById('demo-' + ch).classList.add('active');
+        if (ch === 'wa') {
+            document.querySelector('[onclick="showChannel(\'wa\')"]').classList.add('active-wa');
+        } else {
+            document.querySelector('[onclick="showChannel(\'slack\')"]').classList.add('active-slack');
+        }
+    }
+    </script>
 </body>
 </html>
