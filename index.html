@@ -531,7 +531,7 @@
                 <p class="note">Available within 24 hours</p>
             </div>
 
-            <p class="hero-intro"><strong>Last week at 10 PM, my ECS service needed a restart.</strong><br>I didn't open my laptop.</p>
+            <p class="hero-intro"><strong>2 AM. CloudWatch fires. CPU at 96%.</strong><br>I didn't open my laptop.</p>
 
             <!-- Channel toggle tabs -->
             <div class="channel-tabs">
@@ -547,32 +547,38 @@
                         <span>ConvOps Agent</span>
                     </div>
                     <div class="bubble agent">
-                        translate-service running slow. Want me to check?
-                        <div class="time">22:07</div>
+                        🔴 <strong>ALERT: api-service · CPUUtilization 96%</strong><br><br>
+                        Has been above 90% for 10 minutes.<br><br>
+                        Investigated:<br>
+                        • CPU: 96% · Memory: 61% · Tasks: 2/2<br>
+                        • Traffic: 3× normal (deploy 12 min ago)<br>
+                        • No OOM errors in logs<br><br>
+                        Likely cause: traffic spike post-deploy, not a leak.<br><br>
+                        Recommended actions:<br>
+                        1️⃣ Scale out — add 2 tasks (fastest fix)<br>
+                        2️⃣ Restart service — force fresh deployment<br>
+                        3️⃣ Do nothing — monitor for 5 more min<br><br>
+                        Reply 1, 2, or 3.
+                        <div class="time">02:14</div>
                     </div>
                     <div class="bubble user">
-                        What's the load?
-                        <div class="time">22:08</div>
+                        1
+                        <div class="time">02:15</div>
                     </div>
                     <div class="bubble agent">
-                        CPU 2.5%, Memory 26%, 1/1 tasks healthy. Very light.
-                        <div class="time">22:08</div>
+                        ⚠️ Confirm: scale api-service from 2 → 4 tasks on prod-cluster?<br><br>
+                        Reply YES to confirm or NO to cancel. (expires in 5 min)
+                        <div class="time">02:15</div>
                     </div>
                     <div class="bubble user">
-                        Show me restart plan
-                        <div class="time">22:09</div>
+                        YES
+                        <div class="time">02:15</div>
                     </div>
                     <div class="bubble agent">
-                        Force new deployment → drain old task → start fresh → zero downtime. Approve?
-                        <div class="time">22:09</div>
-                    </div>
-                    <div class="bubble user">
-                        Yes
-                        <div class="time">22:09</div>
-                    </div>
-                    <div class="bubble agent">
-                        ✅ Deploying... Done. Service healthy.
-                        <div class="time">22:11</div>
+                        ✅ Scaling out. 2 new tasks deploying now.<br><br>
+                        CPU: 96% → 71% → 54%<br>
+                        All 4 tasks healthy. Action logged.
+                        <div class="time">02:17</div>
                     </div>
                 </div>
             </div>
@@ -588,39 +594,51 @@
                         <div class="slack-msg">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:07 PM</span></div>
-                                <div class="slack-text">🔴 <strong>translate-service</strong> running slow on <strong>prod-cluster</strong>. Want me to check?</div>
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:14 AM</span></div>
+                                <div class="slack-text">
+                                    🔴 <strong>ALERT: api-service · CPUUtilization 96%</strong><br><br>
+                                    Has been above 90% for 10 minutes.<br><br>
+                                    Investigated:<br>
+                                    • CPU: 96% · Memory: 61% · Tasks: 2/2<br>
+                                    • Traffic: 3× normal (deploy 12 min ago)<br>
+                                    • No OOM errors in logs<br><br>
+                                    Likely cause: traffic spike post-deploy, not a leak.<br><br>
+                                    <strong>Recommended:</strong><br>
+                                    <span class="action-btn">1️⃣ Scale out (+2 tasks)</span>&nbsp;
+                                    <span class="action-btn">2️⃣ Restart service</span>&nbsp;
+                                    <span class="action-btn">3️⃣ Monitor only</span>
+                                </div>
                             </div>
                         </div>
                         <hr class="slack-divider">
                         <div class="slack-msg">
                             <div class="slack-avatar user">N</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender user-name">nitz<span class="ts">10:08 PM</span></div>
-                                <div class="slack-text">What's the load?</div>
+                                <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
+                                <div class="slack-text">1</div>
                             </div>
                         </div>
                         <div class="slack-msg">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:08 PM</span></div>
-                                <div class="slack-text">CPU 2.5% · Memory 26% · 1/1 tasks healthy. Very light. Likely a cold connection pool.<br><br>
-                                <span class="action-btn">↩ Restart Service</span></div>
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:15 AM</span></div>
+                                <div class="slack-text">⚠️ Confirm: scale <strong>api-service</strong> from 2 → 4 tasks on <strong>prod-cluster</strong>?<br><br>
+                                <span class="action-btn">✅ YES — Scale out</span>&nbsp;<span class="action-btn">❌ NO — Cancel</span></div>
                             </div>
                         </div>
                         <hr class="slack-divider">
                         <div class="slack-msg">
                             <div class="slack-avatar user">N</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender user-name">nitz<span class="ts">10:09 PM</span></div>
-                                <div class="slack-text">Yes, restart it</div>
+                                <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
+                                <div class="slack-text">YES</div>
                             </div>
                         </div>
                         <div class="slack-msg">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender bot-name">ConvOps<span class="ts">10:11 PM</span></div>
-                                <div class="slack-text">✅ Done. New deployment live. Service healthy.</div>
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:17 AM</span></div>
+                                <div class="slack-text">✅ Scaling out. 2 new tasks deploying now.<br><br>CPU: 96% → 71% → 54%<br>All 4 tasks healthy. Action logged.</div>
                             </div>
                         </div>
                     </div>
