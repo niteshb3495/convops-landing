@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — ConvOps</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 24px 56px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        header h1 { font-size: 2em; font-weight: 700; margin-bottom: 0.3em; }
+        header p { font-size: 1em; opacity: 0.85; }
+
+        .container {
+            max-width: 760px;
+            margin: -40px auto 60px;
+            padding: 0 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 48px 52px;
+        }
+
+        @media (max-width: 600px) {
+            .card { padding: 28px 20px; }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.25em;
+            margin: 32px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f0eeff;
+        }
+
+        h2:first-of-type { margin-top: 0; }
+
+        p { margin-bottom: 12px; font-size: 0.97em; }
+        p:last-child { margin-bottom: 0; }
+
+        ul { padding-left: 20px; margin-bottom: 12px; }
+        li { margin: 6px 0; font-size: 0.97em; }
+
+        .updated {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 28px;
+        }
+
+        .highlight-box {
+            background: #f4f3ff;
+            border-left: 4px solid #667eea;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 0.95em;
+        }
+
+        footer-nav {
+            display: block;
+            text-align: center;
+            margin-top: 32px;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        footer-nav a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer-nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Privacy Policy</h1>
+    <p>ConvOps — Conversational Ops for Engineering Teams</p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <p class="updated">Last updated: March 2026</p>
+
+        <h2>1. Who We Are</h2>
+        <p>ConvOps ("we", "our", "us") is operated by Nitesh Bhavsar, Berlin, Germany. We provide a conversational infrastructure management platform that connects your AWS environment to messaging channels (WhatsApp, Slack).</p>
+        <p>Contact: <a href="mailto:nitz@convops.io">nitz@convops.io</a></p>
+
+        <h2>2. What Data We Collect</h2>
+        <p>We collect only what is necessary to provide the service:</p>
+        <ul>
+            <li><strong>Account information</strong> — name, email address, company name (where applicable)</li>
+            <li><strong>Messaging channel identifiers</strong> — WhatsApp phone number and/or Slack workspace ID, used solely to route alerts to you</li>
+            <li><strong>AWS account identifiers</strong> — account IDs and IAM role ARNs you provide during setup; we do not store credentials</li>
+            <li><strong>Action audit logs</strong> — timestamps, action types, approval/rejection decisions, and the IAM principal used; required for security and accountability</li>
+            <li><strong>Usage data</strong> — anonymised, aggregate metrics (e.g. number of alerts processed) to improve reliability</li>
+        </ul>
+        <p>We do <strong>not</strong> collect: long-lived AWS credentials, the content of your workloads, training data from your infrastructure, or any sensitive personal data beyond what is listed above.</p>
+
+        <h2>3. Individual / Solo Users</h2>
+        <div class="highlight-box">
+            <strong>Solo plan users</strong> connect their own personal or individual AWS account to ConvOps. The same data practices described in this policy apply equally to Solo, Team, and Enterprise users. Specifically:
+            <ul style="margin-top:10px; margin-bottom:0">
+                <li>Your AWS account is accessed exclusively via the IAM role you create — no credentials are stored by ConvOps.</li>
+                <li>Alert data and action logs are retained only as long as necessary to provide the service (or up to 12 months, whichever is shorter), unless you request earlier deletion.</li>
+                <li>Your personal contact details (e.g. WhatsApp number) are used only for delivering alerts to you and are never sold or shared with third parties.</li>
+                <li>You can request deletion of your account and all associated data at any time by emailing nitz@convops.io.</li>
+            </ul>
+        </div>
+
+        <h2>4. Legal Basis for Processing (GDPR)</h2>
+        <p>For users in the European Economic Area (EEA) and UK, we process personal data under the following legal bases:</p>
+        <ul>
+            <li><strong>Contract performance (Art. 6(1)(b) GDPR)</strong> — to provide the service you signed up for</li>
+            <li><strong>Legitimate interests (Art. 6(1)(f) GDPR)</strong> — security logging, fraud prevention, and service improvement</li>
+            <li><strong>Legal obligation (Art. 6(1)(c) GDPR)</strong> — where retention is required by applicable law</li>
+        </ul>
+
+        <h2>5. How We Use Your Data</h2>
+        <ul>
+            <li>Delivering infrastructure alerts to your chosen messaging channel</li>
+            <li>Executing approved actions in your AWS account on your behalf</li>
+            <li>Maintaining the action audit log for your own security review</li>
+            <li>Providing customer support</li>
+            <li>Sending service-related notifications (e.g. outages, security advisories)</li>
+        </ul>
+        <p>We do not use your data for advertising or sell it to third parties.</p>
+
+        <h2>6. Data Storage and Security</h2>
+        <ul>
+            <li>Data is stored in AWS (EU-West-1, Ireland) by default</li>
+            <li>All data in transit is encrypted with TLS 1.2+</li>
+            <li>All data at rest is encrypted with AES-256</li>
+            <li>AWS access uses short-lived session tokens via IAM role assumption — no long-lived credentials stored</li>
+            <li>ConvOps runs within your own AWS account; your infrastructure data does not leave your cloud environment</li>
+        </ul>
+
+        <h2>7. Data Retention</h2>
+        <p>We retain personal data for as long as your account is active or as needed to provide the service. Action audit logs are retained for up to 12 months. You may request deletion at any time; see Section 9.</p>
+
+        <h2>8. Third-Party Services</h2>
+        <p>We use a small number of sub-processors to operate the service:</p>
+        <ul>
+            <li><strong>AWS</strong> — infrastructure hosting (EEA region)</li>
+            <li><strong>WhatsApp / Meta</strong> — message delivery via the WhatsApp Business API (subject to Meta's privacy policy)</li>
+            <li><strong>Slack Technologies</strong> — message delivery via the Slack API (subject to Slack's privacy policy)</li>
+        </ul>
+        <p>No other personal data is shared with third parties.</p>
+
+        <h2>9. Your Rights</h2>
+        <p>Under GDPR and applicable law, you have the right to:</p>
+        <ul>
+            <li><strong>Access</strong> the personal data we hold about you</li>
+            <li><strong>Rectification</strong> of inaccurate data</li>
+            <li><strong>Erasure</strong> ("right to be forgotten") — we will delete your data within 30 days of request</li>
+            <li><strong>Portability</strong> — receive your data in a machine-readable format</li>
+            <li><strong>Objection</strong> to processing based on legitimate interests</li>
+            <li><strong>Restriction</strong> of processing in certain circumstances</li>
+        </ul>
+        <p>To exercise any right, email <a href="mailto:nitz@convops.io">nitz@convops.io</a>. We will respond within 30 days. You also have the right to lodge a complaint with your local data protection authority (in Germany: the Berliner Beauftragte für Datenschutz und Informationsfreiheit).</p>
+
+        <h2>10. Cookies</h2>
+        <p>Our marketing website (convops.io) does not use tracking cookies. No third-party analytics are loaded on this page.</p>
+
+        <h2>11. Changes to This Policy</h2>
+        <p>We may update this policy periodically. Material changes will be notified via email or an in-app notice at least 14 days before taking effect. The "Last updated" date at the top reflects the most recent revision.</p>
+
+        <h2>12. Contact</h2>
+        <p>Questions or requests: <a href="mailto:nitz@convops.io">nitz@convops.io</a></p>
+        <p>Nitesh Bhavsar · Berlin, Germany</p>
+    </div>
+
+    <footer-nav>
+        <a href="/">&larr; Back to ConvOps</a> &nbsp;·&nbsp; © 2026 ConvOps. All rights reserved.
+    </footer-nav>
+</div>
+
+</body>
+</html>
