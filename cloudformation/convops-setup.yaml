@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'ConvOps Setup — connects your AWS account to ConvOps monitoring'
+
+Parameters:
+  RegistrationToken:
+    Type: String
+    Description: 'Your ConvOps registration token (from convops.io/register)'
+    NoEcho: true
+  WaPhone:
+    Type: String
+    Description: 'Your WhatsApp number including country code (e.g. +4915511520510)'
+
+Resources:
+
+  ConvOpsAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ConvOpsAccessRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: 'arn:aws:iam::009001720832:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref RegistrationToken
+      Policies:
+        - PolicyName: ConvOpsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Read permissions
+              - Effect: Allow
+                Action:
+                  - cloudwatch:GetMetricData
+                  - cloudwatch:DescribeAlarms
+                  - cloudwatch:GetMetricStatistics
+                  - cloudwatch:ListMetrics
+                  - logs:FilterLogEvents
+                  - logs:GetLogEvents
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - ec2:DescribeInstances
+                  - ec2:DescribeInstanceStatus
+                  - ecs:DescribeTasks
+                  - ecs:DescribeServices
+                  - ecs:ListTasks
+                  - ecs:ListServices
+                  - rds:DescribeDBInstances
+                  - rds:DescribeEvents
+                  - lambda:ListFunctions
+                  - lambda:GetFunctionConfiguration
+                  - lambda:GetFunction
+                Resource: '*'
+              # Remediation permissions
+              - Effect: Allow
+                Action:
+                  - ecs:UpdateService
+                  - ec2:RebootInstances
+                  - rds:RebootDBInstance
+                  - lambda:InvokeFunction
+                Resource: '*'
+
+  ConvOpsAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: ConvOpsAlertTopic
+      Subscription:
+        - Protocol: https
+          Endpoint: 'https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod/ingest'
+
+  ConvOpsRegistration:
+    Type: Custom::ConvOpsRegistration
+    DependsOn:
+      - ConvOpsAccessRole
+      - ConvOpsAlertTopic
+    Properties:
+      ServiceToken: 'arn:aws:lambda:eu-central-1:009001720832:function:convops-registration'
+      RoleArn: !GetAtt ConvOpsAccessRole.Arn
+      SnsTopicArn: !Ref ConvOpsAlertTopic
+      AccountId: !Ref AWS::AccountId
+      RegistrationToken: !Ref RegistrationToken
+      WaPhone: !Ref WaPhone
+
+Outputs:
+  ConvOpsRoleArn:
+    Description: 'IAM Role ARN used by ConvOps to access your account'
+    Value: !GetAtt ConvOpsAccessRole.Arn
+  ConvOpsSnsTopicArn:
+    Description: 'SNS Topic ARN for CloudWatch Alarm notifications'
+    Value: !Ref ConvOpsAlertTopic
+  SetupStatus:
+    Description: 'Registration status'
+    Value: !GetAtt ConvOpsRegistration.Message
