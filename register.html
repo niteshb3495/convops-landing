@@ -1,79 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connect Your AWS Account — ConvOps</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      color: #333;
       background: #f8f9fa;
+      color: #333;
+      min-height: 100vh;
     }
-
-    /* ── HEADER ── */
     header {
-      text-align: center;
-      padding: 60px 24px 80px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    header h1 { font-size: 2.4em; margin-bottom: 0.4em; font-weight: 700; }
-    header p  { font-size: 1.15em; opacity: 0.9; font-weight: 300; max-width: 520px; margin: 0 auto; }
-    header a  { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9em; display: inline-block; margin-bottom: 20px; }
-    header a:hover { color: white; }
-
-    /* ── CARD ── */
-    .card-wrap  { max-width: 560px; margin: -50px auto 40px; padding: 0 20px; }
-    .card       { background: white; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,0.13); padding: 40px; }
-
-    /* ── STEPS ── */
+    header a { color: white; text-decoration: none; font-weight: 700; font-size: 1.2em; }
+    header nav a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 24px; font-size: 0.95em; }
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 60px 24px 80px;
+    }
+    .hero h1 { font-size: 2.2em; font-weight: 700; margin-bottom: 12px; }
+    .hero p { font-size: 1.1em; opacity: 0.9; max-width: 480px; margin: 0 auto; }
     .steps {
       display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 36px;
+      justify-content: center;
+      gap: 0;
+      max-width: 700px;
+      margin: -28px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
     }
     .step {
       flex: 1;
+      background: white;
+      border-radius: 10px;
+      padding: 18px 14px;
       text-align: center;
+      margin: 0 6px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
     .step-num {
       width: 32px; height: 32px;
-      border-radius: 50%;
-      background: #f4f3ff;
-      border: 2px solid #667eea;
-      color: #667eea;
-      font-weight: 700;
-      font-size: 0.85em;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 6px;
-    }
-    .step-label {
-      font-size: 0.72em;
-      color: #666;
-      line-height: 1.3;
-    }
-    .step.active .step-num {
       background: linear-gradient(135deg, #667eea, #764ba2);
-      border-color: transparent;
       color: white;
-    }
-    .step.active .step-label { color: #333; font-weight: 600; }
-    .step-sep {
-      flex: 0 0 20px;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: #ccc;
-      font-size: 1.2em;
-      padding-top: 0px;
-      margin-top: 6px;
+      font-weight: 700; font-size: 0.9em;
+      margin: 0 auto 8px;
     }
-
-    /* ── FORM ── */
-    label       { display: block; font-size: 0.88em; font-weight: 600; color: #555; margin-bottom: 6px; }
+    .step p { font-size: 0.82em; color: #555; line-height: 1.4; }
+    .card {
+      max-width: 520px;
+      margin: 48px auto 60px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      padding: 40px;
+    }
+    .card h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 8px; }
+    .card .subtitle { color: #666; font-size: 0.95em; margin-bottom: 28px; }
+    label { display: block; font-size: 0.9em; font-weight: 600; color: #444; margin-bottom: 6px; }
     input[type="tel"] {
       width: 100%;
       padding: 13px 16px;
@@ -83,238 +79,205 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    input[type="tel"]:focus  { border-color: #667eea; }
-    input[type="tel"]::placeholder { color: #bbb; }
-
-    .hint { font-size: 0.8em; color: #999; margin-top: 6px; }
-
+    input[type="tel"]:focus { border-color: #667eea; }
+    .hint { font-size: 0.82em; color: #888; margin-top: 6px; }
     .btn-primary {
-      display: block; width: 100%;
-      margin-top: 22px;
+      width: 100%;
       padding: 14px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      border: none; border-radius: 8px;
-      font-size: 1em; font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 20px;
+      transition: opacity 0.2s;
     }
-    .btn-primary:hover  { opacity: 0.9; transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
+    .btn-primary:hover { opacity: 0.92; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-launch {
-      display: none;
       width: 100%;
-      margin-top: 22px;
       padding: 14px;
-      background: linear-gradient(135deg, #FF9900 0%, #e07000 100%);
+      background: #ff9900;
       color: white;
-      border: none; border-radius: 8px;
-      font-size: 1em; font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 700;
       cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-    .btn-launch:hover  { opacity: 0.9; transform: translateY(-1px); }
-    .btn-launch.visible { display: block; }
-
-    /* ── STATUS / MESSAGES ── */
-    .msg {
-      display: none;
       margin-top: 16px;
-      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .btn-launch:hover { background: #e68900; }
+    #launch-section { display: none; margin-top: 24px; }
+    .launch-info {
+      background: #f0f7ff;
+      border: 1px solid #c8e0ff;
       border-radius: 8px;
-      font-size: 0.9em;
+      padding: 14px 16px;
+      font-size: 0.88em;
+      color: #2c5aa0;
+      margin-bottom: 4px;
       line-height: 1.5;
     }
-    .msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; display: block; }
-    .msg.error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; display: block; }
-    .msg.info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; display: block; }
-
-    .loader {
-      display: inline-block;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
+    .launch-info strong { display: block; margin-bottom: 4px; font-size: 0.95em; }
+    .token-display {
+      font-family: monospace;
+      font-size: 0.78em;
+      color: #888;
+      word-break: break-all;
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── AWS NOTE ── */
-    .aws-note {
-      margin-top: 28px;
-      padding: 16px;
-      background: #fffbeb;
-      border-radius: 8px;
-      border: 1px solid #fde68a;
-      font-size: 0.82em;
-      color: #78350f;
-      line-height: 1.5;
+    .error { color: #c0392b; font-size: 0.88em; margin-top: 10px; display: none; }
+    .loading { display: none; text-align: center; color: #667eea; margin-top: 16px; font-size: 0.9em; }
+    .whatsapp-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.85em;
+      color: #666;
     }
-    .aws-note strong { color: #92400e; }
-
-    /* ── FOOTER ── */
+    .whatsapp-note span { color: #25D366; font-weight: 600; }
     footer {
       text-align: center;
-      padding: 28px;
-      font-size: 0.8em;
-      color: #aaa;
+      padding: 32px;
+      color: #999;
+      font-size: 0.85em;
+      border-top: 1px solid #eee;
     }
-    footer a { color: #999; text-decoration: none; }
-    footer a:hover { color: #667eea; }
+    footer a { color: #667eea; text-decoration: none; }
   </style>
 </head>
 <body>
 
 <header>
-  <a href="/">← Back to ConvOps</a>
-  <h1>Connect Your AWS Account</h1>
-  <p>One CloudFormation stack. WhatsApp setup confirmation. Under 3 minutes.</p>
+  <a href="/">ConvOps</a>
+  <nav>
+    <a href="/#pricing">Pricing</a>
+    <a href="/onboarding-guide">Docs</a>
+  </nav>
 </header>
 
-<div class="card-wrap">
-  <div class="card">
+<div class="hero">
+  <h1>Connect your AWS account</h1>
+  <p>Takes 3 minutes. No code. No agents. Just CloudFormation.</p>
+</div>
 
-    <!-- Steps indicator -->
-    <div class="steps">
-      <div class="step active" id="step1">
-        <div class="step-num">1</div>
-        <div class="step-label">Enter<br>phone</div>
-      </div>
-      <div class="step-sep">›</div>
-      <div class="step" id="step2">
-        <div class="step-num">2</div>
-        <div class="step-label">Launch<br>Stack</div>
-      </div>
-      <div class="step-sep">›</div>
-      <div class="step" id="step3">
-        <div class="step-num">3</div>
-        <div class="step-label">WhatsApp<br>confirm</div>
-      </div>
-      <div class="step-sep">›</div>
-      <div class="step" id="step4">
-        <div class="step-num">4</div>
-        <div class="step-label">Reply<br>YES</div>
-      </div>
+<div class="steps">
+  <div class="step">
+    <div class="step-num">1</div>
+    <p>Enter your WhatsApp number</p>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <p>Click Launch Stack in AWS Console</p>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <p>Get a WhatsApp confirmation</p>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <p>Reply YES — you're live</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Get started</h2>
+  <p class="subtitle">Enter the WhatsApp number where you want to receive alerts.</p>
+
+  <div id="form-section">
+    <label for="phone">WhatsApp number</label>
+    <input type="tel" id="phone" placeholder="+49 155 1234 5678" autocomplete="tel" />
+    <p class="hint">Include your country code (e.g. +49 for Germany, +1 for US)</p>
+    <button class="btn-primary" id="btn-get-started" onclick="getStarted()">Get my Launch Stack link →</button>
+    <p class="error" id="error-msg">Something went wrong. Please try again.</p>
+    <p class="loading" id="loading">Generating your secure link...</p>
+  </div>
+
+  <div id="launch-section">
+    <div class="launch-info">
+      <strong>✅ Your secure link is ready</strong>
+      This will open your AWS Console with a pre-filled CloudFormation template.
+      The stack creates an IAM role and SNS topic — nothing else.
+      Deploy time: ~2 minutes.
     </div>
-
-    <!-- Form -->
-    <div id="phoneSection">
-      <label for="waPhone">WhatsApp number</label>
-      <input
-        type="tel"
-        id="waPhone"
-        placeholder="+49 151 1234 5678"
-        autocomplete="tel"
-        inputmode="tel"
-      />
-      <p class="hint">Include country code. We'll WhatsApp you a confirmation when the stack is deployed.</p>
-
-      <button class="btn-primary" id="getStartedBtn" onclick="getStarted()">
-        Get started →
-      </button>
-    </div>
-
-    <!-- Status message -->
-    <div class="msg" id="statusMsg"></div>
-
-    <!-- Launch Stack button (shown after token generation) -->
-    <a class="btn-launch" id="launchBtn" href="#" target="_blank" rel="noopener noreferrer">
+    <a id="btn-launch" class="btn-launch" href="#" target="_blank" rel="noopener">
       🚀 Launch Stack in AWS Console
     </a>
-
-    <!-- Post-launch note -->
-    <div class="aws-note" id="awsNote" style="display:none;">
-      <strong>What happens next:</strong><br>
-      1. AWS Console opens with the ConvOps stack pre-filled<br>
-      2. Scroll to the bottom and click <strong>"Create stack"</strong><br>
-      3. Stack deploys in ~2 minutes<br>
-      4. You'll receive a WhatsApp message confirming your account is connected<br>
-      5. Reply <strong>YES</strong> to activate monitoring
+    <div class="token-display" id="token-display"></div>
+    <div class="whatsapp-note">
+      After the stack deploys, you'll get a WhatsApp message on <span id="phone-confirm"></span>.
+      Reply <span>YES</span> to activate monitoring.
     </div>
-
   </div>
 </div>
 
 <footer>
-  <a href="/privacy.html">Privacy Policy</a> ·
-  <a href="mailto:hello@convops.io">Contact</a>
+  <p>Questions? <a href="mailto:hello@convops.io">hello@convops.io</a> · <a href="/privacy">Privacy Policy</a> · <a href="/onboarding-guide">Setup Guide</a></p>
 </footer>
 
 <script>
-  const API_BASE = "https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod";
-
-  function showMsg(type, html) {
-    const el = document.getElementById("statusMsg");
-    el.className = "msg " + type;
-    el.innerHTML = html;
-  }
-
-  function setStep(n) {
-    for (let i = 1; i <= 4; i++) {
-      document.getElementById("step" + i).classList.toggle("active", i === n);
-    }
-  }
+  const API_BASE = 'https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod';
+  const API_KEY = 'd00d40e7461f0ac998fdfaffa5c9884e76b031ed3fa23c2665e6e10bf6bab16c';
 
   async function getStarted() {
-    const phone = document.getElementById("waPhone").value.trim();
-    if (!phone) {
-      showMsg("error", "Please enter your WhatsApp number.");
-      return;
-    }
-    if (!phone.startsWith("+")) {
-      showMsg("error", "Please include your country code (e.g. +49 or +91).");
+    const phone = document.getElementById('phone').value.trim();
+    const btn = document.getElementById('btn-get-started');
+    const error = document.getElementById('error-msg');
+    const loading = document.getElementById('loading');
+
+    // Basic validation
+    if (!phone || !phone.startsWith('+') || phone.length < 8) {
+      error.textContent = 'Please enter a valid WhatsApp number with country code (e.g. +4915511520510)';
+      error.style.display = 'block';
       return;
     }
 
-    const btn = document.getElementById("getStartedBtn");
+    error.style.display = 'none';
     btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span> Generating your token…';
-    showMsg("info", "Preparing your registration token…");
+    loading.style.display = 'block';
 
     try {
-      const resp = await fetch(API_BASE + "/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wa_phone: phone }),
+      const resp = await fetch(`${API_BASE}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY
+        },
+        body: JSON.stringify({ wa_phone: phone })
       });
 
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || `HTTP ${resp.status}`);
-      }
-
+      if (!resp.ok) throw new Error('API error: ' + resp.status);
       const data = await resp.json();
 
-      // Show launch button
-      const launchBtn = document.getElementById("launchBtn");
-      launchBtn.href = data.launch_url;
-      launchBtn.classList.add("visible");
+      // Show launch section
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('launch-section').style.display = 'block';
+      document.getElementById('btn-launch').href = data.launch_url;
+      document.getElementById('phone-confirm').textContent = phone;
+      document.getElementById('token-display').textContent = 'Token: ' + data.token + ' (valid 24h)';
 
-      // Show AWS note
-      document.getElementById("awsNote").style.display = "block";
-
-      showMsg("success", "✅ Token ready! Click the orange button to open AWS Console.");
-      setStep(2);
-
-      // Update the form area
-      document.getElementById("getStartedBtn").style.display = "none";
-
-    } catch (err) {
-      showMsg("error", "Something went wrong: " + err.message + ". Please try again.");
+    } catch (e) {
+      error.textContent = 'Something went wrong. Please try again or email hello@convops.io';
+      error.style.display = 'block';
       btn.disabled = false;
-      btn.innerHTML = "Get started →";
+    } finally {
+      loading.style.display = 'none';
     }
   }
 
-  // Allow Enter key to submit
-  document.getElementById("waPhone").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") getStarted();
+  // Allow Enter key
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('phone').addEventListener('keydown', e => {
+      if (e.key === 'Enter') getStarted();
+    });
   });
 </script>
 
