@@ -838,8 +838,8 @@
             </div>
 
             <div style="text-align:center; margin-top:36px;">
-                <a href="https://app.convops.io/sign-up" class="btn-primary" style="font-size:1.05em; padding:14px 32px;">Get Started Free →</a>
-                <p style="color:#999; font-size:0.85em; margin-top:10px;">No credit card required. Free 14-day trial.</p>
+                <a href="#early-access-form" class="btn-primary" style="font-size:1.05em; padding:14px 32px;" onclick="document.getElementById('early-access-email').focus()">Request Early Access — Free →</a>
+                <p style="color:#999; font-size:0.85em; margin-top:10px;">14-day free trial. No credit card required.</p>
             </div>
         </div>
     </div>
@@ -878,7 +878,7 @@
                         <li><span class="checkmark">✓</span> Investigate &amp; restart actions</li>
                         <li><span class="checkmark">✓</span> Live in 5 minutes — 1-click setup</li>
                     </ul>
-                    <a href="https://convops.io/#contact" class="btn-pricing">Start 14-Day Free Trial</a>
+                    <a href="#early-access-form" class="btn-pricing" onclick="document.getElementById('early-access-email').focus()">Start 14-Day Free Trial</a>
                 </div>
 
                 <!-- Team (featured) -->
@@ -893,7 +893,7 @@
                         <li><span class="checkmark">✓</span> On-call routing</li>
                         <li><span class="checkmark">✓</span> Multi-channel (WhatsApp + Slack)</li>
                     </ul>
-                    <a href="https://convops.io/#contact" class="btn-pricing btn-pricing-featured">Start 14-Day Free Trial</a>
+                    <a href="#early-access-form" class="btn-pricing btn-pricing-featured" onclick="document.getElementById('early-access-email').focus()">Start 14-Day Free Trial</a>
                 </div>
 
                 <!-- Enterprise -->
@@ -907,7 +907,7 @@
                         <li><span class="checkmark">✓</span> SLA + dedicated support</li>
                         <li><span class="checkmark">✓</span> Custom integrations</li>
                     </ul>
-                    <a href="https://convops.io/#contact" class="btn-pricing">Contact Us</a>
+                    <a href="mailto:nitz@convops.io?subject=ConvOps Enterprise" class="btn-pricing">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -966,15 +966,44 @@
         </div>
     </div>
 
-    <!-- CTA -->
+    <!-- CTA / EARLY ACCESS -->
     <div class="section">
         <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
-            <h2>Ready to Stop Opening Dashboards?</h2>
-            <p style="font-size:1.15em; margin:16px 0; opacity:0.95">Book a 30-minute demo. See it work on your infrastructure.</p>
-            <a href="mailto:nitz@convops.io?subject=ConvOps Demo Request" class="btn-white">Get Started</a>
-            <p style="opacity:0.85; font-size:0.95em">or email: nitz@convops.io</p>
+            <h2>Request Early Access</h2>
+            <p style="font-size:1.1em; margin:16px 0; opacity:0.95">Get 14 days free. We'll set you up personally and make sure it works for your stack.</p>
+            <form id="early-access-form" onsubmit="handleEarlyAccess(event)" style="display:flex; flex-direction:column; align-items:center; gap:12px; max-width:400px; margin:24px auto 0;">
+                <input
+                    type="email"
+                    id="early-access-email"
+                    placeholder="you@yourcompany.com"
+                    required
+                    style="width:100%; padding:12px 16px; border-radius:8px; border:none; font-size:1em; background:#fff; color:#333; outline:none;"
+                />
+                <button type="submit" class="btn-white" style="width:100%; padding:13px 24px; font-size:1em;">
+                    Get Early Access — Free 14-Day Trial
+                </button>
+            </form>
+            <p id="early-access-success" style="display:none; margin-top:16px; font-size:1em; opacity:0.95;">✅ You're on the list! We'll be in touch within 24 hours.</p>
+            <p style="opacity:0.7; font-size:0.85em; margin-top:16px;">No credit card required. No procurement. Just DevOps.</p>
         </div>
     </div>
+
+    <script>
+    function handleEarlyAccess(e) {
+        e.preventDefault();
+        const email = document.getElementById("early-access-email").value;
+        const form = document.getElementById("early-access-form");
+        const success = document.getElementById("early-access-success");
+        fetch("https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod/early-access", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, source: "convops.io", timestamp: new Date().toISOString() })
+        }).catch(() => {});
+        form.style.display = "none";
+        success.style.display = "block";
+        if (typeof gtag !== "undefined") gtag("event", "early_access_signup", { email });
+    }
+    </script>
 
     <!-- BUILT BY -->
     <div class="section">
