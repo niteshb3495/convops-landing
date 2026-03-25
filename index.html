@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConvOps - Conversational Ops for Engineering Teams</title>
+    <title>ConvOps — Resolve AWS Incidents in Minutes, Not Hours</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
     <style>
@@ -615,9 +615,11 @@
                 <img src="/logo-white.svg" alt="ConvOps" style="width:60px; height:60px; filter:drop-shadow(0 2px 12px rgba(0,0,0,0.3));" />
                 <span style="font-size:2.4em; font-weight:800; color:#fff; letter-spacing:-1px; text-shadow: 0 2px 8px rgba(0,0,0,0.15);">ConvOps</span>
             </div>
-            <h1>AWS Incident Response, via WhatsApp — No Laptop Needed</h1>
-            <p class="subhead">Stop logging into dashboards. Ask questions, get evidence, approve actions — via WhatsApp or Slack, all from your phone.</p>
-            <p style="margin-top:14px; font-size:0.95em; opacity:0.85; font-weight:400">Free forever for alerts &amp; AI investigation. Pro at $49/mo for chat actions. No credit card needed.</p>
+            <h1>Resolve AWS incidents in minutes — not hours</h1>
+            <p class="subhead">ConvOps investigates your alerts, finds the root cause, and lets you fix issues from Slack or WhatsApp.</p>
+            <div style="margin-top:24px;">
+                <a href="/sign-up" class="btn-white" style="font-size:1em; padding:13px 32px;">Try it free — takes 2 minutes (no credit card)</a>
+            </div>
         </div>
     </header>
 
@@ -752,13 +754,9 @@
         <div class="section-inner">
             <h2>The Problem</h2>
             <div class="problem-box">
-                <p>You're paying <strong>$2,000–3,000/month</strong> for:</p>
-                <ul>
-                    <li>Dashboards you hate opening</li>
-                    <li>Alerts you ignore (because there are 500 of them)</li>
-                    <li>Tools that need a laptop</li>
-                </ul>
-                <p style="margin-top:12px">Meanwhile, production breaks at 2 AM and you're fumbling with 5 browser tabs.</p>
+                <p><strong>3 AM. CloudWatch fires. You get: "CPUUtilization &gt; 80%"</strong></p>
+                <p style="margin-top:10px; color:#555;">That's it. Now you open your laptop, SSH in, grep logs, check 4 dashboards, and try to figure out what actually broke — half asleep.</p>
+                <p style="margin-top:10px; color:#555;">ConvOps does that investigation before it wakes you. You get root cause, not a raw metric.</p>
             </div>
         </div>
     </div>
@@ -863,12 +861,104 @@
         </div>
     </div>
 
+    <!-- REAL INCIDENT WALKTHROUGH -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>How it works during a real incident</h2>
+            <p style="color:#666; margin-bottom:28px; font-size:0.95em;">ECS service error spike — 2:13 AM</p>
+
+            <div style="display:flex; flex-direction:column; gap:0;">
+
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#fff8e1; border-radius:10px 10px 0 0; border:1px solid #ffe082;">
+                    <div style="font-size:1.4em; flex-shrink:0;">🚨</div>
+                    <div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">Alert received</div>
+                        <div style="font-size:0.9em; color:#555;">CloudWatch fires: <code style="background:#f5f5f5; padding:2px 6px; border-radius:4px;">api-service · ErrorRate &gt; 5% · 3 min</code></div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#f4f3ff; border:1px solid #e0ddf8; border-top:none;">
+                    <div style="font-size:1.4em; flex-shrink:0;">🔍</div>
+                    <div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:6px;">ConvOps investigates automatically</div>
+                        <ul style="margin:0; padding-left:18px; font-size:0.9em; color:#555; line-height:1.9;">
+                            <li>Pulls CloudWatch logs → finds <code style="background:#f5f5f5; padding:2px 6px; border-radius:4px;">OutOfMemoryError</code> in container logs</li>
+                            <li>Correlates with memory metric spike 4 min before errors started</li>
+                            <li>Identifies failing container: <code style="background:#f5f5f5; padding:2px 6px; border-radius:4px;">api-worker-3</code></li>
+                            <li>Checks other tasks — 3 of 4 healthy, 1 in <code style="background:#f5f5f5; padding:2px 6px; border-radius:4px;">STOPPED</code> state</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#e8f5e9; border:1px solid #a5d6a7; border-top:none;">
+                    <div style="font-size:1.4em; flex-shrink:0;">💬</div>
+                    <div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">You receive on WhatsApp / Slack</div>
+                        <div style="font-size:0.9em; color:#555; line-height:1.7;"><em>"🔴 api-service error spike. Root cause: memory leak in api-worker-3 (OOM). 1 task stopped. Suggested fix: restart service to cycle the container. Reply 1 to restart, 2 to monitor only."</em></div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#fff; border:1px solid #e0ddf8; border-top:none;">
+                    <div style="font-size:1.4em; flex-shrink:0;">✅</div>
+                    <div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">You reply <strong>1</strong> — service restarts</div>
+                        <div style="font-size:0.9em; color:#555;">ConvOps confirms, executes, reports back: all 4 tasks healthy. Total time: <strong>2 minutes</strong>. Audit log written.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#f8f9fa; border-radius:0 0 10px 10px; border:1px solid #e0ddf8; border-top:none;">
+                    <div style="font-size:1.4em; flex-shrink:0;">💤</div>
+                    <div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">Back to sleep</div>
+                        <div style="font-size:0.9em; color:#555;">No laptop. No VPN. No 5 browser tabs. Laptop stayed closed.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- TRUST -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>Built for engineers who don't trust black boxes</h2>
+            <p style="color:#555; margin-bottom:24px; font-size:0.95em;">ConvOps has read access to your AWS account and optional write access for approved actions. Here's exactly what that means:</p>
+            <div class="security-grid">
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">🔒 Read-only by default</div>
+                    <div style="font-size:0.88em; color:#555;">ConvOps reads metrics, logs, and resource state. No write access unless you explicitly enable it during setup.</div>
+                </div>
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">🙋 No automatic actions — ever</div>
+                    <div style="font-size:0.88em; color:#555;">Nothing executes without your explicit reply. "YES" confirmation required. Phone-bound — only you can approve your alerts.</div>
+                </div>
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">🎯 Scoped IAM permissions</div>
+                    <div style="font-size:0.88em; color:#555;">One CloudFormation template. ConvOps gets exactly the permissions it needs — nothing more. You can review or delete the IAM role anytime.</div>
+                </div>
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">📋 Full audit logs</div>
+                    <div style="font-size:0.88em; color:#555;">Every alert, investigation, and action is logged with timestamp, resource, and outcome. 90-day retention.</div>
+                </div>
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">⏱ 15-min session limit</div>
+                    <div style="font-size:0.88em; color:#555;">STS tokens expire after 15 minutes. No long-lived credentials. No credentials stored outside your AWS account.</div>
+                </div>
+                <div class="security-item">
+                    <div style="font-weight:700; font-size:0.95em; color:#222; margin-bottom:4px;">🗑 Revoke instantly</div>
+                    <div style="font-size:0.88em; color:#555;">Delete the IAM role in your AWS account. ConvOps loses all access immediately. No support ticket needed.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- PRICING -->
     <div class="section">
         <div class="section-inner">
             <h2>Pricing</h2>
-            <p style="margin-bottom:8px">Start free. Connect your AWS, receive alerts, and see full AI investigation — no card required.</p>
-            <p style="margin-bottom:28px; font-size:0.9em; color:#888;">Upgrade to Pro when you want to execute actions from chat.</p>
+            <p style="margin-bottom:6px">Start free. Alerts + full AI investigation included. No card required.</p>
+            <p style="margin-bottom:4px; font-size:0.9em; color:#888;">Upgrade to Pro when you want to fix issues from chat.</p>
+            <p style="margin-bottom:28px; font-size:0.88em; color:#aaa; font-style:italic;">Pro costs less than 1 hour of engineer time per month.</p>
 
             <div class="pricing-grid pricing-grid-3">
                 <!-- Free -->
@@ -927,28 +1017,12 @@
     <div class="section">
         <div class="section-inner">
             <h2>Who This Is For</h2>
-            <p><span class="checkmark">✅</span> DevOps teams tired of being laptop-bound</p>
-            <p><span class="checkmark">✅</span> Startups with small on-call rotations</p>
-            <p><span class="checkmark">✅</span> Agencies managing multiple client infrastructures</p>
-            <p><span class="checkmark">✅</span> Remote-first companies needing mobile ops</p>
-
-        </div>
-    </div>
-
-    <!-- SECURITY -->
-    <div class="section">
-        <div class="section-inner">
-            <h2>Security & Control</h2>
-            <p style="margin-bottom:20px"><strong>ConvOps is an AI agent with cloud access. Here's how we keep it safe:</strong></p>
-            <div class="security-grid">
-                <div class="security-item"><span class="checkmark">✅</span> <strong>Read-only by default</strong> — you explicitly grant write permissions per resource</div>
-                <div class="security-item"><span class="checkmark">✅</span> <strong>Approval workflow</strong> — ALL destructive actions require human confirmation</div>
-                <div class="security-item"><span class="checkmark">✅</span> <strong>Full audit log</strong> — every command, approval, and execution logged</div>
-                <div class="security-item"><span class="checkmark">✅</span> <strong>AWS IAM roles</strong> — no long-lived credentials. Session tokens only.</div>
-                <div class="security-item"><span class="checkmark">✅</span> <strong>Encrypted everything</strong> — TLS in transit, AES-256 at rest</div>
-                <div class="security-item"><span class="checkmark">✅</span> <strong>Your AWS account</strong> — IAM role + SNS topic deploy into your account. No credentials ever leave your cloud.</div>
+            <div class="feature-grid">
+                <div class="feature">👤 Solo engineers managing production on the side</div>
+                <div class="feature">🚀 Startups with small on-call rotations</div>
+                <div class="feature">🏢 Agencies managing multiple client AWS accounts</div>
+                <div class="feature">🌍 Remote-first teams who resolve incidents from their phone</div>
             </div>
-
         </div>
     </div>
 
@@ -978,8 +1052,8 @@
     <!-- CTA / EARLY ACCESS -->
     <div class="section">
         <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
-            <h2>Request Early Access</h2>
-            <p style="font-size:1.1em; margin:16px 0; opacity:0.95">Get 14 days free. We'll set you up personally and make sure it works for your stack.</p>
+            <h2>Try it free — 2 minutes to connect</h2>
+            <p style="font-size:1em; margin:12px 0; opacity:0.9">Connect your AWS account. Get your first real alert with root cause analysis. No credit card.</p>
             <form id="early-access-form" onsubmit="handleEarlyAccess(event)" style="display:flex; flex-direction:column; align-items:center; gap:12px; max-width:400px; margin:24px auto 0;">
                 <input
                     type="email"
@@ -993,7 +1067,7 @@
                 </button>
             </form>
             <p id="early-access-success" style="display:none; margin-top:16px; font-size:1em; opacity:0.95;">✅ You're on the list! We'll be in touch within 24 hours.</p>
-            <p style="opacity:0.7; font-size:0.85em; margin-top:16px;">No credit card required. No procurement. Just DevOps.</p>
+            <p style="opacity:0.7; font-size:0.85em; margin-top:16px;">No credit card. No procurement. Takes 2 minutes.</p>
         </div>
     </div>
 
@@ -1116,16 +1190,15 @@
     <!-- BUILT BY -->
     <div class="section">
         <div class="section-inner" style="text-align:center">
-            <h2>Built By DevOps Engineers, For DevOps Engineers</h2>
-            <p style="margin:16px 0"><strong>Nitesh Bhavsar</strong> · Berlin, Germany</p>
-
+            <p style="color:#888; font-size:0.9em; margin-bottom:6px;">Built by a DevOps engineer who got tired of 3 AM log dives.</p>
+            <p><strong>Nitesh Bhavsar</strong> · Berlin, Germany · <a href="mailto:nitesh@convops.io" style="color:#667eea; text-decoration:none;">nitesh@convops.io</a></p>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer>
         <strong>ConvOps</strong>
-        <p style="margin-top:6px">AI-investigated alerts. Human-approved actions. All on your phone.</p>
+        <p style="margin-top:6px">Find root cause faster. Fix incidents without opening AWS console.</p>
         <p style="margin-top:16px">© 2026 ConvOps. All rights reserved. · <a href="/privacy.html" style="color:#888; text-decoration:underline">Privacy Policy</a> · <a href="/onboarding-guide" style="color:#888; text-decoration:underline">Setup Guide</a></p>
     </footer>
 
