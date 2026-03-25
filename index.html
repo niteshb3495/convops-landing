@@ -604,6 +604,16 @@
         li { margin: 8px 0; }
         p  { margin-bottom: 12px; }
         p:last-child { margin-bottom: 0; }
+
+        /* Demo bubble fade-in animation */
+        @keyframes bubbleFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .demo-bubble {
+            opacity: 0;
+            animation: bubbleFadeIn 0.4s ease forwards;
+        }
     </style>
 </head>
 <body>
@@ -625,11 +635,28 @@
     <!-- HERO -->
     <div class="hero-card">
         <div class="hero-inner">
-            <div class="demo-box">
-                <p><strong>📹 See ConvOps In Action</strong></p>
-                <p class="sub">5-minute demo: Real conversation managing AWS infrastructure — no dashboards, no SSH</p>
-                <a href="mailto:nitesh@convops.io?subject=Demo Video Request" class="btn-primary">Request Demo Video</a>
-                <p class="note">Available within 24 hours</p>
+
+            <div style="text-align:center; margin-bottom:24px;">
+                <h2 style="color:#333; font-size:1.35em; font-weight:700; margin-bottom:6px;">Here's exactly what happens during an incident</h2>
+                <p style="color:#777; font-size:0.9em;">Real alert → AI diagnosis → one reply → resolved. No laptop opened.</p>
+            </div>
+
+            <!-- Step labels -->
+            <div style="display:flex; justify-content:space-around; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                <div style="display:flex; align-items:center; gap:6px; background:#fff3f3; border:1px solid #fca5a5; border-radius:20px; padding:4px 12px;">
+                    <span style="width:18px;height:18px;background:#dc2626;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.65em;font-weight:700;color:white;flex-shrink:0;">1</span>
+                    <span style="font-size:0.78em; font-weight:700; color:#991b1b;">🔍 Diagnosis</span>
+                </div>
+                <div style="color:#ccc; align-self:center; font-size:1.2em;">→</div>
+                <div style="display:flex; align-items:center; gap:6px; background:#fffbeb; border:1px solid #fcd34d; border-radius:20px; padding:4px 12px;">
+                    <span style="width:18px;height:18px;background:#d97706;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.65em;font-weight:700;color:white;flex-shrink:0;">2</span>
+                    <span style="font-size:0.78em; font-weight:700; color:#92400e;">⚡ Action</span>
+                </div>
+                <div style="color:#ccc; align-self:center; font-size:1.2em;">→</div>
+                <div style="display:flex; align-items:center; gap:6px; background:#f0fff4; border:1px solid #86efac; border-radius:20px; padding:4px 12px;">
+                    <span style="width:18px;height:18px;background:#16a34a;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.65em;font-weight:700;color:white;flex-shrink:0;">3</span>
+                    <span style="font-size:0.78em; font-weight:700; color:#166534;">✅ Resolution</span>
+                </div>
             </div>
 
             <!-- Channel toggle tabs -->
@@ -645,7 +672,12 @@
                         <div class="chat-avatar">🤖</div>
                         <span>ConvOps Agent</span>
                     </div>
-                    <div class="bubble agent">
+
+                    <!-- Stage 1: Diagnosis -->
+                    <div style="display:flex; align-items:center; gap:6px; margin:6px 4px 2px;">
+                        <span style="font-size:0.7em; font-weight:700; color:#dc2626; background:#fff3f3; border:1px solid #fca5a5; border-radius:10px; padding:1px 8px;">🔍 DIAGNOSIS</span>
+                    </div>
+                    <div class="bubble agent demo-bubble" style="animation-delay:0.2s">
                         🔴 <strong>ALERT: api-service · CPUUtilization 96%</strong><br><br>
                         Has been above 90% for 10 minutes.<br><br>
                         Investigated:<br>
@@ -660,20 +692,30 @@
                         Reply 1, 2, or 3.
                         <div class="time">02:14</div>
                     </div>
-                    <div class="bubble user">
+
+                    <!-- Stage 2: Action -->
+                    <div style="display:flex; align-items:center; gap:6px; margin:10px 4px 2px;">
+                        <span style="font-size:0.7em; font-weight:700; color:#92400e; background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:1px 8px;">⚡ ACTION</span>
+                    </div>
+                    <div class="bubble user demo-bubble" style="animation-delay:0.6s">
                         1
                         <div class="time">02:15</div>
                     </div>
-                    <div class="bubble agent">
+                    <div class="bubble agent demo-bubble" style="animation-delay:0.9s">
                         ⚠️ Confirm: scale api-service from 2 → 4 tasks on prod-cluster?<br><br>
                         Reply YES to confirm or NO to cancel. (expires in 5 min)
                         <div class="time">02:15</div>
                     </div>
-                    <div class="bubble user">
+                    <div class="bubble user demo-bubble" style="animation-delay:1.2s">
                         YES
                         <div class="time">02:15</div>
                     </div>
-                    <div class="bubble agent">
+
+                    <!-- Stage 3: Resolution -->
+                    <div style="display:flex; align-items:center; gap:6px; margin:10px 4px 2px;">
+                        <span style="font-size:0.7em; font-weight:700; color:#166534; background:#f0fff4; border:1px solid #86efac; border-radius:10px; padding:1px 8px;">✅ RESOLUTION</span>
+                    </div>
+                    <div class="bubble agent demo-bubble" style="animation-delay:1.5s">
                         ✅ Scaling out. 2 new tasks deploying now.<br><br>
                         CPU: 96% → 71% → 54%<br>
                         All 4 tasks healthy. Action logged.
@@ -690,7 +732,10 @@
                         <span class="channel-name">infra-alerts</span>
                     </div>
                     <div class="slack-body">
-                        <div class="slack-msg">
+                        <div style="padding:4px 0 8px; display:flex; gap:6px; align-items:center;">
+                            <span style="font-size:0.7em; font-weight:700; color:#dc2626; background:#fff3f3; border:1px solid #fca5a5; border-radius:10px; padding:1px 8px;">🔍 DIAGNOSIS</span>
+                        </div>
+                        <div class="slack-msg demo-bubble" style="animation-delay:0.2s">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
                                 <div class="slack-sender bot-name">ConvOps<span class="ts">2:14 AM</span></div>
@@ -710,14 +755,17 @@
                             </div>
                         </div>
                         <hr class="slack-divider">
-                        <div class="slack-msg">
+                        <div style="padding:4px 0 4px; display:flex; gap:6px; align-items:center;">
+                            <span style="font-size:0.7em; font-weight:700; color:#92400e; background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:1px 8px;">⚡ ACTION</span>
+                        </div>
+                        <div class="slack-msg demo-bubble" style="animation-delay:0.6s">
                             <div class="slack-avatar user">N</div>
                             <div class="slack-msg-content">
                                 <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
                                 <div class="slack-text">1</div>
                             </div>
                         </div>
-                        <div class="slack-msg">
+                        <div class="slack-msg demo-bubble" style="animation-delay:0.9s">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
                                 <div class="slack-sender bot-name">ConvOps<span class="ts">2:15 AM</span></div>
@@ -725,15 +773,18 @@
                                 <span class="action-btn">✅ YES — Scale out</span>&nbsp;<span class="action-btn">❌ NO — Cancel</span></div>
                             </div>
                         </div>
-                        <hr class="slack-divider">
-                        <div class="slack-msg">
+                        <div class="slack-msg demo-bubble" style="animation-delay:1.2s">
                             <div class="slack-avatar user">N</div>
                             <div class="slack-msg-content">
                                 <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
                                 <div class="slack-text">YES</div>
                             </div>
                         </div>
-                        <div class="slack-msg">
+                        <hr class="slack-divider">
+                        <div style="padding:4px 0 4px; display:flex; gap:6px; align-items:center;">
+                            <span style="font-size:0.7em; font-weight:700; color:#166534; background:#f0fff4; border:1px solid #86efac; border-radius:10px; padding:1px 8px;">✅ RESOLUTION</span>
+                        </div>
+                        <div class="slack-msg demo-bubble" style="animation-delay:1.5s">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
                                 <div class="slack-sender bot-name">ConvOps<span class="ts">2:17 AM</span></div>
