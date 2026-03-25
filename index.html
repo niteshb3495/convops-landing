@@ -956,219 +956,172 @@
     <div class="section">
         <div class="section-inner">
             <h2>Try it yourself — no account needed</h2>
-            <p style="color:#666; margin-bottom:28px; font-size:0.95em;">Click simulate to run a realistic AWS incident through ConvOps. See exactly what you'd receive and what you can do.</p>
+            <p style="color:#666; margin-bottom:20px; font-size:0.95em;">Click simulate to see exactly what ConvOps sends you during a real incident.</p>
 
-            <div id="sim-container">
+            <!-- Channel tabs — visible from the start -->
+            <div style="display:flex; gap:8px; margin-bottom:16px;">
+                <button onclick="simChannel('wa')" id="sim-tab-wa" style="padding:6px 16px; border-radius:20px; border:2px solid #075e54; background:#075e54; color:white; cursor:pointer; font-size:0.88em; font-weight:600;">💬 WhatsApp</button>
+                <button onclick="simChannel('slack')" id="sim-tab-slack" style="padding:6px 16px; border-radius:20px; border:2px solid #e0e0e0; background:white; color:#666; cursor:pointer; font-size:0.88em; font-weight:600;"># Slack</button>
+            </div>
 
-                <!-- Idle state -->
-                <div id="sim-idle" style="text-align:center; padding:40px 24px; background:#f8f9fa; border-radius:10px; border:2px dashed #e0ddf8;">
-                    <div style="font-size:2em; margin-bottom:12px;">⚡</div>
-                    <p style="font-weight:600; color:#333; margin-bottom:6px;">Simulate a real incident</p>
-                    <p style="color:#888; font-size:0.9em; margin-bottom:20px;">ECS error spike or Lambda timeout — randomised each time</p>
-                    <button onclick="simStart()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:12px 28px; border-radius:8px; font-size:0.95em; font-weight:600; cursor:pointer; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-                        ▶ Simulate an incident
-                    </button>
-                </div>
-
-                <!-- Active simulation -->
-                <div id="sim-active" style="display:none;">
-
-                    <!-- Alert banner -->
-                    <div id="sim-alert" style="display:none; background:#fff3f3; border:1.5px solid #f5a0a0; border-radius:10px; padding:16px 20px; margin-bottom:14px;">
-                        <div style="display:flex; align-items:flex-start; gap:12px;">
-                            <span style="font-size:1.3em;">🚨</span>
-                            <div>
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
-                                    <span style="font-weight:700; color:#c0392b; font-size:0.9em; text-transform:uppercase; letter-spacing:0.03em;">URGENT ALERT</span>
-                                    <span id="sim-severity" style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:20px; font-size:0.75em; font-weight:700;"></span>
-                                </div>
-                                <p id="sim-alarm" style="font-family:monospace; font-size:0.9em; color:#333; margin:0;"></p>
-                                <p style="font-size:0.8em; color:#888; margin:4px 0 0;">prod-account · eu-central-1</p>
-                            </div>
-                        </div>
+            <!-- WhatsApp channel -->
+            <div id="sim-chat-wa" style="display:block;">
+                <div class="chat-window">
+                    <div class="chat-header">
+                        <div class="chat-avatar">🤖</div>
+                        <span>ConvOps</span>
                     </div>
 
-                    <!-- Investigation -->
-                    <div id="sim-investigation" style="display:none; background:#f4f3ff; border:1px solid #e0ddf8; border-radius:10px; padding:16px 20px; margin-bottom:14px;">
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                            <span id="sim-inv-spinner" style="display:inline-block; font-size:0.85em;">🔄</span>
-                            <span style="font-size:0.8em; font-weight:700; color:#667eea; text-transform:uppercase; letter-spacing:0.04em;">Investigating…</span>
-                        </div>
-                        <div id="sim-steps" style="font-family:monospace; font-size:0.83em; color:#555; line-height:2;"></div>
+                    <!-- Idle placeholder -->
+                    <div id="wa-idle" style="padding:16px; text-align:center;">
+                        <p style="color:#888; font-size:0.88em; margin-bottom:14px;">ECS error spike or Lambda timeout — randomised each time</p>
+                        <button onclick="simStart()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:10px 24px; border-radius:8px; font-size:0.9em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">▶ Simulate an incident</button>
                     </div>
 
-                    <!-- Results -->
-                    <div id="sim-results" style="display:none;">
+                    <!-- Alert message (real template format) -->
+                    <div id="wa-alert" class="bubble agent" style="display:none;"></div>
 
-                        <!-- Root cause -->
-                        <div style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
-                            <p style="font-size:0.78em; font-weight:700; color:#92400e; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">Root Cause</p>
-                            <p id="sim-rootcause" style="font-size:0.9em; color:#333; line-height:1.6; margin:0;"></p>
-                        </div>
+                    <!-- Investigation status -->
+                    <div id="wa-investigating" class="bubble agent" style="display:none; font-size:0.85em; color:#555;"></div>
 
-                        <!-- What happened -->
-                        <div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
-                            <p style="font-size:0.78em; font-weight:700; color:#666; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">What Happened</p>
-                            <p id="sim-explanation" style="font-size:0.9em; color:#444; line-height:1.6; margin:0;"></p>
-                        </div>
+                    <!-- Results + reply hint -->
+                    <div id="wa-results" class="bubble agent" style="display:none;"></div>
+                    <p id="wa-reply-hint" style="display:none; font-size:0.78em; color:#888; text-align:center; margin:6px 0 10px; font-style:italic;">↑ Reply with a number to take action</p>
 
-                        <!-- Urgency -->
-                        <div id="sim-urgency-box" style="background:#fff5f5; border:1px solid #fca5a5; border-radius:8px; padding:10px 16px; margin-bottom:12px; display:flex; align-items:flex-start; gap:8px;">
-                            <span style="color:#ef4444; font-size:0.85em; margin-top:1px;">⚠️</span>
-                            <p id="sim-urgency" style="font-size:0.85em; color:#991b1b; margin:0; line-height:1.5;"></p>
-                        </div>
+                    <!-- User reply "1" -->
+                    <div id="wa-user1" class="bubble user" style="display:none;">1<div class="time" id="wa-t2"></div></div>
 
-                        <!-- Suggested fix + action details -->
-                        <div style="background:#f0effe; border:1.5px solid #c4b5fd; border-radius:10px; padding:20px; margin-bottom:14px;">
-                            <p style="font-size:0.78em; font-weight:700; color:#5b21b6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">Suggested Fix</p>
-                            <p id="sim-fix" style="font-size:0.95em; font-weight:600; color:#2d2046; line-height:1.5; margin-bottom:16px;"></p>
+                    <!-- Confirm ask -->
+                    <div id="wa-confirm" class="bubble agent" style="display:none;"></div>
+                    <p id="wa-confirm-hint" style="display:none; font-size:0.78em; color:#888; text-align:center; margin:6px 0 10px; font-style:italic;">↑ Reply YES to confirm or NO to cancel</p>
 
-                            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin-bottom:20px;">
-                                <div style="background:white; border-radius:8px; padding:12px 14px; border:1px solid #e0ddf8;">
-                                    <p style="font-size:0.72em; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:4px;">What will happen</p>
-                                    <p id="sim-what" style="font-size:0.82em; color:#444; line-height:1.5; margin:0;"></p>
-                                </div>
-                                <div style="background:white; border-radius:8px; padding:12px 14px; border:1px solid #e0ddf8;">
-                                    <p style="font-size:0.72em; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:4px;">Why it helps</p>
-                                    <p id="sim-why" style="font-size:0.82em; color:#444; line-height:1.5; margin:0;"></p>
-                                </div>
-                                <div style="background:#f0fff4; border-radius:8px; padding:12px 14px; border:1px solid #86efac;">
-                                    <p style="font-size:0.72em; font-weight:700; color:#166534; text-transform:uppercase; margin-bottom:4px;">Expected outcome</p>
-                                    <p id="sim-outcome" style="font-size:0.82em; color:#15803d; line-height:1.5; margin:0;"></p>
-                                </div>
-                            </div>
-
-                            <p style="font-size:0.8em; color:#777; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
-                                <span style="color:#28a745;">✓</span> You are in control — no action is taken without your confirmation.
-                            </p>
-
-                            <div id="sim-action-area">
-                                <button id="sim-action-btn" onclick="simAction()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:11px 22px; border-radius:8px; font-size:0.92em; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:8px;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-                                    <span>▶</span> <span id="sim-action-label"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Channel tabs + chat confirm UI -->
-                    <div id="sim-confirm" style="display:none; margin-bottom:14px;">
-                        <p style="font-size:0.8em; color:#999; margin-bottom:10px; font-style:italic; text-align:center;">This is how ConvOps notifies you — simulation only, no real AWS changes.</p>
-
-                        <!-- Channel tabs -->
-                        <div style="display:flex; gap:8px; margin-bottom:14px;">
-                            <button onclick="simChannel('wa')" id="sim-tab-wa" style="padding:6px 16px; border-radius:20px; border:2px solid #075e54; background:#075e54; color:white; cursor:pointer; font-size:0.88em; font-weight:600; transition:all 0.2s;">💬 WhatsApp</button>
-                            <button onclick="simChannel('slack')" id="sim-tab-slack" style="padding:6px 16px; border-radius:20px; border:2px solid #e0e0e0; background:white; color:#666; cursor:pointer; font-size:0.88em; font-weight:600; transition:all 0.2s;"># Slack</button>
-                        </div>
-
-                        <!-- WhatsApp UI -->
-                        <div id="sim-chat-wa" class="chat-window" style="display:block;">
-                            <div class="chat-header">
-                                <div class="chat-avatar">🤖</div>
-                                <span>ConvOps Agent</span>
-                            </div>
-                            <div class="bubble agent">
-                                <span id="sim-wa-alert-msg"></span>
-                                <div class="time" id="sim-wa-time1"></div>
-                            </div>
-                            <div id="sim-wa-user-reply" class="bubble user" style="display:none;">
-                                1
-                                <div class="time" id="sim-wa-time2"></div>
-                            </div>
-                            <div id="sim-wa-confirm-bubble" class="bubble agent" style="display:none;">
-                                <span id="sim-wa-confirm-msg"></span>
-                                <div class="time" id="sim-wa-time3"></div>
-                            </div>
-                            <div id="sim-wa-yes-bubble" class="bubble user" style="display:none;">
-                                YES
-                                <div class="time" id="sim-wa-time4"></div>
-                            </div>
-                            <div id="sim-wa-done-bubble" class="bubble agent" style="display:none;">
-                                <span id="sim-wa-done-msg"></span>
-                                <div class="time" id="sim-wa-time5"></div>
-                            </div>
-                            <!-- Action buttons -->
-                            <div id="sim-wa-actions" style="display:flex; gap:8px; margin-top:10px; padding:0 4px;">
-                                <button onclick="simConfirm()" style="flex:1; background:#128c7e; color:white; border:none; padding:9px 14px; border-radius:7px; font-size:0.85em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">✅ YES — Execute</button>
-                                <button onclick="simReset()" style="flex:1; background:white; color:#555; border:1px solid #ddd; padding:9px 14px; border-radius:7px; font-size:0.85em; cursor:pointer;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">❌ Cancel</button>
-                            </div>
-                        </div>
-
-                        <!-- Slack UI -->
-                        <div id="sim-chat-slack" class="slack-window" style="display:none;">
-                            <div class="slack-header">
-                                <span>#</span>
-                                <span class="channel-name">infra-alerts</span>
-                            </div>
-                            <div class="slack-body">
-                                <div class="slack-msg">
-                                    <div class="slack-avatar bot">🤖</div>
-                                    <div class="slack-msg-content">
-                                        <div class="slack-sender bot-name">ConvOps<span class="ts" id="sim-slack-time1"></span></div>
-                                        <div class="slack-text" id="sim-slack-alert-msg"></div>
-                                    </div>
-                                </div>
-                                <hr class="slack-divider">
-                                <div id="sim-slack-user-msg" class="slack-msg" style="display:none;">
-                                    <div class="slack-avatar user">N</div>
-                                    <div class="slack-msg-content">
-                                        <div class="slack-sender user-name">nitz<span class="ts" id="sim-slack-time2"></span></div>
-                                        <div class="slack-text">1</div>
-                                    </div>
-                                </div>
-                                <div id="sim-slack-confirm-msg-wrap" class="slack-msg" style="display:none;">
-                                    <div class="slack-avatar bot">🤖</div>
-                                    <div class="slack-msg-content">
-                                        <div class="slack-sender bot-name">ConvOps<span class="ts" id="sim-slack-time3"></span></div>
-                                        <div class="slack-text" id="sim-slack-confirm-msg"></div>
-                                    </div>
-                                </div>
-                                <div id="sim-slack-yes-msg" class="slack-msg" style="display:none;">
-                                    <div class="slack-avatar user">N</div>
-                                    <div class="slack-msg-content">
-                                        <div class="slack-sender user-name">nitz<span class="ts" id="sim-slack-time4"></span></div>
-                                        <div class="slack-text">YES</div>
-                                    </div>
-                                </div>
-                                <div id="sim-slack-done-msg-wrap" class="slack-msg" style="display:none;">
-                                    <div class="slack-avatar bot">🤖</div>
-                                    <div class="slack-msg-content">
-                                        <div class="slack-sender bot-name">ConvOps<span class="ts" id="sim-slack-time5"></span></div>
-                                        <div class="slack-text" id="sim-slack-done-msg"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slack action buttons -->
-                            <div id="sim-slack-actions" style="display:flex; gap:8px; padding:12px 16px; background:#1a1d21; border-top:1px solid #2d2f33;">
-                                <button onclick="simConfirm()" style="background:#4A154B; color:white; border:none; padding:8px 16px; border-radius:5px; font-size:0.85em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">✅ YES — Execute</button>
-                                <button onclick="simReset()" style="background:#2d2f33; color:#ccc; border:1px solid #444; padding:8px 16px; border-radius:5px; font-size:0.85em; cursor:pointer;" onmouseover="this.style.background='#3a3d42'" onmouseout="this.style.background='#2d2f33'">❌ Cancel</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- User YES -->
+                    <div id="wa-yes" class="bubble user" style="display:none;">YES<div class="time" id="wa-t4"></div></div>
 
                     <!-- Resolved -->
-                    <div id="sim-resolved" style="display:none; background:#f0fff4; border:1.5px solid #86efac; border-radius:10px; padding:20px; margin-bottom:14px; text-align:center;">
-                        <div style="font-size:2em; margin-bottom:10px;">✅</div>
-                        <p style="font-weight:700; color:#166534; font-size:1em; margin-bottom:6px;">Incident resolved</p>
-                        <p id="sim-resolved-msg" style="font-size:0.9em; color:#444; margin-bottom:16px;"></p>
-                        <div style="background:white; border:1px solid #e9ecef; border-radius:8px; padding:12px 16px; text-align:left; font-family:monospace; font-size:0.8em; color:#666; margin-bottom:20px;">
-                            <div><span style="color:#aaa;">action:</span> <span id="sim-log-action"></span></div>
-                            <div><span style="color:#aaa;">approved_by:</span> you (phone-bound)</div>
-                            <div><span style="color:#aaa;">timestamp:</span> <span id="sim-log-ts"></span></div>
-                            <div><span style="color:#aaa;">result:</span> <span style="color:#16a34a;">success</span></div>
-                        </div>
-                        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                            <button onclick="simReset()" style="background:#f4f3ff; color:#667eea; border:1.5px solid #667eea; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; cursor:pointer;">Run again</button>
-                            <a href="/sign-up" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; text-decoration:none; display:inline-block;">Connect your real AWS →</a>
-                        </div>
-                    </div>
+                    <div id="wa-done" class="bubble agent" style="display:none;"></div>
+                </div>
 
-                    <!-- Reset link (always visible during active sim) -->
-                    <div id="sim-reset-link" style="text-align:right; margin-top:4px;">
-                        <button onclick="simReset()" style="background:none; border:none; color:#aaa; font-size:0.82em; cursor:pointer; text-decoration:underline;">Reset</button>
+                <!-- Action buttons (outside chat, simulating real user interaction) -->
+                <div id="wa-actions-reply1" style="display:none; margin-top:8px;">
+                    <p style="font-size:0.8em; color:#888; margin-bottom:6px;">Tap to simulate your reply:</p>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button onclick="simWaReply1()" style="background:#dcf8c6; color:#333; border:1px solid #b5e8a0; padding:7px 16px; border-radius:18px; font-size:0.85em; font-weight:600; cursor:pointer;">Reply: 1 — Execute fix</button>
+                        <button onclick="simReset()" style="background:#f5f5f5; color:#888; border:1px solid #ddd; padding:7px 16px; border-radius:18px; font-size:0.85em; cursor:pointer;">Reply: 2 — Monitor only</button>
                     </div>
-
+                </div>
+                <div id="wa-actions-confirm" style="display:none; margin-top:8px;">
+                    <p style="font-size:0.8em; color:#888; margin-bottom:6px;">Tap to simulate your reply:</p>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button onclick="simWaConfirm()" style="background:#dcf8c6; color:#333; border:1px solid #b5e8a0; padding:7px 16px; border-radius:18px; font-size:0.85em; font-weight:600; cursor:pointer;">Reply: YES</button>
+                        <button onclick="simReset()" style="background:#f5f5f5; color:#888; border:1px solid #ddd; padding:7px 16px; border-radius:18px; font-size:0.85em; cursor:pointer;">Reply: NO</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- Slack channel -->
+            <div id="sim-chat-slack" style="display:none;">
+                <div class="slack-window">
+                    <div class="slack-header"><span>#</span><span class="channel-name">infra-alerts</span></div>
+                    <div class="slack-body">
+
+                        <!-- Idle -->
+                        <div id="slack-idle" style="padding:12px 0; text-align:center;">
+                            <p style="color:#888; font-size:0.88em; margin-bottom:14px;">ECS error spike or Lambda timeout — randomised each time</p>
+                            <button onclick="simStart()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:10px 24px; border-radius:8px; font-size:0.9em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">▶ Simulate an incident</button>
+                        </div>
+
+                        <!-- Alert message -->
+                        <div id="slack-alert" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts" id="slack-t1"></span></div>
+                                <div class="slack-text" id="slack-alert-body"></div>
+                            </div>
+                        </div>
+
+                        <!-- Investigating -->
+                        <div id="slack-investigating" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts" id="slack-t-inv"></span></div>
+                                <div class="slack-text" id="slack-inv-body" style="color:#aaa; font-style:italic;"></div>
+                            </div>
+                        </div>
+
+                        <hr class="slack-divider" id="slack-div1" style="display:none;">
+
+                        <!-- Results with action buttons -->
+                        <div id="slack-results" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts" id="slack-t2"></span></div>
+                                <div class="slack-text" id="slack-results-body"></div>
+                                <div id="slack-action-btns" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                                    <button onclick="simSlackAction()" style="background:#4A154B; color:white; border:none; padding:6px 14px; border-radius:4px; font-size:0.83em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">1️⃣ Execute fix</button>
+                                    <button onclick="simReset()" style="background:#2d2f33; color:#ccc; border:1px solid #444; padding:6px 14px; border-radius:4px; font-size:0.83em; cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">2️⃣ Monitor only</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="slack-divider" id="slack-div2" style="display:none;">
+
+                        <!-- User clicks action -->
+                        <div id="slack-user1" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar user">N</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender user-name">nitz<span class="ts" id="slack-t3"></span></div>
+                                <div class="slack-text">clicked: Execute fix</div>
+                            </div>
+                        </div>
+
+                        <!-- Confirm with buttons -->
+                        <div id="slack-confirm" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts" id="slack-t4"></span></div>
+                                <div class="slack-text" id="slack-confirm-body"></div>
+                                <div id="slack-confirm-btns" style="margin-top:8px; display:flex; gap:8px;">
+                                    <button onclick="simSlackConfirm()" style="background:#16a34a; color:white; border:none; padding:6px 14px; border-radius:4px; font-size:0.83em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">✅ YES — Confirm</button>
+                                    <button onclick="simReset()" style="background:#2d2f33; color:#ccc; border:1px solid #444; padding:6px 14px; border-radius:4px; font-size:0.83em; cursor:pointer;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">❌ Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="slack-divider" id="slack-div3" style="display:none;">
+
+                        <!-- User YES -->
+                        <div id="slack-yes" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar user">N</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender user-name">nitz<span class="ts" id="slack-t5"></span></div>
+                                <div class="slack-text">clicked: YES — Confirm</div>
+                            </div>
+                        </div>
+
+                        <!-- Done -->
+                        <div id="slack-done" class="slack-msg" style="display:none;">
+                            <div class="slack-avatar bot">🤖</div>
+                            <div class="slack-msg-content">
+                                <div class="slack-sender bot-name">ConvOps<span class="ts" id="slack-t6"></span></div>
+                                <div class="slack-text" id="slack-done-body"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resolved CTA (shown after both channels complete) -->
+            <div id="sim-resolved" style="display:none; background:#f0fff4; border:1.5px solid #86efac; border-radius:10px; padding:18px 20px; margin-top:16px; text-align:center;">
+                <p style="font-weight:700; color:#166534; font-size:1em; margin-bottom:4px;">✅ Incident resolved in under 2 minutes</p>
+                <p id="sim-resolved-msg" style="font-size:0.88em; color:#444; margin-bottom:14px;"></p>
+                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                    <button onclick="simReset()" style="background:#f4f3ff; color:#667eea; border:1.5px solid #667eea; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; cursor:pointer;">Run again</button>
+                    <a href="/sign-up" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; text-decoration:none; display:inline-block;">Connect your real AWS →</a>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -1177,188 +1130,216 @@
         var SCENARIOS = [
             {
                 severity: "P1",
-                alarm: "api-service · ErrorRate > 5% · 3 min",
-                steps: [
-                    "✓ Pulling CloudWatch logs for api-service…",
-                    "✓ Checking ECS task status and stopped reason…",
-                    "✓ Fetching memory utilisation metrics (last 30 min)…",
-                    "✓ Checking recent CloudWatch events for deploy activity…"
-                ],
-                rootCause: "Container api-worker-3 stopped with reason: OutOfMemoryError (limit: 512MB). Memory rose from 340MB → 620MB over 8 min before the task was killed. 1 of 4 tasks currently in STOPPED state.",
-                explanation: "ConvOps detected the OOM stop reason from ECS task metadata and confirmed the memory spike in CloudWatch metrics. A deploy event (v2.4.1) was logged 23 minutes before the spike — likely related, but ConvOps cannot confirm the code-level cause. Check the deploy diff or enable a profiler to find the root cause in code.",
-                urgency: "This issue is actively impacting service performance — 1 task down, error rate at 5% and rising.",
+                alarm: "api-service · ErrorRate > 5%",
+                resource: "api-service (ECS)",
+                metric: "ErrorRate",
+                threshold: "> 5%",
+                env: "production",
+                region: "eu-central-1",
+                alertId: "ALT-20260325-0214",
+                analysis: "1 of 4 tasks STOPPED (OOM). Memory 340→620MB after deploy v2.4.1 (23 min ago). Suggest restart to restore capacity.",
+                rootCause: "Container api-worker-3 stopped: OutOfMemoryError (512MB limit). Memory rose 340MB→620MB. Deploy v2.4.1 logged 23 min before spike.",
+                explanation: "OOM stop reason confirmed from ECS task metadata + CloudWatch memory spike. Deploy v2.4.1 is likely related — cannot confirm code-level cause without profiler.",
                 fix: "Restart the ECS service to cycle the stopped container and restore all 4 tasks to RUNNING.",
-                what: "ECS will stop and replace all running tasks, cycling the container that hit the OOM limit.",
-                why: "Restarting clears the memory state of the faulty container, returning all 4 tasks to a healthy running state.",
-                outcome: "ErrorRate drops to <0.1%. All 4 tasks RUNNING. Full capacity restored in ~60 seconds.",
-                action: "Run fix now — Restart ECS service",
-                resolved: "ECS service restarted. All 4 tasks RUNNING. ErrorRate back to 0.1%. Investigate v2.4.1 deploy when ready."
+                what: "ECS stops and replaces all running tasks, cycling the container that hit OOM.",
+                outcome: "ErrorRate <0.1%. All 4 tasks RUNNING in ~60 seconds.",
+                action: "Restart ECS service — api-service",
+                confirmMsg: "⚠️ Confirm: restart api-service on prod-cluster?\n\nReply YES to confirm. Expires in 5 min.",
+                resolved: "✅ ECS restarted. All 4 tasks RUNNING. ErrorRate back to 0.1%. Investigate v2.4.1 deploy when ready."
             },
             {
                 severity: "P2",
-                alarm: "payment-processor · Duration > 28s · 5 invocations",
-                steps: [
-                    "✓ Fetching Lambda execution logs (last 15 min)…",
-                    "✓ Checking RDS CPU and connection count metrics…",
-                    "✓ Correlating Lambda timeout timestamps with RDS load…",
-                    "✓ Checking for other Lambdas hitting the same RDS instance…"
-                ],
-                rootCause: "Lambda avg duration: 27.8s (limit: 30s). RDS CPU: 94%. RDS connection count: 487/500. Timeouts started 14 minutes ago, correlating with RDS connection saturation. 3 other Lambdas share the same RDS instance.",
-                explanation: "ConvOps can see that Lambda is timing out and that RDS connections are nearly exhausted at the same time — the correlation is strong. What ConvOps cannot tell you: why connections are being held open. That requires inspecting your application code. The RDS reboot will clear stale connections and restore availability now.",
-                urgency: "Payment processing is timing out — users are experiencing failed transactions right now.",
+                alarm: "payment-processor · Duration > 28s",
+                resource: "payment-processor (Lambda)",
+                metric: "Duration",
+                threshold: "> 28s",
+                env: "production",
+                region: "eu-central-1",
+                alertId: "ALT-20260325-0318",
+                analysis: "RDS CPU 94%, connections 487/500. Lambda timing out waiting on connection pool. 3 other Lambdas affected. Suggest RDS reboot to clear pool.",
+                rootCause: "Lambda avg 27.8s (limit 30s). RDS connections 487/500, CPU 94%. Timeouts correlate with connection saturation. 3 Lambdas share same RDS.",
+                explanation: "Strong correlation: Lambda timeouts started when RDS connections hit saturation. Cannot identify why connections are held open — requires code inspection.",
                 fix: "Reboot RDS to clear the saturated connection pool and restore Lambda response times.",
-                what: "RDS will reboot (~1–2 min), clearing all active and stale connections. The pool resets to 0.",
-                why: "With the pool cleared, Lambdas can acquire fresh connections immediately instead of queuing and timing out.",
-                outcome: "Lambda avg duration: 27.8s → <500ms. Connections: 487/500 → ~10/500. Payment processing restored.",
-                action: "Run fix now — Reboot RDS instance",
-                resolved: "RDS rebooted. Connection count: 12/500. Lambda avg duration back to 340ms. Payment processing restored."
+                what: "RDS reboots (~1–2 min), clearing all stale connections. Pool resets to 0.",
+                outcome: "Lambda avg duration 27.8s → <500ms. Connections 487/500 → ~10/500.",
+                action: "Reboot RDS instance — payments-db",
+                confirmMsg: "⚠️ Confirm: reboot payments-db on prod account?\n\nReply YES to confirm. Expires in 5 min.",
+                resolved: "✅ RDS rebooted. Connections: 12/500. Lambda avg duration back to 340ms. Payment processing restored."
             }
         ];
 
         var current = null;
+        var currentCh = 'wa';
 
-        window.simStart = function() {
-            current = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
-            document.getElementById('sim-idle').style.display = 'none';
-            document.getElementById('sim-active').style.display = 'block';
-            document.getElementById('sim-alert').style.display = 'none';
-            document.getElementById('sim-investigation').style.display = 'none';
-            document.getElementById('sim-results').style.display = 'none';
-            document.getElementById('sim-confirm').style.display = 'none';
-            document.getElementById('sim-resolved').style.display = 'none';
-
-            // Stage 1: alert
-            document.getElementById('sim-severity').textContent = current.severity;
-            document.getElementById('sim-alarm').textContent = current.alarm;
-            document.getElementById('sim-alert').style.display = 'block';
-
-            // Stage 2: investigate after 1.4s
-            setTimeout(function() {
-                document.getElementById('sim-investigation').style.display = 'block';
-                document.getElementById('sim-steps').innerHTML = '';
-                var delay = 0;
-                current.steps.forEach(function(step, i) {
-                    delay += 800;
-                    setTimeout(function() {
-                        document.getElementById('sim-steps').innerHTML += '<div>' + step + '</div>';
-                        // Stage 3: results after last step
-                        if (i === current.steps.length - 1) {
-                            setTimeout(simShowResults, 600);
-                        }
-                    }, delay);
-                });
-            }, 1400);
-        };
-
-        function simShowResults() {
-            document.getElementById('sim-inv-spinner').textContent = '✓';
-            document.getElementById('sim-rootcause').textContent = current.rootCause;
-            document.getElementById('sim-explanation').textContent = current.explanation;
-            document.getElementById('sim-urgency').textContent = current.urgency;
-            document.getElementById('sim-fix').textContent = current.fix;
-            document.getElementById('sim-what').textContent = current.what;
-            document.getElementById('sim-why').textContent = current.why;
-            document.getElementById('sim-outcome').textContent = current.outcome;
-            document.getElementById('sim-action-label').textContent = current.action;
-            document.getElementById('sim-results').style.display = 'block';
-        }
-
-        function simTime(offsetMin) {
-            var d = new Date(Date.now() - offsetMin * 60000);
+        function ts(offsetMin) {
+            var d = new Date(Date.now() - (offsetMin||0) * 60000);
             return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
         }
 
-        function buildWaAlertMsg() {
-            return '🔴 <strong>ALERT: ' + current.alarm + '</strong><br><br>' +
-                'Root cause: ' + current.rootCause + '<br><br>' +
-                'Urgency: ' + current.urgency + '<br><br>' +
-                'Suggested fix: ' + current.fix + '<br><br>' +
-                'Expected outcome: ' + current.outcome + '<br><br>' +
-                'Reply <strong>1</strong> to execute fix · Reply <strong>2</strong> to monitor only';
+        function show(id) { document.getElementById(id).style.display = 'block'; }
+        function showFlex(id) { document.getElementById(id).style.display = 'flex'; }
+        function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Build WhatsApp message using real approved template format:
+        // 🚨 {{1}} | {{2}} | P{{3}} / Resource: {{4}} / Metric: {{5}} → Threshold: {{6}} / Env: {{7}} | Region: {{8}} / AI Analysis: {{9}} / Actions: 1-5 / Alert ID: {{10}} / www.convops.io
+        function buildWaTemplate(s) {
+            return '🚨 ' + s.alarm + ' | ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) +
+                ' | P' + s.severity.replace('P','') +
+                ' / Resource: ' + s.resource +
+                ' / Metric: ' + s.metric + ' → Threshold: ' + s.threshold +
+                ' / Env: ' + s.env + ' | Region: ' + s.region +
+                ' / AI Analysis: ' + s.analysis +
+                ' / Actions: 1-5 / Alert ID: ' + s.alertId + ' / www.convops.io';
         }
 
-        function buildSlackAlertMsg() {
-            return '🔴 <strong>ALERT: ' + current.alarm + '</strong><br><br>' +
-                '<strong>Root cause:</strong> ' + current.rootCause + '<br>' +
-                '<strong>Urgency:</strong> ' + current.urgency + '<br>' +
-                '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
-                '<strong>Expected outcome:</strong> ' + current.outcome + '<br><br>' +
-                '<span class="action-btn">1️⃣ ' + current.action + '</span>&nbsp;<span class="action-btn">2️⃣ Monitor only</span>';
+        function buildSlackAlert(s) {
+            return '🚨 <strong>ALERT: ' + s.alarm + '</strong><br><br>' +
+                '<strong>Root cause:</strong> ' + s.rootCause + '<br>' +
+                '<strong>Analysis:</strong> ' + s.analysis + '<br><br>' +
+                '<strong>Suggested fix:</strong> ' + s.fix + '<br>' +
+                '<strong>Expected:</strong> ' + s.outcome;
         }
-
-        window.simAction = function() {
-            document.getElementById('sim-action-area').style.display = 'none';
-            document.getElementById('sim-confirm').style.display = 'block';
-
-            var t1 = simTime(3), t2 = simTime(2), t3 = simTime(2), t4 = simTime(1), t5 = simTime(0);
-
-            // WhatsApp
-            document.getElementById('sim-wa-alert-msg').innerHTML = buildWaAlertMsg();
-            document.getElementById('sim-wa-time1').textContent = t1;
-            document.getElementById('sim-wa-time2').textContent = t2;
-            document.getElementById('sim-wa-confirm-msg').innerHTML = '⚠️ Confirm: <strong>' + current.action + '</strong> on prod-cluster?<br><br>Reply YES to confirm or NO to cancel. (expires in 5 min)';
-            document.getElementById('sim-wa-time3').textContent = t3;
-            document.getElementById('sim-wa-time4').textContent = t4;
-            document.getElementById('sim-wa-time5').textContent = t5;
-            document.getElementById('sim-wa-user-reply').style.display = 'block';
-            document.getElementById('sim-wa-confirm-bubble').style.display = 'block';
-
-            // Slack
-            document.getElementById('sim-slack-alert-msg').innerHTML = buildSlackAlertMsg();
-            document.getElementById('sim-slack-time1').textContent = ' ' + t1;
-            document.getElementById('sim-slack-time2').textContent = ' ' + t2;
-            document.getElementById('sim-slack-confirm-msg').innerHTML = '⚠️ Confirm: <strong>' + current.action + '</strong> on prod-cluster?<br><span class="action-btn" style="margin-top:6px; display:inline-block;">✅ YES — Confirm</span>&nbsp;<span class="action-btn">❌ NO — Cancel</span>';
-            document.getElementById('sim-slack-time3').textContent = ' ' + t3;
-            document.getElementById('sim-slack-time4').textContent = ' ' + t4;
-            document.getElementById('sim-slack-time5').textContent = ' ' + t5;
-            document.getElementById('sim-slack-user-msg').style.display = 'flex';
-            document.getElementById('sim-slack-confirm-msg-wrap').style.display = 'flex';
-        };
 
         window.simChannel = function(ch) {
-            document.getElementById('sim-chat-wa').style.display    = ch === 'wa'    ? 'block' : 'none';
-            document.getElementById('sim-chat-slack').style.display = ch === 'slack' ? 'block' : 'none';
+            currentCh = ch;
+            hide('sim-chat-wa');   hide('sim-chat-slack');
+            show('sim-chat-' + ch);
             var tabWa    = document.getElementById('sim-tab-wa');
             var tabSlack = document.getElementById('sim-tab-slack');
             if (ch === 'wa') {
-                tabWa.style.background    = '#075e54'; tabWa.style.borderColor    = '#075e54'; tabWa.style.color = 'white';
-                tabSlack.style.background = 'white';   tabSlack.style.borderColor = '#e0e0e0'; tabSlack.style.color = '#666';
+                tabWa.style.cssText    = 'padding:6px 16px;border-radius:20px;border:2px solid #075e54;background:#075e54;color:white;cursor:pointer;font-size:0.88em;font-weight:600;';
+                tabSlack.style.cssText = 'padding:6px 16px;border-radius:20px;border:2px solid #e0e0e0;background:white;color:#666;cursor:pointer;font-size:0.88em;font-weight:600;';
             } else {
-                tabSlack.style.background = '#4A154B'; tabSlack.style.borderColor = '#4A154B'; tabSlack.style.color = 'white';
-                tabWa.style.background    = 'white';   tabWa.style.borderColor    = '#e0e0e0'; tabWa.style.color = '#666';
+                tabSlack.style.cssText = 'padding:6px 16px;border-radius:20px;border:2px solid #4A154B;background:#4A154B;color:white;cursor:pointer;font-size:0.88em;font-weight:600;';
+                tabWa.style.cssText    = 'padding:6px 16px;border-radius:20px;border:2px solid #e0e0e0;background:white;color:#666;cursor:pointer;font-size:0.88em;font-weight:600;';
             }
         };
 
-        window.simConfirm = function() {
-            // Show YES reply + resolved in both channels
-            var doneMsg = '✅ ' + current.resolved;
-            document.getElementById('sim-wa-yes-bubble').style.display = 'block';
-            document.getElementById('sim-wa-done-msg').innerHTML = doneMsg;
-            document.getElementById('sim-wa-done-bubble').style.display = 'block';
-            document.getElementById('sim-wa-actions').style.display = 'none';
+        window.simStart = function() {
+            current = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
 
-            document.getElementById('sim-slack-yes-msg').style.display = 'flex';
-            document.getElementById('sim-slack-done-msg').innerHTML = doneMsg;
-            document.getElementById('sim-slack-done-msg-wrap').style.display = 'flex';
-            document.getElementById('sim-slack-actions').style.display = 'none';
+            // Reset all states
+            ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm','wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
+             'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done','sim-resolved'].forEach(hide);
+            hide('wa-idle'); hide('slack-idle');
+            // Re-enable action buttons
+            document.getElementById('slack-action-btns').style.display = 'flex';
+            document.getElementById('slack-confirm-btns').style.display = 'flex';
 
-            // Show resolved state below
-            document.getElementById('sim-confirm').style.display = 'none';
-            document.getElementById('sim-resolved-msg').textContent = current.resolved;
-            document.getElementById('sim-log-action').textContent = current.action;
-            document.getElementById('sim-log-ts').textContent = new Date().toISOString();
-            document.getElementById('sim-resolved').style.display = 'block';
-            document.getElementById('sim-reset-link').style.display = 'none';
+            // --- WhatsApp flow ---
+            // Step 1: alert arrives (real template format)
+            document.getElementById('wa-alert').innerHTML = buildWaTemplate(current) + '<div class="time">' + ts(4) + '</div>';
+            show('wa-alert');
+
+            // Step 2: investigating status
+            setTimeout(function() {
+                document.getElementById('wa-investigating').innerHTML = '🔄 Investigating… pulling CloudWatch logs + metrics.<div class="time">' + ts(3) + '</div>';
+                show('wa-investigating');
+            }, 1200);
+
+            // Step 3: results + action options
+            setTimeout(function() {
+                document.getElementById('wa-results').innerHTML =
+                    '✅ <strong>Investigation complete</strong><br><br>' +
+                    '<strong>Root cause:</strong> ' + current.rootCause + '<br><br>' +
+                    '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
+                    '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
+                    'Reply:<br>1️⃣ Execute fix now<br>2️⃣ Monitor only' +
+                    '<div class="time">' + ts(2) + '</div>';
+                show('wa-results');
+                show('wa-reply-hint');
+                show('wa-actions-reply1');
+            }, 3800);
+
+            // --- Slack flow ---
+            document.getElementById('slack-t1').textContent = ' ' + ts(4);
+            document.getElementById('slack-alert-body').innerHTML = buildSlackAlert(current);
+            showFlex('slack-alert');
+
+            setTimeout(function() {
+                document.getElementById('slack-t-inv').textContent = ' ' + ts(3);
+                document.getElementById('slack-inv-body').textContent = '🔄 Investigating… pulling CloudWatch logs + metrics.';
+                showFlex('slack-investigating');
+            }, 1200);
+
+            setTimeout(function() {
+                hide('slack-investigating');
+                show('slack-div1');
+                document.getElementById('slack-t2').textContent = ' ' + ts(2);
+                document.getElementById('slack-results-body').innerHTML =
+                    '✅ <strong>Investigation complete</strong><br>' +
+                    '<strong>Root cause:</strong> ' + current.rootCause + '<br>' +
+                    '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
+                    '<strong>Expected:</strong> ' + current.outcome;
+                showFlex('slack-results');
+            }, 3800);
         };
+
+        // WA: user replies "1"
+        window.simWaReply1 = function() {
+            hide('wa-actions-reply1'); hide('wa-reply-hint');
+            document.getElementById('wa-t2').textContent = ts(1);
+            show('wa-user1');
+            setTimeout(function() {
+                document.getElementById('wa-confirm').innerHTML = current.confirmMsg.replace('\\n','<br>') + '<div class="time">' + ts(1) + '</div>';
+                show('wa-confirm');
+                show('wa-confirm-hint');
+                show('wa-actions-confirm');
+            }, 700);
+        };
+
+        // WA: user replies "YES"
+        window.simWaConfirm = function() {
+            hide('wa-actions-confirm'); hide('wa-confirm-hint');
+            document.getElementById('wa-t4').textContent = ts(0);
+            show('wa-yes');
+            setTimeout(function() {
+                document.getElementById('wa-done').innerHTML = current.resolved + '<br><br>Action logged. Alert ID: ' + current.alertId + '<div class="time">' + ts(0) + '</div>';
+                show('wa-done');
+                simShowResolved();
+            }, 800);
+        };
+
+        // Slack: user clicks "Execute fix"
+        window.simSlackAction = function() {
+            hide('slack-action-btns');
+            show('slack-div2');
+            document.getElementById('slack-t3').textContent = ' ' + ts(1);
+            showFlex('slack-user1');
+            setTimeout(function() {
+                document.getElementById('slack-t4').textContent = ' ' + ts(1);
+                document.getElementById('slack-confirm-body').innerHTML = '⚠️ Confirm: <strong>' + current.action + '</strong> on prod account?';
+                showFlex('slack-confirm');
+            }, 600);
+        };
+
+        // Slack: user clicks "YES — Confirm"
+        window.simSlackConfirm = function() {
+            hide('slack-confirm-btns');
+            show('slack-div3');
+            document.getElementById('slack-t5').textContent = ' ' + ts(0);
+            showFlex('slack-yes');
+            setTimeout(function() {
+                document.getElementById('slack-t6').textContent = ' ' + ts(0);
+                document.getElementById('slack-done-body').innerHTML = current.resolved + '<br><em style="color:#aaa;font-size:0.85em;">Action logged. Alert ID: ' + current.alertId + '</em>';
+                showFlex('slack-done');
+                simShowResolved();
+            }, 800);
+        };
+
+        function simShowResolved() {
+            document.getElementById('sim-resolved-msg').textContent = current.resolved.replace('✅ ','');
+            show('sim-resolved');
+        }
 
         window.simReset = function() {
             current = null;
-            document.getElementById('sim-idle').style.display = 'block';
-            document.getElementById('sim-active').style.display = 'none';
-            document.getElementById('sim-action-area').style.display = 'block';
-            document.getElementById('sim-reset-link').style.display = 'block';
-            // Reset channel tab to WA
-            simChannel('wa');
+            show('wa-idle'); show('slack-idle');
+            hide('sim-resolved');
+            ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm','wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
+             'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done'].forEach(hide);
+            document.getElementById('slack-action-btns').style.display = 'flex';
+            document.getElementById('slack-confirm-btns').style.display = 'flex';
         };
     })();
     </script>
