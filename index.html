@@ -1243,38 +1243,31 @@
         window.simStart = function() {
             current = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
 
-            // Reset all states
-            ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm','wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
-             'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done','sim-resolved'].forEach(hide);
+            // Reset all visible states
+            ['wa-alert','wa-investigating','wa-results',
+             'slack-alert','slack-investigating','slack-div1','slack-results','sim-resolved'].forEach(hide);
             hide('wa-idle'); hide('slack-idle');
-            // Re-enable action buttons
-            // ACTIONS_DISABLED: document.getElementById('slack-action-btns').style.display = 'flex';
-            document.getElementById('slack-confirm-btns').style.display = 'flex';
 
             // --- WhatsApp flow ---
-            // Step 1: alert arrives (real template format)
             document.getElementById('wa-alert').innerHTML = buildWaTemplate(current) + '<div class="time">' + ts(4) + '</div>';
             show('wa-alert');
 
-            // Step 2: investigating status
             setTimeout(function() {
                 document.getElementById('wa-investigating').innerHTML = '🔄 Investigating… pulling CloudWatch logs + metrics.<div class="time">' + ts(3) + '</div>';
                 show('wa-investigating');
             }, 1200);
 
-            // Step 3: results + action options
             setTimeout(function() {
                 document.getElementById('wa-results').innerHTML =
                     '💡 <strong>AI Analysis update</strong><br><br>' +
                     '<strong>Root cause:</strong> ' + current.rootCause + '<br><br>' +
                     '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
                     '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
-                    // ACTIONS_DISABLED: reply options hidden
-                    '' +
+                    '<span style="font-size:0.82em;color:#28a745;">✓ Investigation complete.</span> ' +
+                    '<span style="font-size:0.78em;color:#999;font-style:italic;">Action execution available in Pro plan.</span>' +
                     '<div class="time">' + ts(2) + '</div>';
                 show('wa-results');
-                // ACTIONS_DISABLED: reply buttons hidden
-                // show('wa-reply-hint'); show('wa-actions-reply1');
+                simShowResolved();
             }, 3800);
 
             // --- Slack flow ---
@@ -1296,65 +1289,24 @@
                     '✅ <strong>Investigation complete</strong><br>' +
                     '<strong>Root cause:</strong> ' + current.rootCause + '<br>' +
                     '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
-                    '<strong>Expected:</strong> ' + current.outcome;
+                    '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
+                    '<div style="background:#1e2a1e;border:1px solid #2d5a2d;border-radius:6px;padding:8px 12px;margin-top:4px;">' +
+                    '<span style="font-size:0.8em;color:#4ade80;">✓ Root cause identified, fix suggested.</span><br>' +
+                    '<span style="font-size:0.75em;color:#6b7280;font-style:italic;">Action execution available in Pro plan.</span>' +
+                    '</div>';
                 showFlex('slack-results');
             }, 3800);
         };
 
-        // WA: user replies "1"
-        window.simWaReply1 = function() {
-            hide('wa-actions-reply1'); hide('wa-reply-hint');
-            document.getElementById('wa-t2').textContent = ts(1);
-            show('wa-user1');
-            setTimeout(function() {
-                document.getElementById('wa-confirm').innerHTML = current.confirmMsg.replace('\\n','<br>') + '<div class="time">' + ts(1) + '</div>';
-                show('wa-confirm');
-                show('wa-confirm-hint');
-                show('wa-actions-confirm');
-            }, 700);
-        };
+        // ACTIONS_DISABLED: simWaReply1, simWaConfirm, simSlackAction, simSlackConfirm
+        // are all no-ops until Pro launches. Buttons that call them are hidden in HTML.
+        window.simWaReply1   = function() { simReset(); };
+        window.simWaConfirm  = function() { simReset(); };
+        window.simSlackAction  = function() { simReset(); };
+        window.simSlackConfirm = function() { simReset(); };
 
-        // ACTIONS_DISABLED: WA confirm function hidden
-        /* window.simWaConfirm = function() {
-            hide('wa-actions-confirm'); hide('wa-confirm-hint');
-            document.getElementById('wa-t4').textContent = ts(0);
-            show('wa-yes');
-            setTimeout(function() {
-                // ACTIONS_DISABLED: document.getElementById('wa-done').innerHTML = current.resolved + '<br><br>Action logged...';
-                show('wa-done');
-                simShowResolved();
-            }, 800);
-        }; */};
-
-        // Slack: user clicks "Execute fix"
-        window.simSlackAction = function() {
-            hide('slack-action-btns');
-            show('slack-div2');
-            document.getElementById('slack-t3').textContent = ' ' + ts(1);
-            showFlex('slack-user1');
-            setTimeout(function() {
-                document.getElementById('slack-t4').textContent = ' ' + ts(1);
-                document.getElementById('slack-confirm-body').innerHTML = '⚠️ Confirm: <strong>' + current.action + '</strong> on prod account?';
-                showFlex('slack-confirm');
-            }, 600);
-        };
-
-        // ACTIONS_DISABLED: Slack confirm function hidden
-        /* window.simSlackConfirm = function() {
-            hide('slack-confirm-btns');
-            show('slack-div3');
-            document.getElementById('slack-t5').textContent = ' ' + ts(0);
-            showFlex('slack-yes');
-            setTimeout(function() {
-                document.getElementById('slack-t6').textContent = ' ' + ts(0);
-                // ACTIONS_DISABLED: document.getElementById('slack-done-body').innerHTML = ...
-                showFlex('slack-done');
-                simShowResolved();
-            }, 800);
-        };
- */
         function simShowResolved() {
-            document.getElementById('sim-resolved-msg').textContent = current.resolved.replace('✅ ','');
+            document.getElementById('sim-resolved-msg').textContent = 'Investigation complete. ' + current.rootCause;
             show('sim-resolved');
         }
 
@@ -1362,10 +1314,8 @@
             current = null;
             show('wa-idle'); show('slack-idle');
             hide('sim-resolved');
-            ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm','wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
-             'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done'].forEach(hide);
-            // ACTIONS_DISABLED: document.getElementById('slack-action-btns').style.display = 'flex';
-            document.getElementById('slack-confirm-btns').style.display = 'flex';
+            ['wa-alert','wa-investigating','wa-results',
+             'slack-alert','slack-investigating','slack-div1','slack-results'].forEach(hide);
         };
     })();
     </script>
