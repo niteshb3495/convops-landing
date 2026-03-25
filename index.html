@@ -685,41 +685,18 @@
                         • Traffic: 3× normal (deploy 12 min ago)<br>
                         • No OOM errors in logs<br><br>
                         Likely cause: traffic spike post-deploy, not a leak.<br><br>
-                        Recommended actions:<br>
-                        1️⃣ Scale out — add 2 tasks (fastest fix)<br>
-                        2️⃣ Restart service — force fresh deployment<br>
-                        3️⃣ Do nothing — monitor for 5 more min<br><br>
-                        Reply 1, 2, or 3.
+                        <!-- ACTIONS_DISABLED: action options removed -->
+                        AI Analysis: traffic spike post-deploy (3× normal, deploy 12 min ago). Not a memory leak. Recommend scale out to restore capacity.
                         <div class="time">02:14</div>
                     </div>
 
-                    <!-- Stage 2: Action -->
-                    <div style="display:flex; align-items:center; gap:6px; margin:10px 4px 2px;">
-                        <span style="font-size:0.7em; font-weight:700; color:#92400e; background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:1px 8px;">⚡ ACTION</span>
-                    </div>
-                    <div class="bubble user demo-bubble" style="animation-delay:0.6s">
-                        1
-                        <div class="time">02:15</div>
-                    </div>
-                    <div class="bubble agent demo-bubble" style="animation-delay:0.9s">
-                        ⚠️ Confirm: scale api-service from 2 → 4 tasks on prod-cluster?<br><br>
-                        Reply YES to confirm or NO to cancel. (expires in 5 min)
-                        <div class="time">02:15</div>
-                    </div>
-                    <div class="bubble user demo-bubble" style="animation-delay:1.2s">
-                        YES
-                        <div class="time">02:15</div>
-                    </div>
-
-                    <!-- Stage 3: Resolution -->
-                    <div style="display:flex; align-items:center; gap:6px; margin:10px 4px 2px;">
-                        <span style="font-size:0.7em; font-weight:700; color:#166534; background:#f0fff4; border:1px solid #86efac; border-radius:10px; padding:1px 8px;">✅ RESOLUTION</span>
-                    </div>
-                    <div class="bubble agent demo-bubble" style="animation-delay:1.5s">
-                        ✅ Scaling out. 2 new tasks deploying now.<br><br>
-                        CPU: 96% → 71% → 54%<br>
-                        All 4 tasks healthy. Action logged.
-                        <div class="time">02:17</div>
+                    <!-- ACTIONS_DISABLED: Action + Resolution stages hidden. To re-enable uncomment.
+                    Stage 2 Action and Stage 3 Resolution bubbles here.
+                    -->
+                    <div class="bubble agent demo-bubble" style="animation-delay:0.6s; background:#f0fff4; border-radius:0 8px 8px 8px;">
+                        ✅ Investigation complete. Root cause identified and fix suggested.<br><br>
+                        <span style="font-size:0.85em; color:#999; font-style:italic;">Action execution available in Pro plan.</span>
+                        <div class="time">02:14</div>
                     </div>
                 </div>
             </div>
@@ -747,55 +724,25 @@
                                     • Traffic: 3× normal (deploy 12 min ago)<br>
                                     • No OOM errors in logs<br><br>
                                     Likely cause: traffic spike post-deploy, not a leak.<br><br>
-                                    <strong>Recommended:</strong><br>
-                                    <span class="action-btn">1️⃣ Scale out (+2 tasks)</span>&nbsp;
-                                    <span class="action-btn">2️⃣ Restart service</span>&nbsp;
-                                    <span class="action-btn">3️⃣ Monitor only</span>
+                                    <!-- ACTIONS_DISABLED: action buttons removed -->
+                                    <strong>AI Analysis:</strong> Traffic spike post-deploy (3× normal). Not a memory leak. Recommended fix: scale out.
                                 </div>
                             </div>
                         </div>
+                        <!-- ACTIONS_DISABLED: Action + Resolution stages hidden. To re-enable uncomment. -->
                         <hr class="slack-divider">
-                        <div style="padding:4px 0 4px; display:flex; gap:6px; align-items:center;">
-                            <span style="font-size:0.7em; font-weight:700; color:#92400e; background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:1px 8px;">⚡ ACTION</span>
-                        </div>
                         <div class="slack-msg demo-bubble" style="animation-delay:0.6s">
-                            <div class="slack-avatar user">N</div>
-                            <div class="slack-msg-content">
-                                <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
-                                <div class="slack-text">1</div>
-                            </div>
-                        </div>
-                        <div class="slack-msg demo-bubble" style="animation-delay:0.9s">
                             <div class="slack-avatar bot">🤖</div>
                             <div class="slack-msg-content">
-                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:15 AM</span></div>
-                                <div class="slack-text">⚠️ Confirm: scale <strong>api-service</strong> from 2 → 4 tasks on <strong>prod-cluster</strong>?<br><br>
-                                <span class="action-btn">✅ YES — Scale out</span>&nbsp;<span class="action-btn">❌ NO — Cancel</span></div>
-                            </div>
-                        </div>
-                        <div class="slack-msg demo-bubble" style="animation-delay:1.2s">
-                            <div class="slack-avatar user">N</div>
-                            <div class="slack-msg-content">
-                                <div class="slack-sender user-name">nitz<span class="ts">2:15 AM</span></div>
-                                <div class="slack-text">YES</div>
-                            </div>
-                        </div>
-                        <hr class="slack-divider">
-                        <div style="padding:4px 0 4px; display:flex; gap:6px; align-items:center;">
-                            <span style="font-size:0.7em; font-weight:700; color:#166534; background:#f0fff4; border:1px solid #86efac; border-radius:10px; padding:1px 8px;">✅ RESOLUTION</span>
-                        </div>
-                        <div class="slack-msg demo-bubble" style="animation-delay:1.5s">
-                            <div class="slack-avatar bot">🤖</div>
-                            <div class="slack-msg-content">
-                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:17 AM</span></div>
-                                <div class="slack-text">✅ Scaling out. 2 new tasks deploying now.<br><br>CPU: 96% → 71% → 54%<br>All 4 tasks healthy. Action logged.</div>
+                                <div class="slack-sender bot-name">ConvOps<span class="ts">2:14 AM</span></div>
+                                <div class="slack-text" style="color:#4ade80;">✅ Investigation complete. Root cause identified, fix suggested.<br><span style="color:#6b7280; font-style:italic; font-size:0.9em;">Action execution available in Pro plan.</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <p class="hero-tagline">That's ConvOps. From alert to resolved — without opening a laptop.</p>
+            <p class="hero-tagline">That's ConvOps. Instant root cause analysis — without opening a laptop.</p>
         </div>
     </div>
 
@@ -849,10 +796,11 @@
                     <ol style="margin:0; padding-left:20px;">
                         <li style="padding:8px 0; border-bottom:1px solid #bbf7d0; font-size:0.9em; color:#333; line-height:1.5;">Get alert <strong>with diagnosis already done</strong></li>
                         <li style="padding:8px 0; border-bottom:1px solid #bbf7d0; font-size:0.9em; color:#333; line-height:1.5;">See root cause instantly</li>
-                        <li style="padding:8px 0; font-size:0.9em; color:#333; line-height:1.5;">Reply <strong>1</strong> to fix — done in seconds</li>
+                        <!-- ACTIONS_DISABLED: "Reply 1 to fix" hidden. To re-enable uncomment. -->
+                        <li style="padding:8px 0; font-size:0.9em; color:#333; line-height:1.5;">Get <strong>root cause + fix suggestion</strong> instantly</li>
                     </ol>
                     <div style="margin-top:16px; background:#dcfce7; border-radius:8px; padding:10px 14px; text-align:center;">
-                        <span style="font-size:0.85em; font-weight:700; color:#166534;">⚡ Under 2 minutes. No laptop.</span>
+                        <span style="font-size:0.85em; font-weight:700; color:#166534;">⚡ Diagnosis in seconds. No laptop needed.</span>
                     </div>
                 </div>
 
@@ -932,10 +880,11 @@
                     <div style="flex-shrink:0; width:48px; height:48px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3em; font-weight:800; color:#fff;">4</div>
                     <div>
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
-                            <h3 style="margin:0; font-size:1.05em; color:#222;">Reply to act — you stay in control</h3>
+                            <h3 style="margin:0; font-size:1.05em; color:#222;">You stay in control — reply to investigate</h3>
                             <span style="font-size:0.75em; background:#dcfce7; color:#166534; padding:2px 10px; border-radius:20px; font-weight:600;">Human-in-loop</span>
                         </div>
-                        <p style="margin:0; color:#555; line-height:1.6; font-size:0.95em;">Reply <strong>YES</strong> to restart a service, reboot an instance, or scale out. Reply <strong>NO</strong> to cancel. Every action is logged with who approved it, when, and what changed. No autonomous execution — ever.</p>
+                        <p style="margin:0; color:#555; line-height:1.6; font-size:0.95em;">Reply <strong>4</strong> to investigate deeper, ask follow-up questions, or snooze the alert. ConvOps responds with more context pulled from your AWS account. No autonomous execution — ever.</p>
+                        <!-- ACTIONS_DISABLED: action execution copy hidden. To re-enable restore: "Reply YES to restart/reboot/scale. Every action is logged." -->
                         <div style="display:inline-flex; align-items:center; gap:6px; margin-top:10px; background:#f0fff4; border:1px solid #86efac; border-radius:6px; padding:5px 10px;">
                             <svg style="width:13px;height:13px;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
                             <span style="font-size:0.78em; font-weight:600; color:#166534;">No action is taken without your explicit approval — confirmation required every time</span>
@@ -985,23 +934,17 @@
                     <div style="font-size:1.4em; flex-shrink:0;">💬</div>
                     <div>
                         <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">You receive on WhatsApp / Slack</div>
-                        <div style="font-size:0.9em; color:#555; line-height:1.7;"><em>"🔴 api-service error spike. Root cause: memory leak in api-worker-3 (OOM). 1 task stopped. Suggested fix: restart service to cycle the container. Reply 1 to restart, 2 to monitor only."</em></div>
+                        <div style="font-size:0.9em; color:#555; line-height:1.7;"><em>"🔴 api-service error spike. Root cause: OOM on api-worker-3. 1 task stopped. Memory 340→620MB after deploy v2.4.1. Suggested fix: restart service to cycle the container."</em></div>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#fff; border:1px solid #e0ddf8; border-top:none;">
-                    <div style="font-size:1.4em; flex-shrink:0;">✅</div>
+                <!-- ACTIONS_DISABLED: "You reply 1 — service restarts" and "Back to sleep" steps hidden.
+                To re-enable: uncomment this block. -->
+                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#f0fff4; border-radius:0 0 10px 10px; border:1px solid #86efac; border-top:none;">
+                    <div style="font-size:1.4em; flex-shrink:0;">💡</div>
                     <div>
-                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">You reply <strong>1</strong> — service restarts</div>
-                        <div style="font-size:0.9em; color:#555;">ConvOps confirms, executes, reports back: all 4 tasks healthy. Total time: <strong>2 minutes</strong>. Audit log written.</div>
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:16px; align-items:flex-start; padding:20px 24px; background:#f8f9fa; border-radius:0 0 10px 10px; border:1px solid #e0ddf8; border-top:none;">
-                    <div style="font-size:1.4em; flex-shrink:0;">💤</div>
-                    <div>
-                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">Back to sleep</div>
-                        <div style="font-size:0.9em; color:#555;">No laptop. No VPN. No 5 browser tabs. Laptop stayed closed.</div>
+                        <div style="font-weight:700; font-size:0.95em; color:#333; margin-bottom:4px;">You know exactly what happened — and what to do</div>
+                        <div style="font-size:0.9em; color:#555;">No log diving. No dashboards. ConvOps brings the context to you. Action execution coming in Pro plan.</div>
                     </div>
                 </div>
 
@@ -1050,7 +993,7 @@
 
                     <!-- Confirm ask -->
                     <div id="wa-confirm" class="bubble agent" style="display:none;"></div>
-                    <p id="wa-confirm-hint" style="display:none; font-size:0.78em; color:#888; text-align:center; margin:6px 0 10px; font-style:italic;">↑ Reply YES to confirm or NO to cancel</p>
+                    <!-- ACTIONS_DISABLED: wa-confirm-hint hidden -->
 
                     <!-- User YES -->
                     <div id="wa-yes" class="bubble user" style="display:none;">YES<div class="time" id="wa-t4"></div></div>
@@ -1060,7 +1003,7 @@
                 </div>
 
                 <!-- Action buttons (outside chat, simulating real user interaction) -->
-                <div id="wa-actions-reply1" style="display:none; margin-top:8px;">
+                <!-- ACTIONS_DISABLED: <div id="wa-actions-reply1" style="display:none; margin-top:8px;">
                     <p style="font-size:0.8em; color:#888; margin-bottom:6px;">Tap to simulate your reply:</p>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <!-- ACTIONS_DISABLED — action reply buttons hidden until Pro launches.
@@ -1070,14 +1013,14 @@
                         -->
                         <p style="font-size:0.82em; color:#28a745; margin:4px 0;">✓ Investigation complete. ConvOps has diagnosed the issue and suggested a fix.</p>
                         <p style="font-size:0.78em; color:#999; font-style:italic;">Action execution available in Pro plan.</p>
-                    </div>
+                    </div> -->
                 </div>
-                <div id="wa-actions-confirm" style="display:none; margin-top:8px;">
+                <!-- ACTIONS_DISABLED: <div id="wa-actions-confirm" style="display:none; margin-top:8px;">
                     <p style="font-size:0.8em; color:#888; margin-bottom:6px;">Tap to simulate your reply:</p>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <button onclick="simWaConfirm()" style="background:#dcf8c6; color:#333; border:1px solid #b5e8a0; padding:7px 16px; border-radius:18px; font-size:0.85em; font-weight:600; cursor:pointer;">Reply: YES</button>
                         <button onclick="simReset()" style="background:#f5f5f5; color:#888; border:1px solid #ddd; padding:7px 16px; border-radius:18px; font-size:0.85em; cursor:pointer;">Reply: NO</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -1216,7 +1159,7 @@
                 what: "ECS stops and replaces all running tasks, cycling the container that hit OOM.",
                 outcome: "ErrorRate <0.1%. All 4 tasks RUNNING in ~60 seconds.",
                 action: "Restart ECS service — api-service",
-                confirmMsg: "⚠️ Confirm: restart api-service on prod-cluster?\n\nReply YES to confirm. Expires in 5 min.",
+                // ACTIONS_DISABLED: confirmMsg: "⚠️ Confirm: restart api-service on prod-cluster?\n\nReply YES to confirm. Expires in 5 min.",
                 resolved: "✅ ECS restarted. All 4 tasks RUNNING. ErrorRate back to 0.1%. Investigate v2.4.1 deploy when ready."
             },
             {
@@ -1238,7 +1181,7 @@
                 what: "RDS reboots (~1–2 min), clearing all stale connections. Pool resets to 0.",
                 outcome: "Lambda avg duration 27.8s → <500ms. Connections 487/500 → ~10/500.",
                 action: "Reboot RDS instance — payments-db",
-                confirmMsg: "⚠️ Confirm: reboot payments-db on prod account?\n\nReply YES to confirm. Expires in 5 min.",
+                // ACTIONS_DISABLED: confirmMsg: "⚠️ Confirm: reboot payments-db on prod account?\n\nReply YES to confirm. Expires in 5 min.",
                 resolved: "✅ RDS rebooted. Connections: 12/500. Lambda avg duration back to 340ms. Payment processing restored."
             }
         ];
@@ -1305,7 +1248,7 @@
              'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done','sim-resolved'].forEach(hide);
             hide('wa-idle'); hide('slack-idle');
             // Re-enable action buttons
-            document.getElementById('slack-action-btns').style.display = 'flex';
+            // ACTIONS_DISABLED: document.getElementById('slack-action-btns').style.display = 'flex';
             document.getElementById('slack-confirm-btns').style.display = 'flex';
 
             // --- WhatsApp flow ---
@@ -1326,11 +1269,12 @@
                     '<strong>Root cause:</strong> ' + current.rootCause + '<br><br>' +
                     '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
                     '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
-                    'Reply:<br>1 - Take Action<br>2 - Snooze<br>3 - Ignore<br>4 - Investigate<br>5 - Escalate' +
+                    // ACTIONS_DISABLED: reply options hidden
+                    '' +
                     '<div class="time">' + ts(2) + '</div>';
                 show('wa-results');
-                show('wa-reply-hint');
-                show('wa-actions-reply1');
+                // ACTIONS_DISABLED: reply buttons hidden
+                // show('wa-reply-hint'); show('wa-actions-reply1');
             }, 3800);
 
             // --- Slack flow ---
@@ -1370,17 +1314,17 @@
             }, 700);
         };
 
-        // WA: user replies "YES"
-        window.simWaConfirm = function() {
+        // ACTIONS_DISABLED: WA confirm function hidden
+        /* window.simWaConfirm = function() {
             hide('wa-actions-confirm'); hide('wa-confirm-hint');
             document.getElementById('wa-t4').textContent = ts(0);
             show('wa-yes');
             setTimeout(function() {
-                document.getElementById('wa-done').innerHTML = current.resolved + '<br><br>Action logged. Alert ID: ' + current.alertId + '<div class="time">' + ts(0) + '</div>';
+                // ACTIONS_DISABLED: document.getElementById('wa-done').innerHTML = current.resolved + '<br><br>Action logged...';
                 show('wa-done');
                 simShowResolved();
             }, 800);
-        };
+        }; */};
 
         // Slack: user clicks "Execute fix"
         window.simSlackAction = function() {
@@ -1395,20 +1339,20 @@
             }, 600);
         };
 
-        // Slack: user clicks "YES — Confirm"
-        window.simSlackConfirm = function() {
+        // ACTIONS_DISABLED: Slack confirm function hidden
+        /* window.simSlackConfirm = function() {
             hide('slack-confirm-btns');
             show('slack-div3');
             document.getElementById('slack-t5').textContent = ' ' + ts(0);
             showFlex('slack-yes');
             setTimeout(function() {
                 document.getElementById('slack-t6').textContent = ' ' + ts(0);
-                document.getElementById('slack-done-body').innerHTML = current.resolved + '<br><em style="color:#aaa;font-size:0.85em;">Action logged. Alert ID: ' + current.alertId + '</em>';
+                // ACTIONS_DISABLED: document.getElementById('slack-done-body').innerHTML = ...
                 showFlex('slack-done');
                 simShowResolved();
             }, 800);
         };
-
+ */
         function simShowResolved() {
             document.getElementById('sim-resolved-msg').textContent = current.resolved.replace('✅ ','');
             show('sim-resolved');
@@ -1420,7 +1364,7 @@
             hide('sim-resolved');
             ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm','wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
              'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2','slack-user1','slack-confirm','slack-div3','slack-yes','slack-done'].forEach(hide);
-            document.getElementById('slack-action-btns').style.display = 'flex';
+            // ACTIONS_DISABLED: document.getElementById('slack-action-btns').style.display = 'flex';
             document.getElementById('slack-confirm-btns').style.display = 'flex';
         };
     })();
@@ -1548,9 +1492,10 @@
                         <span style="font-size:0.75em; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:2px 8px; border-radius:20px; font-weight:600;">$49/mo</span>
                     </div>
                     <ul style="list-style:none; padding:0; margin:0 0 16px;">
-                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Execute fixes from chat</li>
-                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Automation rules</li>
-                        <li style="padding:7px 0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Team workflows</li>
+                        <!-- ACTIONS_DISABLED: these are Pro features, shown as coming soon until launch -->
+                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#888; display:flex; align-items:center; gap:8px;"><span style="color:#c4b5fd; font-weight:700;">⏳</span> Execute fixes from chat <span style="font-size:0.78em; background:#ede9fe; color:#7c3aed; padding:1px 7px; border-radius:10px; margin-left:4px;">Coming soon</span></li>
+                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#888; display:flex; align-items:center; gap:8px;"><span style="color:#c4b5fd; font-weight:700;">⏳</span> Automation rules <span style="font-size:0.78em; background:#ede9fe; color:#7c3aed; padding:1px 7px; border-radius:10px; margin-left:4px;">Coming soon</span></li>
+                        <li style="padding:7px 0; font-size:0.92em; color:#888; display:flex; align-items:center; gap:8px;"><span style="color:#c4b5fd; font-weight:700;">⏳</span> Team workflows <span style="font-size:0.78em; background:#ede9fe; color:#7c3aed; padding:1px 7px; border-radius:10px; margin-left:4px;">Coming soon</span></li>
                     </ul>
                     <a href="https://app.convops.io/sign-up" style="display:block; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Try Pro free — no credit card</a>
                 </div>
