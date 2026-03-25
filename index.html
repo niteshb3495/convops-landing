@@ -952,6 +952,258 @@
         </div>
     </div>
 
+    <!-- INTERACTIVE SIMULATION -->
+    <div class="section">
+        <div class="section-inner">
+            <h2>Try it yourself — no account needed</h2>
+            <p style="color:#666; margin-bottom:28px; font-size:0.95em;">Click simulate to run a realistic AWS incident through ConvOps. See exactly what you'd receive and what you can do.</p>
+
+            <div id="sim-container">
+
+                <!-- Idle state -->
+                <div id="sim-idle" style="text-align:center; padding:40px 24px; background:#f8f9fa; border-radius:10px; border:2px dashed #e0ddf8;">
+                    <div style="font-size:2em; margin-bottom:12px;">⚡</div>
+                    <p style="font-weight:600; color:#333; margin-bottom:6px;">Simulate a real incident</p>
+                    <p style="color:#888; font-size:0.9em; margin-bottom:20px;">ECS error spike or Lambda timeout — randomised each time</p>
+                    <button onclick="simStart()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:12px 28px; border-radius:8px; font-size:0.95em; font-weight:600; cursor:pointer; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+                        ▶ Simulate an incident
+                    </button>
+                </div>
+
+                <!-- Active simulation -->
+                <div id="sim-active" style="display:none;">
+
+                    <!-- Alert banner -->
+                    <div id="sim-alert" style="display:none; background:#fff3f3; border:1.5px solid #f5a0a0; border-radius:10px; padding:16px 20px; margin-bottom:14px;">
+                        <div style="display:flex; align-items:flex-start; gap:12px;">
+                            <span style="font-size:1.3em;">🚨</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+                                    <span style="font-weight:700; color:#c0392b; font-size:0.9em; text-transform:uppercase; letter-spacing:0.03em;">URGENT ALERT</span>
+                                    <span id="sim-severity" style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:20px; font-size:0.75em; font-weight:700;"></span>
+                                </div>
+                                <p id="sim-alarm" style="font-family:monospace; font-size:0.9em; color:#333; margin:0;"></p>
+                                <p style="font-size:0.8em; color:#888; margin:4px 0 0;">prod-account · eu-central-1</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Investigation -->
+                    <div id="sim-investigation" style="display:none; background:#f4f3ff; border:1px solid #e0ddf8; border-radius:10px; padding:16px 20px; margin-bottom:14px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                            <span id="sim-inv-spinner" style="display:inline-block; font-size:0.85em;">🔄</span>
+                            <span style="font-size:0.8em; font-weight:700; color:#667eea; text-transform:uppercase; letter-spacing:0.04em;">Investigating…</span>
+                        </div>
+                        <div id="sim-steps" style="font-family:monospace; font-size:0.83em; color:#555; line-height:2;"></div>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="sim-results" style="display:none;">
+
+                        <!-- Root cause -->
+                        <div style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+                            <p style="font-size:0.78em; font-weight:700; color:#92400e; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">Root Cause</p>
+                            <p id="sim-rootcause" style="font-size:0.9em; color:#333; line-height:1.6; margin:0;"></p>
+                        </div>
+
+                        <!-- What happened -->
+                        <div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+                            <p style="font-size:0.78em; font-weight:700; color:#666; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">What Happened</p>
+                            <p id="sim-explanation" style="font-size:0.9em; color:#444; line-height:1.6; margin:0;"></p>
+                        </div>
+
+                        <!-- Urgency -->
+                        <div id="sim-urgency-box" style="background:#fff5f5; border:1px solid #fca5a5; border-radius:8px; padding:10px 16px; margin-bottom:12px; display:flex; align-items:flex-start; gap:8px;">
+                            <span style="color:#ef4444; font-size:0.85em; margin-top:1px;">⚠️</span>
+                            <p id="sim-urgency" style="font-size:0.85em; color:#991b1b; margin:0; line-height:1.5;"></p>
+                        </div>
+
+                        <!-- Suggested fix + action details -->
+                        <div style="background:#f0effe; border:1.5px solid #c4b5fd; border-radius:10px; padding:20px; margin-bottom:14px;">
+                            <p style="font-size:0.78em; font-weight:700; color:#5b21b6; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">Suggested Fix</p>
+                            <p id="sim-fix" style="font-size:0.95em; font-weight:600; color:#2d2046; line-height:1.5; margin-bottom:16px;"></p>
+
+                            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin-bottom:20px;">
+                                <div style="background:white; border-radius:8px; padding:12px 14px; border:1px solid #e0ddf8;">
+                                    <p style="font-size:0.72em; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:4px;">What will happen</p>
+                                    <p id="sim-what" style="font-size:0.82em; color:#444; line-height:1.5; margin:0;"></p>
+                                </div>
+                                <div style="background:white; border-radius:8px; padding:12px 14px; border:1px solid #e0ddf8;">
+                                    <p style="font-size:0.72em; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:4px;">Why it helps</p>
+                                    <p id="sim-why" style="font-size:0.82em; color:#444; line-height:1.5; margin:0;"></p>
+                                </div>
+                                <div style="background:#f0fff4; border-radius:8px; padding:12px 14px; border:1px solid #86efac;">
+                                    <p style="font-size:0.72em; font-weight:700; color:#166534; text-transform:uppercase; margin-bottom:4px;">Expected outcome</p>
+                                    <p id="sim-outcome" style="font-size:0.82em; color:#15803d; line-height:1.5; margin:0;"></p>
+                                </div>
+                            </div>
+
+                            <p style="font-size:0.8em; color:#777; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                                <span style="color:#28a745;">✓</span> You are in control — no action is taken without your confirmation.
+                            </p>
+
+                            <div id="sim-action-area">
+                                <button id="sim-action-btn" onclick="simAction()" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:11px 22px; border-radius:8px; font-size:0.92em; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:8px;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+                                    <span>▶</span> <span id="sim-action-label"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm -->
+                    <div id="sim-confirm" style="display:none; background:#fffbeb; border:1.5px solid #fcd34d; border-radius:10px; padding:16px 20px; margin-bottom:14px;">
+                        <p style="font-weight:600; color:#78350f; margin-bottom:4px;">Confirm action?</p>
+                        <p id="sim-confirm-label" style="font-size:0.88em; color:#666; margin-bottom:14px;"></p>
+                        <p style="font-size:0.8em; color:#999; margin-bottom:14px; font-style:italic;">This is a simulation — no real AWS resources are affected.</p>
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="simConfirm()" style="background:#16a34a; color:white; border:none; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; cursor:pointer;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">✅ YES — Execute</button>
+                            <button onclick="simReset()" style="background:white; color:#666; border:1px solid #ddd; padding:9px 20px; border-radius:7px; font-size:0.88em; cursor:pointer;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">❌ Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- Resolved -->
+                    <div id="sim-resolved" style="display:none; background:#f0fff4; border:1.5px solid #86efac; border-radius:10px; padding:20px; margin-bottom:14px; text-align:center;">
+                        <div style="font-size:2em; margin-bottom:10px;">✅</div>
+                        <p style="font-weight:700; color:#166534; font-size:1em; margin-bottom:6px;">Incident resolved</p>
+                        <p id="sim-resolved-msg" style="font-size:0.9em; color:#444; margin-bottom:16px;"></p>
+                        <div style="background:white; border:1px solid #e9ecef; border-radius:8px; padding:12px 16px; text-align:left; font-family:monospace; font-size:0.8em; color:#666; margin-bottom:20px;">
+                            <div><span style="color:#aaa;">action:</span> <span id="sim-log-action"></span></div>
+                            <div><span style="color:#aaa;">approved_by:</span> you (phone-bound)</div>
+                            <div><span style="color:#aaa;">timestamp:</span> <span id="sim-log-ts"></span></div>
+                            <div><span style="color:#aaa;">result:</span> <span style="color:#16a34a;">success</span></div>
+                        </div>
+                        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                            <button onclick="simReset()" style="background:#f4f3ff; color:#667eea; border:1.5px solid #667eea; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; cursor:pointer;">Run again</button>
+                            <a href="/sign-up" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; text-decoration:none; display:inline-block;">Connect your real AWS →</a>
+                        </div>
+                    </div>
+
+                    <!-- Reset link (always visible during active sim) -->
+                    <div id="sim-reset-link" style="text-align:right; margin-top:4px;">
+                        <button onclick="simReset()" style="background:none; border:none; color:#aaa; font-size:0.82em; cursor:pointer; text-decoration:underline;">Reset</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var SCENARIOS = [
+            {
+                severity: "P1",
+                alarm: "api-service · ErrorRate > 5% · 3 min",
+                steps: [
+                    "✓ Pulling CloudWatch logs for api-service…",
+                    "✓ Checking ECS task status and stopped reason…",
+                    "✓ Fetching memory utilisation metrics (last 30 min)…",
+                    "✓ Checking recent CloudWatch events for deploy activity…"
+                ],
+                rootCause: "Container api-worker-3 stopped with reason: OutOfMemoryError (limit: 512MB). Memory rose from 340MB → 620MB over 8 min before the task was killed. 1 of 4 tasks currently in STOPPED state.",
+                explanation: "ConvOps detected the OOM stop reason from ECS task metadata and confirmed the memory spike in CloudWatch metrics. A deploy event (v2.4.1) was logged 23 minutes before the spike — likely related, but ConvOps cannot confirm the code-level cause. Check the deploy diff or enable a profiler to find the root cause in code.",
+                urgency: "This issue is actively impacting service performance — 1 task down, error rate at 5% and rising.",
+                fix: "Restart the ECS service to cycle the stopped container and restore all 4 tasks to RUNNING.",
+                what: "ECS will stop and replace all running tasks, cycling the container that hit the OOM limit.",
+                why: "Restarting clears the memory state of the faulty container, returning all 4 tasks to a healthy running state.",
+                outcome: "ErrorRate drops to <0.1%. All 4 tasks RUNNING. Full capacity restored in ~60 seconds.",
+                action: "Run fix now — Restart ECS service",
+                resolved: "ECS service restarted. All 4 tasks RUNNING. ErrorRate back to 0.1%. Investigate v2.4.1 deploy when ready."
+            },
+            {
+                severity: "P2",
+                alarm: "payment-processor · Duration > 28s · 5 invocations",
+                steps: [
+                    "✓ Fetching Lambda execution logs (last 15 min)…",
+                    "✓ Checking RDS CPU and connection count metrics…",
+                    "✓ Correlating Lambda timeout timestamps with RDS load…",
+                    "✓ Checking for other Lambdas hitting the same RDS instance…"
+                ],
+                rootCause: "Lambda avg duration: 27.8s (limit: 30s). RDS CPU: 94%. RDS connection count: 487/500. Timeouts started 14 minutes ago, correlating with RDS connection saturation. 3 other Lambdas share the same RDS instance.",
+                explanation: "ConvOps can see that Lambda is timing out and that RDS connections are nearly exhausted at the same time — the correlation is strong. What ConvOps cannot tell you: why connections are being held open. That requires inspecting your application code. The RDS reboot will clear stale connections and restore availability now.",
+                urgency: "Payment processing is timing out — users are experiencing failed transactions right now.",
+                fix: "Reboot RDS to clear the saturated connection pool and restore Lambda response times.",
+                what: "RDS will reboot (~1–2 min), clearing all active and stale connections. The pool resets to 0.",
+                why: "With the pool cleared, Lambdas can acquire fresh connections immediately instead of queuing and timing out.",
+                outcome: "Lambda avg duration: 27.8s → <500ms. Connections: 487/500 → ~10/500. Payment processing restored.",
+                action: "Run fix now — Reboot RDS instance",
+                resolved: "RDS rebooted. Connection count: 12/500. Lambda avg duration back to 340ms. Payment processing restored."
+            }
+        ];
+
+        var current = null;
+
+        window.simStart = function() {
+            current = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
+            document.getElementById('sim-idle').style.display = 'none';
+            document.getElementById('sim-active').style.display = 'block';
+            document.getElementById('sim-alert').style.display = 'none';
+            document.getElementById('sim-investigation').style.display = 'none';
+            document.getElementById('sim-results').style.display = 'none';
+            document.getElementById('sim-confirm').style.display = 'none';
+            document.getElementById('sim-resolved').style.display = 'none';
+
+            // Stage 1: alert
+            document.getElementById('sim-severity').textContent = current.severity;
+            document.getElementById('sim-alarm').textContent = current.alarm;
+            document.getElementById('sim-alert').style.display = 'block';
+
+            // Stage 2: investigate after 1.4s
+            setTimeout(function() {
+                document.getElementById('sim-investigation').style.display = 'block';
+                document.getElementById('sim-steps').innerHTML = '';
+                var delay = 0;
+                current.steps.forEach(function(step, i) {
+                    delay += 800;
+                    setTimeout(function() {
+                        document.getElementById('sim-steps').innerHTML += '<div>' + step + '</div>';
+                        // Stage 3: results after last step
+                        if (i === current.steps.length - 1) {
+                            setTimeout(simShowResults, 600);
+                        }
+                    }, delay);
+                });
+            }, 1400);
+        };
+
+        function simShowResults() {
+            document.getElementById('sim-inv-spinner').textContent = '✓';
+            document.getElementById('sim-rootcause').textContent = current.rootCause;
+            document.getElementById('sim-explanation').textContent = current.explanation;
+            document.getElementById('sim-urgency').textContent = current.urgency;
+            document.getElementById('sim-fix').textContent = current.fix;
+            document.getElementById('sim-what').textContent = current.what;
+            document.getElementById('sim-why').textContent = current.why;
+            document.getElementById('sim-outcome').textContent = current.outcome;
+            document.getElementById('sim-action-label').textContent = current.action;
+            document.getElementById('sim-results').style.display = 'block';
+        }
+
+        window.simAction = function() {
+            document.getElementById('sim-action-area').style.display = 'none';
+            document.getElementById('sim-confirm').style.display = 'block';
+            document.getElementById('sim-confirm-label').textContent = current.action;
+        };
+
+        window.simConfirm = function() {
+            document.getElementById('sim-confirm').style.display = 'none';
+            document.getElementById('sim-resolved-msg').textContent = current.resolved;
+            document.getElementById('sim-log-action').textContent = current.action;
+            document.getElementById('sim-log-ts').textContent = new Date().toISOString();
+            document.getElementById('sim-resolved').style.display = 'block';
+            document.getElementById('sim-reset-link').style.display = 'none';
+        };
+
+        window.simReset = function() {
+            current = null;
+            document.getElementById('sim-idle').style.display = 'block';
+            document.getElementById('sim-active').style.display = 'none';
+            document.getElementById('sim-action-area').style.display = 'block';
+            document.getElementById('sim-reset-link').style.display = 'block';
+        };
+    })();
+    </script>
+
     <!-- PRICING -->
     <div class="section">
         <div class="section-inner">
