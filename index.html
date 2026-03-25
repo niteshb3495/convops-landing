@@ -1006,8 +1006,8 @@
                 <div id="wa-actions-reply1" style="display:none; margin-top:8px;">
                     <p style="font-size:0.8em; color:#888; margin-bottom:6px;">Tap to simulate your reply:</p>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <button onclick="simWaReply1()" style="background:#dcf8c6; color:#333; border:1px solid #b5e8a0; padding:7px 16px; border-radius:18px; font-size:0.85em; font-weight:600; cursor:pointer;">Reply: 1 — Execute fix</button>
-                        <button onclick="simReset()" style="background:#f5f5f5; color:#888; border:1px solid #ddd; padding:7px 16px; border-radius:18px; font-size:0.85em; cursor:pointer;">Reply: 2 — Monitor only</button>
+                        <button onclick="simWaReply1()" style="background:#dcf8c6; color:#333; border:1px solid #b5e8a0; padding:7px 16px; border-radius:18px; font-size:0.85em; font-weight:600; cursor:pointer;">Reply: 1 - Take Action</button>
+                        <button onclick="simReset()" style="background:#f5f5f5; color:#888; border:1px solid #ddd; padding:7px 16px; border-radius:18px; font-size:0.85em; cursor:pointer;">Reply: 2 - Snooze</button>
                     </div>
                 </div>
                 <div id="wa-actions-confirm" style="display:none; margin-top:8px;">
@@ -1131,12 +1131,15 @@
             {
                 severity: "P1",
                 alarm: "api-service · ErrorRate > 5%",
-                resource: "api-service (ECS)",
+                resource: "api-service",
+                resourceType: "ECS",
                 metric: "ErrorRate",
+                metricValue: "5.8%",
                 threshold: "> 5%",
                 env: "production",
                 region: "eu-central-1",
                 alertId: "ALT-20260325-0214",
+                ref: "cv-001",
                 analysis: "1 of 4 tasks STOPPED (OOM). Memory 340→620MB after deploy v2.4.1 (23 min ago). Suggest restart to restore capacity.",
                 rootCause: "Container api-worker-3 stopped: OutOfMemoryError (512MB limit). Memory rose 340MB→620MB. Deploy v2.4.1 logged 23 min before spike.",
                 explanation: "OOM stop reason confirmed from ECS task metadata + CloudWatch memory spike. Deploy v2.4.1 is likely related — cannot confirm code-level cause without profiler.",
@@ -1150,12 +1153,15 @@
             {
                 severity: "P2",
                 alarm: "payment-processor · Duration > 28s",
-                resource: "payment-processor (Lambda)",
+                resource: "payment-processor",
+                resourceType: "Lambda",
                 metric: "Duration",
+                metricValue: "27.8s",
                 threshold: "> 28s",
                 env: "production",
                 region: "eu-central-1",
                 alertId: "ALT-20260325-0318",
+                ref: "cv-002",
                 analysis: "RDS CPU 94%, connections 487/500. Lambda timing out waiting on connection pool. 3 other Lambdas affected. Suggest RDS reboot to clear pool.",
                 rootCause: "Lambda avg 27.8s (limit 30s). RDS connections 487/500, CPU 94%. Timeouts correlate with connection saturation. 3 Lambdas share same RDS.",
                 explanation: "Strong correlation: Lambda timeouts started when RDS connections hit saturation. Cannot identify why connections are held open — requires code inspection.",
@@ -1183,15 +1189,20 @@
         // Build WhatsApp message using real approved template format:
         // 🚨 {{1}} | {{2}} | P{{3}} / Resource: {{4}} / Metric: {{5}} → Threshold: {{6}} / Env: {{7}} | Region: {{8}} / AI Analysis: {{9}} / Actions: 1-5 / Alert ID: {{10}} / www.convops.io
         function buildWaTemplate(s) {
-            var t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-            return '🚨 <strong>' + s.alarm + '</strong> | ' + t + ' | P' + s.severity.replace('P','') +
-                '<br>Resource: ' + s.resource +
-                '<br>Metric: ' + s.metric + ' → Threshold: ' + s.threshold +
+            return 'ConvOps Infrastructure Alert' +
+                '<br><br>🚨 ' + s.metric + ' | ' + s.resourceType + ' | P' + s.severity.replace('P','') +
+                '<br><br>Resource: ' + s.resource +
+                '<br>Metric: ' + s.metricValue + ' → Threshold: ' + s.threshold +
                 '<br>Env: ' + s.env + ' | Region: ' + s.region +
-                '<br><br>AI Analysis: ' + s.analysis +
-                '<br><br>Actions: 1-5' +
-                '<br>Alert ID: ' + s.alertId +
-                '<br>www.convops.io';
+                '<br><br>💡 AI Analysis: ' + s.analysis + ' [Ref:' + s.ref + ']' +
+                '<br><br>Reply:' +
+                '<br>1 - Take Action' +
+                '<br>2 - Snooze' +
+                '<br>3 - Ignore' +
+                '<br>4 - Investigate' +
+                '<br>5 - Escalate' +
+                '<br><br>Alert ID: ' + s.alertId +
+                '<br><br>www.convops.io';
         }
 
         function buildSlackAlert(s) {
@@ -1242,11 +1253,11 @@
             // Step 3: results + action options
             setTimeout(function() {
                 document.getElementById('wa-results').innerHTML =
-                    '✅ <strong>Investigation complete</strong><br><br>' +
+                    '💡 <strong>AI Analysis update</strong><br><br>' +
                     '<strong>Root cause:</strong> ' + current.rootCause + '<br><br>' +
                     '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
                     '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
-                    'Reply:<br>1️⃣ Execute fix now<br>2️⃣ Monitor only' +
+                    'Reply:<br>1 - Take Action<br>2 - Snooze<br>3 - Ignore<br>4 - Investigate<br>5 - Escalate' +
                     '<div class="time">' + ts(2) + '</div>';
                 show('wa-results');
                 show('wa-reply-hint');
