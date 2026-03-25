@@ -1183,13 +1183,15 @@
         // Build WhatsApp message using real approved template format:
         // 🚨 {{1}} | {{2}} | P{{3}} / Resource: {{4}} / Metric: {{5}} → Threshold: {{6}} / Env: {{7}} | Region: {{8}} / AI Analysis: {{9}} / Actions: 1-5 / Alert ID: {{10}} / www.convops.io
         function buildWaTemplate(s) {
-            return '🚨 ' + s.alarm + ' | ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) +
-                ' | P' + s.severity.replace('P','') +
-                ' / Resource: ' + s.resource +
-                ' / Metric: ' + s.metric + ' → Threshold: ' + s.threshold +
-                ' / Env: ' + s.env + ' | Region: ' + s.region +
-                ' / AI Analysis: ' + s.analysis +
-                ' / Actions: 1-5 / Alert ID: ' + s.alertId + ' / www.convops.io';
+            var t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+            return '🚨 <strong>' + s.alarm + '</strong> | ' + t + ' | P' + s.severity.replace('P','') +
+                '<br>Resource: ' + s.resource +
+                '<br>Metric: ' + s.metric + ' → Threshold: ' + s.threshold +
+                '<br>Env: ' + s.env + ' | Region: ' + s.region +
+                '<br><br>AI Analysis: ' + s.analysis +
+                '<br><br>Actions: 1-5' +
+                '<br>Alert ID: ' + s.alertId +
+                '<br>www.convops.io';
         }
 
         function buildSlackAlert(s) {
