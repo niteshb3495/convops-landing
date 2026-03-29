@@ -1224,5 +1224,191 @@
         }
     }
     </script>
+
+    <script>
+    var simScenarios = [
+        {
+            service: "api-service",
+            alarm: "ErrorRate > 5%",
+            duration: "3 min",
+            cpu: "91%", mem: "68%", tasks: "2/2",
+            rootCause: "traffic spike post-deploy (deploy 8 min ago). No OOM errors.",
+            fix: "scale out (+2 tasks)",
+            confirmMsg: "scale <strong>api-service</strong> from 2 \u2192 4 tasks on <strong>prod-cluster</strong>",
+            resolvedMsg: "CPU: 91% \u2192 72% \u2192 54% \u00b7 All 4 tasks healthy.",
+            actions: ["Scale out (+2 tasks)", "Restart service", "Monitor only"],
+            type: "ECS error spike"
+        },
+        {
+            service: "worker-lambda",
+            alarm: "Duration > 28,000ms (timeout)",
+            duration: "5 invocations",
+            cpu: "N/A", mem: "512MB / 512MB", tasks: "N/A",
+            rootCause: "memory ceiling hit on every invocation \u2014 Lambda OOM-killing before completion.",
+            fix: "increase memory to 1024 MB",
+            confirmMsg: "update <strong>worker-lambda</strong> memory from 512 MB \u2192 1024 MB",
+            resolvedMsg: "Lambda p99 duration: 28s \u2192 4.1s \u00b7 0 timeouts in last 10 invocations.",
+            actions: ["Increase memory to 1024 MB", "Add timeout retry", "Monitor only"],
+            type: "Lambda timeout"
+        }
+    ];
+
+    var simActive = null;
+    var simCh = 'wa';
+
+    function simNow() {
+        var d = new Date();
+        return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    }
+
+    function simChannel(ch) {
+        simCh = ch;
+        var isWa = ch === 'wa';
+        document.getElementById('sim-chat-wa').style.display = isWa ? 'block' : 'none';
+        document.getElementById('sim-chat-slack').style.display = isWa ? 'none' : 'block';
+        var tabWa = document.getElementById('sim-tab-wa');
+        var tabSlack = document.getElementById('sim-tab-slack');
+        if (isWa) {
+            tabWa.style.background = '#075e54'; tabWa.style.borderColor = '#075e54'; tabWa.style.color = 'white';
+            tabSlack.style.background = 'white'; tabSlack.style.borderColor = '#e0e0e0'; tabSlack.style.color = '#666';
+        } else {
+            tabSlack.style.background = '#4A154B'; tabSlack.style.borderColor = '#4A154B'; tabSlack.style.color = 'white';
+            tabWa.style.background = 'white'; tabWa.style.borderColor = '#e0e0e0'; tabWa.style.color = '#666';
+        }
+        simReset();
+    }
+
+    function show(id) { var el = document.getElementById(id); if (el) el.style.display = ''; }
+    function hide(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; }
+    function html(id, val) { var el = document.getElementById(id); if (el) el.innerHTML = val; }
+    function text(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+
+    function simStart() {
+        simActive = simScenarios[Math.floor(Math.random() * simScenarios.length)];
+        var s = simActive;
+        var t1 = simNow();
+
+        if (simCh === 'wa') {
+            hide('wa-idle');
+            html('wa-alert', '\uD83D\uDD34 <strong>ALERT: ' + s.service + ' \u00b7 ' + s.alarm + '</strong><br>Has been triggered for ' + s.duration + '.<div class="time">' + t1 + '</div>');
+            show('wa-alert');
+
+            setTimeout(function() {
+                html('wa-investigating', '\uD83D\uDD0D Investigating... pulling CloudWatch logs + metrics<div class="time">' + simNow() + '</div>');
+                show('wa-investigating');
+            }, 800);
+
+            setTimeout(function() {
+                var res = '\uD83D\uDCCA <strong>Analysis complete:</strong><br><br>';
+                if (s.cpu !== 'N/A') res += '\u2022 CPU: ' + s.cpu + ' \u00b7 Memory: ' + s.mem + ' \u00b7 Tasks: ' + s.tasks + '<br>';
+                else res += '\u2022 Memory: ' + s.mem + '<br>';
+                res += '\u2022 Root cause: ' + s.rootCause + '<br><br>';
+                res += '<strong>Recommended actions:</strong><br>';
+                s.actions.forEach(function(a, i) { res += (i+1) + '. ' + a + '<br>'; });
+                res += '<br>Reply 1, 2, or 3.<div class="time">' + simNow() + '</div>';
+                html('wa-results', res);
+                show('wa-results');
+                show('wa-reply-hint');
+                show('wa-actions-reply1');
+                hide('wa-investigating');
+            }, 2400);
+
+        } else {
+            hide('slack-idle');
+            html('slack-t1', ' ' + t1);
+            html('slack-alert-body', '\uD83D\uDD34 <strong>ALERT: ' + s.service + ' \u00b7 ' + s.alarm + '</strong><br>Has been triggered for ' + s.duration + '.');
+            show('slack-alert');
+
+            setTimeout(function() {
+                html('slack-t-inv', ' ' + simNow());
+                html('slack-inv-body', '\uD83D\uDD0D Investigating... pulling CloudWatch logs + metrics');
+                show('slack-investigating');
+            }, 800);
+
+            setTimeout(function() {
+                var res = '\uD83D\uDCCA <strong>Analysis complete:</strong><br><br>';
+                if (s.cpu !== 'N/A') res += '\u2022 CPU: ' + s.cpu + ' \u00b7 Memory: ' + s.mem + ' \u00b7 Tasks: ' + s.tasks + '<br>';
+                else res += '\u2022 Memory: ' + s.mem + '<br>';
+                res += '\u2022 Root cause: ' + s.rootCause;
+                html('slack-t2', ' ' + simNow());
+                html('slack-results-body', res);
+                show('slack-div1');
+                show('slack-results');
+                hide('slack-investigating');
+            }, 2400);
+        }
+    }
+
+    function simWaReply1() {
+        hide('wa-actions-reply1');
+        hide('wa-reply-hint');
+        var s = simActive;
+        text('wa-t2', simNow());
+        show('wa-user1');
+
+        setTimeout(function() {
+            html('wa-confirm', '\u26A0\uFE0F Confirm: ' + s.confirmMsg + '?<br><br>Reply <strong>YES</strong> to confirm or <strong>NO</strong> to cancel. (expires in 5 min)<div class="time">' + simNow() + '</div>');
+            show('wa-confirm');
+            show('wa-confirm-hint');
+            show('wa-actions-confirm');
+        }, 700);
+    }
+
+    function simWaConfirm() {
+        hide('wa-actions-confirm');
+        hide('wa-confirm-hint');
+        var s = simActive;
+        text('wa-t4', simNow());
+        show('wa-yes');
+
+        setTimeout(function() {
+            html('wa-done', '\u2705 Executing: ' + s.fix + '...<br><br>' + s.resolvedMsg + '<br>Action logged.<div class="time">' + simNow() + '</div>');
+            show('wa-done');
+            html('sim-resolved-msg', s.type + ' resolved. ' + s.resolvedMsg);
+            show('sim-resolved');
+        }, 900);
+    }
+
+    function simSlackAction() {
+        var s = simActive;
+        hide('slack-action-btns');
+        text('slack-t3', ' ' + simNow());
+        show('slack-div2');
+        show('slack-user1');
+
+        setTimeout(function() {
+            html('slack-t4', ' ' + simNow());
+            html('slack-confirm-body', '\u26A0\uFE0F Confirm: ' + s.confirmMsg + '?');
+            show('slack-confirm');
+        }, 700);
+    }
+
+    function simSlackConfirm() {
+        var s = simActive;
+        hide('slack-confirm-btns');
+        text('slack-t5', ' ' + simNow());
+        show('slack-div3');
+        show('slack-yes');
+
+        setTimeout(function() {
+            html('slack-t6', ' ' + simNow());
+            html('slack-done-body', '\u2705 Executing: ' + s.fix + '...<br><br>' + s.resolvedMsg + '<br>Action logged.');
+            show('slack-done');
+            html('sim-resolved-msg', s.type + ' resolved. ' + s.resolvedMsg);
+            show('sim-resolved');
+        }, 900);
+    }
+
+    function simReset() {
+        ['wa-alert','wa-investigating','wa-results','wa-reply-hint','wa-user1','wa-confirm',
+         'wa-confirm-hint','wa-yes','wa-done','wa-actions-reply1','wa-actions-confirm',
+         'slack-alert','slack-investigating','slack-div1','slack-results','slack-div2',
+         'slack-user1','slack-confirm','slack-div3','slack-yes','slack-done','sim-resolved'
+        ].forEach(function(id) { hide(id); });
+        show('wa-idle');
+        show('slack-idle');
+        simActive = null;
+    }
+    </script>
 </body>
 </html>
