@@ -698,18 +698,23 @@
                         <span style="font-size:0.7em; font-weight:700; color:#dc2626; background:#fff3f3; border:1px solid #fca5a5; border-radius:10px; padding:1px 8px;">🔍 DIAGNOSIS</span>
                     </div>
                     <div class="bubble agent demo-bubble" style="animation-delay:0.2s">
-                        🔴 <strong>ALERT: api-service · CPUUtilization 96%</strong><br><br>
-                        Has been above 90% for 10 minutes.<br><br>
-                        Investigated:<br>
-                        • CPU: 96% · Memory: 61% · Tasks: 2/2<br>
-                        • Traffic: 3× normal (deploy 12 min ago)<br>
-                        • No OOM errors in logs<br><br>
-                        Likely cause: traffic spike post-deploy, not a leak.<br><br>
-                        Recommended actions:<br>
-                        1️⃣ Scale out — add 2 tasks (fastest fix)<br>
-                        2️⃣ Restart service — force fresh deployment<br>
-                        3️⃣ Do nothing — monitor for 5 more min<br><br>
-                        Reply 1, 2, or 3.
+                        <strong>ConvOps Infrastructure Alert</strong><br>
+                        ConvOps Alert:<br><br>
+                        Resource: api-service<br>
+                        Metric: ALARM - Threshold: &gt; 90%<br>
+                        Env: production | Region: eu-central-1<br><br>
+                        Analysis: CPU 96%, 3× traffic spike after deploy 12 min ago. No OOM errors. Likely traffic overload, not a memory leak.<br>
+                        Impact: Service degraded. Response times rising. Risk of task failure if load continues.<br>
+                        Causes: Deploy v2.4.1 triggered traffic spike. Tasks under-provisioned for current load.<br>
+                        Suggested: Scale out — add 2 tasks to absorb traffic spike.<br>
+                        Recommendation: ECS adds 2 tasks (~60s). CPU expected to drop from 96% → ~54%.<br><br>
+                        Reply:<br>
+                        1 - Take Action<br>
+                        2 - Snooze<br>
+                        3 - Ignore<br>
+                        4 - Investigate<br>
+                        5 - Escalate<br><br>
+                        Alert ID: ALT-20260325-0214 | www.convops.io
                         <div class="time">02:14</div>
                     </div>
 
@@ -760,17 +765,18 @@
                             <div class="slack-msg-content">
                                 <div class="slack-sender bot-name">ConvOps<span class="ts">2:14 AM</span></div>
                                 <div class="slack-text">
-                                    🔴 <strong>ALERT: api-service · CPUUtilization 96%</strong><br><br>
-                                    Has been above 90% for 10 minutes.<br><br>
-                                    Investigated:<br>
-                                    • CPU: 96% · Memory: 61% · Tasks: 2/2<br>
-                                    • Traffic: 3× normal (deploy 12 min ago)<br>
-                                    • No OOM errors in logs<br><br>
-                                    Likely cause: traffic spike post-deploy, not a leak.<br><br>
-                                    <strong>Recommended:</strong><br>
-                                    <span class="action-btn">1️⃣ Scale out (+2 tasks)</span>&nbsp;
-                                    <span class="action-btn">2️⃣ Restart service</span>&nbsp;
-                                    <span class="action-btn">3️⃣ Monitor only</span>
+                                    <strong>ConvOps Infrastructure Alert</strong><br>
+                                    ConvOps Alert:<br><br>
+                                    Resource: api-service<br>
+                                    Metric: ALARM - Threshold: &gt; 90%<br>
+                                    Env: production | Region: eu-central-1<br><br>
+                                    Analysis: CPU 96%, 3× traffic spike after deploy 12 min ago. No OOM errors. Likely traffic overload, not a memory leak.<br>
+                                    Impact: Service degraded. Response times rising. Risk of task failure if load continues.<br>
+                                    Causes: Deploy v2.4.1 triggered traffic spike. Tasks under-provisioned for current load.<br>
+                                    Suggested: Scale out — add 2 tasks to absorb traffic spike.<br>
+                                    Recommendation: ECS adds 2 tasks (~60s). CPU expected to drop from 96% → ~54%.<br><br>
+                                    Reply: 1 - Take Action · 2 - Snooze · 3 - Ignore · 4 - Investigate · 5 - Escalate<br><br>
+                                    Alert ID: ALT-20260325-0214 | www.convops.io
                                 </div>
                             </div>
                         </div>
