@@ -1264,12 +1264,14 @@
         function hide(id) { document.getElementById(id).style.display = 'none'; }
 
         // Build WhatsApp message using real approved template format
+        // Analysis is included in the alert itself — no separate investigation step
         function buildWaTemplate(s) {
             return '<strong>ConvOps Infrastructure Alert</strong>' +
                 '<br>ConvOps Alert:' +
                 '<br><br>Resource: ' + s.resource +
                 '<br>Metric: ALARM - Threshold: ' + s.threshold +
                 '<br>Env: ' + s.env + ' | Region: ' + s.region +
+                '<br><br>Analysis: ' + s.analysis +
                 '<br><br>Reply:' +
                 '<br>1 - Take Action' +
                 '<br>2 - Snooze' +
@@ -1318,25 +1320,11 @@
             document.getElementById('wa-alert').innerHTML = buildWaTemplate(current) + '<div class="time">' + ts(4) + '</div>';
             show('wa-alert');
 
-            // Step 2: investigating status
+            // Step 2: show action buttons immediately after alert
             setTimeout(function() {
-                document.getElementById('wa-investigating').innerHTML = '🔄 Investigating… pulling CloudWatch logs + metrics.<div class="time">' + ts(3) + '</div>';
-                show('wa-investigating');
-            }, 1200);
-
-            // Step 3: results + action options
-            setTimeout(function() {
-                document.getElementById('wa-results').innerHTML =
-                    '💡 <strong>AI Analysis update</strong><br><br>' +
-                    '<strong>Root cause:</strong> ' + current.rootCause + '<br><br>' +
-                    '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
-                    '<strong>Expected:</strong> ' + current.outcome + '<br><br>' +
-                    'Reply:<br>1 - Take Action<br>2 - Snooze<br>3 - Ignore<br>4 - Investigate<br>5 - Escalate' +
-                    '<div class="time">' + ts(2) + '</div>';
-                show('wa-results');
                 show('wa-reply-hint');
                 show('wa-actions-reply1');
-            }, 3800);
+            }, 800);
 
             // --- Slack flow ---
             document.getElementById('slack-t1').textContent = ' ' + ts(4);
