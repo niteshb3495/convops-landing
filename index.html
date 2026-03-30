@@ -1291,11 +1291,18 @@
         }
 
         function buildSlackAlert(s) {
-            return '🚨 <strong>ALERT: ' + s.alarm + '</strong><br><br>' +
-                '<strong>Root cause:</strong> ' + s.rootCause + '<br>' +
-                '<strong>Analysis:</strong> ' + s.analysis + '<br><br>' +
-                '<strong>Suggested fix:</strong> ' + s.fix + '<br>' +
-                '<strong>Expected:</strong> ' + s.outcome;
+            return '<strong>ConvOps Infrastructure Alert</strong><br>' +
+                'ConvOps Alert:<br><br>' +
+                'Resource: ' + s.resource + '<br>' +
+                'Metric: ALARM - Threshold: ' + s.threshold + '<br>' +
+                'Env: ' + s.env + ' | Region: ' + s.region + '<br><br>' +
+                'Analysis: ' + s.analysis + '<br>' +
+                'Impact: ' + s.outcome + '<br>' +
+                'Causes: ' + s.explanation + '<br>' +
+                'Suggested: ' + s.fix + '<br>' +
+                'Recommendation: ' + s.what + '<br><br>' +
+                'Reply: 1 - Take Action · 2 - Snooze · 3 - Ignore · 4 - Investigate · 5 - Escalate<br><br>' +
+                'Alert ID: ' + s.alertId + ' | www.convops.io';
         }
 
         window.simChannel = function(ch) {
@@ -1340,23 +1347,12 @@
             document.getElementById('slack-alert-body').innerHTML = buildSlackAlert(current);
             showFlex('slack-alert');
 
+            // Show action buttons immediately after alert
             setTimeout(function() {
-                document.getElementById('slack-t-inv').textContent = ' ' + ts(3);
-                document.getElementById('slack-inv-body').textContent = '🔄 Investigating… pulling CloudWatch logs + metrics.';
-                showFlex('slack-investigating');
-            }, 1200);
-
-            setTimeout(function() {
-                hide('slack-investigating');
                 show('slack-div1');
-                document.getElementById('slack-t2').textContent = ' ' + ts(2);
-                document.getElementById('slack-results-body').innerHTML =
-                    '✅ <strong>Investigation complete</strong><br>' +
-                    '<strong>Root cause:</strong> ' + current.rootCause + '<br>' +
-                    '<strong>Suggested fix:</strong> ' + current.fix + '<br>' +
-                    '<strong>Expected:</strong> ' + current.outcome;
+                document.getElementById('slack-t2').textContent = ' ' + ts(4);
                 showFlex('slack-results');
-            }, 3800);
+            }, 800);
         };
 
         // WA: user replies "1"
