@@ -1690,114 +1690,11 @@
         const email = document.getElementById("early-access-email").value;
         const form = document.getElementById("early-access-form");
         const success = document.getElementById("early-access-success");
-        fetch("https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod/early-access", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, source: "convops.io", timestamp: new Date().toISOString() })
-        }).catch(() => {});
+        window.location.href = "mailto:info@convops.io?subject=Early%20Access%20Request&body=Hi%2C%20I%27d%20like%20early%20access%20to%20ConvOps.%0A%0AMy%20email%3A%20" + encodeURIComponent(email);
         form.style.display = "none";
         success.style.display = "block";
         if (typeof gtag !== "undefined") gtag("event", "early_access_signup", { email });
     }
-    </script>
-
-    <!-- TESTIMONIALS -->
-    <div class="section" style="background:#f0effe;">
-        <div class="section-inner">
-            <h2 style="text-align:center; margin-bottom:8px;">What Early Users Are Saying</h2>
-            <p style="text-align:center; color:#666; margin-bottom:36px; font-size:1em;">Real feedback from engineers and teams using ConvOps today.</p>
-
-            <div style="position:relative; max-width:640px; margin:0 auto;">
-
-                <!-- Cards wrapper -->
-                <div id="testimonial-track" style="overflow:hidden; border-radius:14px;">
-                    <div id="testimonial-inner" style="display:flex; transition:transform 0.4s ease;">
-
-                        <!-- Card 1 -->
-                        <div class="t-card" style="min-width:100%; background:#fff; border:1px solid #e0ddf8; border-radius:14px; padding:36px 40px; box-sizing:border-box;">
-                            <div style="font-size:2.2em; color:#667eea; line-height:1; margin-bottom:16px;">"</div>
-                            <p style="color:#444; line-height:1.8; font-size:1em; font-style:italic; margin-bottom:28px;">I manage infrastructure for a small SaaS product on the side. ConvOps was the first tool that didn't require me to set up a whole monitoring stack. Connected my AWS account in under 5 minutes and got my first alert the same evening. And it's free — I didn't expect that.</p>
-                            <div style="display:flex; align-items:center; gap:14px;">
-                                <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.9em; flex-shrink:0;">MB</div>
-                                <div>
-                                    <div style="font-weight:700; font-size:0.95em; color:#222;">Manisha B.</div>
-                                    <div style="font-size:0.82em; color:#888;">Free Plan</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="t-card" style="min-width:100%; background:#fff; border:1px solid #e0ddf8; border-radius:14px; padding:36px 40px; box-sizing:border-box;">
-                            <div style="font-size:2.2em; color:#667eea; line-height:1; margin-bottom:16px;">"</div>
-                            <p style="color:#444; line-height:1.8; font-size:1em; font-style:italic; margin-bottom:28px;">I was skeptical at first — another AI tool that promises to fix everything. But ConvOps actually does what it says. Got a CPU spike alert at 11 PM, investigated it right from WhatsApp, and had the answer in under a minute. Free plan, no credit card, no catch.</p>
-                            <div style="display:flex; align-items:center; gap:14px;">
-                                <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.9em; flex-shrink:0;">SB</div>
-                                <div>
-                                    <div style="font-weight:700; font-size:0.95em; color:#222;">Shreyas Bangera</div>
-                                    <div style="font-size:0.82em; color:#888;">DevOps Engineer · Free Plan</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="t-card" style="min-width:100%; background:#fff; border:1px solid #e0ddf8; border-radius:14px; padding:36px 40px; box-sizing:border-box;">
-                            <div style="font-size:2.2em; color:#667eea; line-height:1; margin-bottom:16px;">"</div>
-                            <p style="color:#444; line-height:1.8; font-size:1em; font-style:italic; margin-bottom:28px;">As an early adopter on Pro, I've been part of shaping how ConvOps works. The AI root cause analysis is genuinely useful — it tells you what's wrong before you've even opened a dashboard. Worth every penny for the time it saves.</p>
-                            <div style="display:flex; align-items:center; gap:14px;">
-                                <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:0.9em; flex-shrink:0;">RR</div>
-                                <div>
-                                    <div style="font-weight:700; font-size:0.95em; color:#222;">Raghunath Ramlingam</div>
-                                    <div style="font-size:0.82em; color:#888;">Engineering Manager · Pro Plan · Early Adopter</div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Prev arrow -->
-                <button onclick="tMove(-1)" style="position:absolute; left:-20px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #e0ddf8; cursor:pointer; font-size:1.1em; color:#667eea; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(102,126,234,0.2)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">‹</button>
-
-                <!-- Next arrow -->
-                <button onclick="tMove(1)" style="position:absolute; right:-20px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #e0ddf8; cursor:pointer; font-size:1.1em; color:#667eea; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(102,126,234,0.2)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">›</button>
-            </div>
-
-            <!-- Dots -->
-            <div id="t-dots" style="display:flex; justify-content:center; gap:8px; margin-top:20px;">
-                <button onclick="tGo(0)" style="width:8px; height:8px; border-radius:50%; border:none; cursor:pointer; background:#667eea; padding:0;"></button>
-                <button onclick="tGo(1)" style="width:8px; height:8px; border-radius:50%; border:none; cursor:pointer; background:#d1d5db; padding:0;"></button>
-                <button onclick="tGo(2)" style="width:8px; height:8px; border-radius:50%; border:none; cursor:pointer; background:#d1d5db; padding:0;"></button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    (function() {
-        var cur = 0, total = 3, timer;
-        function update() {
-            document.getElementById("testimonial-inner").style.transform = "translateX(-" + (cur * 100) + "%)";
-            var dots = document.getElementById("t-dots").children;
-            for (var i = 0; i < dots.length; i++) dots[i].style.background = i === cur ? "#667eea" : "#d1d5db";
-        }
-        window.tMove = function(dir) {
-            cur = (cur + dir + total) % total;
-            update();
-            resetTimer();
-        };
-        window.tGo = function(idx) {
-            cur = idx;
-            update();
-            resetTimer();
-        };
-        function resetTimer() {
-            clearInterval(timer);
-            timer = setInterval(function() { cur = (cur + 1) % total; update(); }, 5000);
-        }
-        var track = document.getElementById("testimonial-track");
-        track.addEventListener("mouseenter", function() { clearInterval(timer); });
-        track.addEventListener("mouseleave", function() { resetTimer(); });
-        resetTimer();
-    })();
     </script>
 
     <!-- FOOTER -->
