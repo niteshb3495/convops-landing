@@ -1263,23 +1263,25 @@
         function showFlex(id) { document.getElementById(id).style.display = 'flex'; }
         function hide(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Build WhatsApp message using real approved template format:
-        // 🚨 {{1}} | {{2}} | P{{3}} / Resource: {{4}} / Metric: {{5}} → Threshold: {{6}} / Env: {{7}} | Region: {{8}} / AI Analysis: {{9}} / Actions: 1-5 / Alert ID: {{10}} / www.convops.io
+        // Build WhatsApp message using real approved template format
         function buildWaTemplate(s) {
-            return 'ConvOps Infrastructure Alert' +
-                '<br><br>🚨 ' + s.metric + ' | ' + s.resourceType + ' | P' + s.severity.replace('P','') +
+            return '<strong>ConvOps Infrastructure Alert</strong>' +
+                '<br>ConvOps Alert:' +
                 '<br><br>Resource: ' + s.resource +
-                '<br>Metric: ' + s.metricValue + ' → Threshold: ' + s.threshold +
+                '<br>Metric: ALARM - Threshold: ' + s.threshold +
                 '<br>Env: ' + s.env + ' | Region: ' + s.region +
-                '<br><br>💡 AI Analysis: ' + s.analysis + ' [Ref:' + s.ref + ']' +
+                '<br><br>Analysis: ' + s.analysis +
+                '<br>Impact: ' + s.outcome +
+                '<br>Causes: ' + s.explanation +
+                '<br>Suggested: ' + s.fix +
+                '<br>Recommendation: ' + s.what +
                 '<br><br>Reply:' +
                 '<br>1 - Take Action' +
                 '<br>2 - Snooze' +
                 '<br>3 - Ignore' +
                 '<br>4 - Investigate' +
                 '<br>5 - Escalate' +
-                '<br><br>Alert ID: ' + s.alertId +
-                '<br><br>www.convops.io';
+                '<br><br>Alert ID: ' + s.alertId + ' | www.convops.io';
         }
 
         function buildSlackAlert(s) {
