@@ -1264,7 +1264,6 @@
         function hide(id) { document.getElementById(id).style.display = 'none'; }
 
         // Build WhatsApp message using real approved template format
-        // Analysis is included in the alert itself — no separate investigation step
         function buildWaTemplate(s) {
             return '<strong>ConvOps Infrastructure Alert</strong>' +
                 '<br>ConvOps Alert:' +
@@ -1272,6 +1271,10 @@
                 '<br>Metric: ALARM - Threshold: ' + s.threshold +
                 '<br>Env: ' + s.env + ' | Region: ' + s.region +
                 '<br><br>Analysis: ' + s.analysis +
+                '<br>Impact: ' + s.outcome +
+                '<br>Causes: ' + s.explanation +
+                '<br>Suggested: ' + s.fix +
+                '<br>Recommendation: ' + s.what +
                 '<br><br>Reply:' +
                 '<br>1 - Take Action' +
                 '<br>2 - Snooze' +
