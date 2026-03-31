@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConvOps Docs — What ConvOps Monitors &amp; How It Works</title>
+    <meta name="description" content="ConvOps documentation: monitoring capabilities, investigation features, customer stack, security model, and alert flow." />
+    <meta property="og:title" content="ConvOps Docs — Monitoring Capabilities &amp; Security Model" />
+    <meta property="og:description" content="Learn exactly what ConvOps monitors, how investigation works, what gets deployed in your AWS account, and how we keep it secure." />
+    <meta property="og:url" content="https://convops.io/docs" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://convops.io/docs" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+        header {
+            text-align: center;
+            padding: 60px 24px 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        h1 { font-size: 2.3em; margin-bottom: 0.4em; font-weight: 700; }
+        .subhead { font-size: 1.05em; opacity: 0.92; font-weight: 300; max-width: 580px; margin: 0 auto; }
+        .section { max-width: 860px; margin: 0 auto 28px; padding: 0 24px; }
+        .section-inner { background: white; border-radius: 12px; padding: 36px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        h2 { color: #667eea; margin-bottom: 18px; font-size: 1.5em; }
+        h3 { color: #444; font-size: 1em; margin: 18px 0 8px; font-weight: 700; }
+        p { margin-bottom: 12px; color: #555; font-size: 0.95em; }
+        p:last-child { margin-bottom: 0; }
+        ul { padding-left: 20px; }
+        li { margin: 6px 0; font-size: 0.93em; color: #555; }
+        [id] { scroll-margin-top: 20px; }
+
+        /* TOC */
+        .toc { background: #f4f3ff; border-radius: 10px; padding: 22px 26px; margin-bottom: 28px; }
+        .toc-title { color: #667eea; margin-bottom: 12px; font-size: 0.88em; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+        .toc ol { padding-left: 18px; margin: 0; }
+        .toc li { margin: 5px 0; font-size: 0.91em; }
+        .toc a { color: #667eea; text-decoration: none; font-weight: 500; }
+        .toc a:hover { text-decoration: underline; }
+
+        /* Cards */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+        .card { background: #f4f3ff; border-radius: 10px; padding: 14px 16px; border: 1.5px solid #e0ddf8; }
+        .card-icon { font-size: 1.3em; margin-bottom: 5px; display: block; }
+        .card-title { font-weight: 700; color: #333; margin-bottom: 3px; display: block; font-size: 0.9em; }
+        .card p { font-size: 0.84em; color: #666; margin: 0; }
+
+        /* Badges */
+        .badge-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+        .badge { display: inline-flex; align-items: center; gap: 4px; background: #f4f3ff; border: 1.5px solid #c4b8ff; border-radius: 20px; padding: 4px 12px; font-size: 0.82em; font-weight: 600; color: #5b21b6; }
+        .badge.green { background: #f0fff4; border-color: #86efac; color: #166534; }
+        .badge.blue { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+
+        /* Investigation list */
+        .inv-list { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
+        .inv-item { display: flex; gap: 14px; align-items: flex-start; background: #f8f9fa; border-radius: 8px; padding: 14px 16px; border-left: 3px solid #667eea; }
+        .inv-item.purple { border-left-color: #764ba2; background: #f9f6ff; }
+        .inv-item.green { border-left-color: #16a34a; }
+        .inv-item.amber { border-left-color: #f59e0b; }
+        .inv-icon { font-size: 1.25em; flex-shrink: 0; margin-top: 1px; }
+        .inv-title { font-weight: 700; font-size: 0.91em; color: #333; margin-bottom: 2px; }
+        .inv-detail { font-size: 0.86em; color: #666; line-height: 1.55; }
+
+        /* Code */
+        pre { background: #1a1d21; color: #d1d2d3; border-radius: 10px; padding: 18px 20px; overflow-x: auto; font-size: 0.82em; line-height: 1.65; margin: 14px 0; font-family: 'SFMono-Regular','Consolas','Liberation Mono',Menlo,monospace; }
+        .icode { background: #f0effe; color: #5b21b6; padding: 2px 6px; border-radius: 4px; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 0.86em; }
+
+        /* Flow diagram */
+        .flow-wrap { background: #1a1d21; border-radius: 12px; padding: 26px 20px; margin: 18px 0; overflow-x: auto; }
+        .flow-row { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: nowrap; min-width: 580px; }
+        .flow-node { background: #2d2f33; border: 1.5px solid #444; border-radius: 8px; padding: 9px 13px; font-size: 0.8em; color: #d1d2d3; font-weight: 600; text-align: center; white-space: nowrap; }
+        .flow-node.purple { background: #3d2d5c; border-color: #764ba2; color: #e8d8f8; }
+        .flow-node.green { background: #1a3a2a; border-color: #16a34a; color: #86efac; }
+        .flow-arrow { color: #667eea; font-size: 1.1em; padding: 0 6px; flex-shrink: 0; }
+        .flow-sub { text-align: center; color: #888; font-size: 0.78em; margin: 8px 0 6px; }
+
+        /* Security */
+        .sec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 18px 0; }
+        .sec-card { background: #f0fff4; border: 2px solid #86efac; border-radius: 10px; padding: 16px; }
+        .sec-icon { font-size: 1.2em; margin-bottom: 6px; display: block; }
+        .sec-title { font-weight: 700; font-size: 0.9em; color: #166534; margin-bottom: 4px; display: block; }
+        .sec-card p { font-size: 0.85em; color: #555; margin: 0; line-height: 1.5; }
+
+        /* Actions */
+        .act-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0; }
+        .act-card { background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 8px; padding: 14px 15px; }
+        .act-icon { font-size: 1.15em; margin-bottom: 4px; display: block; }
+        .act-title { font-weight: 700; font-size: 0.88em; color: #333; margin-bottom: 2px; display: block; }
+        .act-desc { font-size: 0.83em; color: #777; }
+
+        /* Settings */
+        .set-list { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+        .set-item { background: #f8f9fa; border-radius: 8px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+        .set-icon { font-size: 1.1em; flex-shrink: 0; margin-top: 2px; }
+        .set-name { font-weight: 700; font-size: 0.91em; color: #333; }
+        .set-desc { font-size: 0.85em; color: #666; margin-top: 2px; }
+
+        /* IAM sections */
+        .iam-block { background: #f8f9fa; border-radius: 10px; border: 1px solid #e9ecef; padding: 18px 20px; margin: 14px 0; }
+        .iam-block h3 { color: #667eea; margin-top: 0; font-size: 0.97em; margin-bottom: 8px; }
+        .iam-block ul { padding-left: 16px; margin: 6px 0; }
+        .iam-block li { font-size: 0.88em; color: #555; margin: 5px 0; line-height: 1.5; }
+
+        /* Notice */
+        .notice { background: #fffbeb; border-left: 4px solid #fbbf24; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0; font-size: 0.9em; color: #78350f; }
+        .notice.blue { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+
+        /* Nav */
+        .nav-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .nav-link { font-size: 0.87em; font-weight: 600; color: rgba(255,255,255,0.85); text-decoration: none; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 13px; transition: all 0.2s; }
+        .nav-link:hover { background: rgba(255,255,255,0.15); }
+        .nav-link.active { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.6); }
+        .nav-cta { font-size: 0.87em; font-weight: 700; color: #667eea; text-decoration: none; background: white; border-radius: 8px; padding: 7px 15px; transition: all 0.2s; }
+        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+        footer { text-align: center; padding: 40px 24px; color: #888; font-size: 0.9em; }
+        footer strong { color: #444; font-size: 1.1em; }
+        footer a { color: #888; text-decoration: underline; }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 1.7em; }
+            h2 { font-size: 1.25em; }
+            .section-inner { padding: 22px 18px; }
+            .flow-row { min-width: 500px; }
+            pre { font-size: 0.74em; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER + NAV -->
+<header>
+    <div class="container">
+        <div class="nav-top" style="margin-bottom:36px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="/logo-white.svg" alt="ConvOps" style="width:32px; height:32px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));" />
+                <span style="font-size:1.3em; font-weight:800; color:#fff; letter-spacing:-0.5px;">ConvOps</span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/docs" class="nav-link active">Docs</a>
+                <a href="https://app.convops.io/sign-in" class="nav-link">Log in →</a>
+                <a href="https://app.convops.io/sign-up" class="nav-cta">Get Started</a>
+            </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px;">
+            <img src="/logo-white.svg" alt="ConvOps" style="width:48px; height:48px; filter:drop-shadow(0 2px 12px rgba(0,0,0,0.3));" />
+            <span style="font-size:1.9em; font-weight:800; color:#fff; letter-spacing:-1px;">ConvOps</span>
+        </div>
+        <h1>Documentation</h1>
+        <p class="subhead">What ConvOps monitors, how investigation works, and exactly what gets deployed in your AWS account.</p>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div style="max-width:860px; margin:36px auto 0; padding:0 24px;">
+
+    <!-- TOC -->
+    <div class="toc">
+        <div class="toc-title">📋 On this page</div>
+        <ol>
+            <li><a href="#monitoring">What ConvOps Monitors</a></li>
+            <li><a href="#investigation">Investigation Capabilities (Reply "4")</a></li>
+            <li><a href="#alert-flow">Alert Flow</a></li>
+            <li><a href="#customer-stack">Customer Stack — What Gets Deployed</a></li>
+            <li><a href="#security">Security Model</a></li>
+            <li><a href="#actions">Actions Available</a></li>
+            <li><a href="#settings">Configurable Settings</a></li>
+        </ol>
+    </div>
+
+    <!-- 1. WHAT CONVOPS MONITORS -->
+    <div class="section" id="monitoring">
+        <div class="section-inner">
+            <h2>🔭 What ConvOps Monitors</h2>
+            <p>ConvOps connects to your AWS account via a read-only IAM role and monitors <strong>CloudWatch Alarms</strong> in real time — across CPU, memory, error rate, latency, and any custom metric you've configured.</p>
+
+            <h3>Alarm Types</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <span class="card-icon">💻</span>
+                    <span class="card-title">CPU Utilization</span>
+                    <p>Threshold alarms on EC2, ECS tasks, RDS, Lambda concurrency.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🧠</span>
+                    <span class="card-title">Memory Usage</span>
+                    <p>Container-level and instance-level memory alarms.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🚨</span>
+                    <span class="card-title">Error Rate</span>
+                    <p>5xx rates, Lambda errors, application error metrics.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">⏱️</span>
+                    <span class="card-title">Latency</span>
+                    <p>API Gateway response times, Lambda duration, ALB target response time.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🔧</span>
+                    <span class="card-title">Custom Metrics</span>
+                    <p>Any CloudWatch alarm you've created — ConvOps handles it automatically.</p>
+                </div>
+            </div>
+
+            <h3>Supported AWS Resources</h3>
+            <div class="badge-list">
+                <span class="badge">🐳 ECS</span>
+                <span class="badge">🖥️ EC2</span>
+                <span class="badge">🗄️ RDS</span>
+                <span class="badge">⚡ Lambda</span>
+                <span class="badge">⚖️ ALB</span>
+                <span class="badge">🌐 API Gateway</span>
+                <span class="badge">🏎️ ElastiCache</span>
+                <span class="badge">📨 SQS</span>
+                <span class="badge">📦 DynamoDB</span>
+                <span class="badge">🪣 S3</span>
+            </div>
+
+            <h3>Alert Channels</h3>
+            <div class="badge-list">
+                <span class="badge green">💬 WhatsApp</span>
+                <span class="badge blue"># Slack</span>
+            </div>
+            <p style="font-size:0.88em;">Choose one or both. Alerts land wherever your team already is — no new tools.</p>
+
+            <h3>Alert Conditions</h3>
+            <div class="inv-list">
+                <div class="inv-item">
+                    <span class="inv-icon">🔴</span>
+                    <div>
+                        <div class="inv-title">ALARM state → Immediate notification</div>
+                        <div class="inv-detail">When a CloudWatch alarm transitions to ALARM, ConvOps ingests it instantly, runs AI analysis, and delivers a rich notification with root cause — not just a raw metric value.</div>
+                    </div>
+                </div>
+                <div class="inv-item green">
+                    <span class="inv-icon">✅</span>
+                    <div>
+                        <div class="inv-title">OK state → Resolved notification</div>
+                        <div class="inv-detail">When the alarm returns to OK, you receive a resolved message so you know the incident closed — no need to manually check CloudWatch.</div>
+                    </div>
+                </div>
+                <div class="inv-item amber">
+                    <span class="inv-icon">🔁</span>
+                    <div>
+                        <div class="inv-title">Repeat-alert deduplication</div>
+                        <div class="inv-detail">If the same alarm fires repeatedly (flapping), ConvOps batches repeat notifications and only pages you again after <span class="icode">repeat_alert_threshold</span> fires (default: <strong>5</strong>). Prevents alert fatigue from noisy alarms. Configurable per workspace.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. INVESTIGATION CAPABILITIES -->
+    <div class="section" id="investigation">
+        <div class="section-inner">
+            <h2>🔍 Investigation Capabilities</h2>
+            <p>Reply <span class="icode">4</span> to any alert to trigger a deep investigation. ConvOps pulls data from multiple AWS sources simultaneously, correlates everything, and delivers an AI root cause analysis — within seconds, without opening AWS console.</p>
+
+            <div class="notice">
+                💡 <strong>The first alert already includes AI analysis.</strong> Reply "4" when you want the full deep-dive with all data sources — metrics, logs, CloudTrail, cost, security groups, and more.
+            </div>
+
+            <div class="inv-list">
+                <div class="inv-item">
+                    <span class="inv-icon">📊</span>
+                    <div>
+                        <div class="inv-title">CloudWatch Metrics — last 30 min</div>
+                        <div class="inv-detail">Avg + max values for the relevant metric. Shows the trend leading up to the alarm threshold breach so you can see if it's a spike or a gradual increase.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">📋</span>
+                    <div>
+                        <div class="inv-title">Application Logs — last 15 min</div>
+                        <div class="inv-detail">Scans CloudWatch Logs filtered for: <span class="icode">ERROR</span> <span class="icode">WARN</span> <span class="icode">Exception</span> <span class="icode">timeout</span> <span class="icode">OOM</span>. Surfaces the most relevant log lines without you having to search.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">🐳</span>
+                    <div>
+                        <div class="inv-title">ECS Service State</div>
+                        <div class="inv-detail">Running / desired / pending task counts. Deployment status. Failed task details. Stopped task reasons + exit codes — the exact message that tells you <em>why</em> a container stopped.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">🖥️</span>
+                    <div>
+                        <div class="inv-title">EC2 Instance State</div>
+                        <div class="inv-detail">Instance state, instance type, CPU credit mode (for burstable T-series). Confirms whether the instance is running or in a degraded/impaired state.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">🗄️</span>
+                    <div>
+                        <div class="inv-title">RDS Database Status</div>
+                        <div class="inv-detail">DB status, engine version, connectivity analysis including security group rules and VPC subnet configuration. Identifies whether the database is reachable from your application layer.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">🛡️</span>
+                    <div>
+                        <div class="inv-title">Security Group Audit</div>
+                        <div class="inv-detail">Inbound rules check. Missing port detection — flags if a required port (e.g., 5432 for PostgreSQL, 3306 for MySQL, 6379 for Redis) is not open to expected sources.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">🌐</span>
+                    <div>
+                        <div class="inv-title">API Gateway Diagnostics</div>
+                        <div class="inv-detail">5xx and 4xx error rates. CORS configuration status. Stage info (deployment ID, throttling limits). Distinguishes client errors from server-side issues.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">⚖️</span>
+                    <div>
+                        <div class="inv-title">ALB Target Health</div>
+                        <div class="inv-detail">Per-target group breakdown: healthy / unhealthy / draining target counts. Identifies which backend instances have dropped out of rotation.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">💰</span>
+                    <div>
+                        <div class="inv-title">Cost Analysis — last 7 days</div>
+                        <div class="inv-detail">Per-service spend breakdown. Spend spike detection: flags any service with cost &gt;20% above its 7-day rolling average. Useful for spotting runaway resources during incidents.</div>
+                    </div>
+                </div>
+                <div class="inv-item">
+                    <span class="inv-icon">📜</span>
+                    <div>
+                        <div class="inv-title">CloudTrail — last 5 changes (past 2h)</div>
+                        <div class="inv-detail">The last 5 changes to the affected resource in the past 2 hours. Shows who changed what — deploys, config changes, SG modifications, IAM updates. Correlates changes to incidents.</div>
+                    </div>
+                </div>
+                <div class="inv-item purple">
+                    <span class="inv-icon">🤖</span>
+                    <div>
+                        <div class="inv-title">Claude AI — Root Cause Analysis</div>
+                        <div class="inv-detail">All collected data is fed to Claude AI, which produces <strong>3–5 bullet root cause analysis + recommended actions</strong>. Correlates metrics, logs, config changes, and resource state into a single coherent diagnosis with suggested next steps.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ALERT FLOW -->
+    <div class="section" id="alert-flow">
+        <div class="section-inner">
+            <h2>⚡ Alert Flow</h2>
+            <p>End-to-end: from CloudWatch alarm to resolved incident.</p>
+
+            <div class="flow-wrap">
+                <div style="overflow-x:auto;">
+                    <div class="flow-row">
+                        <div class="flow-node">☁️ CloudWatch<br>Alarm</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node">📣 SNS<br>Topic</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node purple">🔌 ConvOps<br>Ingest</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node purple">🤖 AI<br>Filter</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-node green">💬 WhatsApp<br># Slack</div>
+                    </div>
+                    <div class="flow-sub">↓ customer replies</div>
+                    <div class="flow-row" style="justify-content:flex-end; gap:0; min-width:580px; padding-right:24px;">
+                        <div class="flow-node green" style="min-width:120px;">✅ ConvOps Acts</div>
+                        <div class="flow-arrow" style="transform:scaleX(-1);">→</div>
+                        <div class="flow-node purple">🔐 Confirm<br>+ Audit Log</div>
+                        <div class="flow-arrow" style="transform:scaleX(-1);">→</div>
+                        <div class="flow-node green">📱 Customer<br>Replies</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:10px; margin-top:16px;">
+                <div style="background:#f4f3ff; border-radius:8px; padding:12px 14px; font-size:0.86em; color:#555; border-left:3px solid #667eea;">
+                    <strong style="color:#333;">1. CloudWatch Alarm</strong><br>
+                    Alarm state changes (ALARM or OK) are published to your SNS topic.
+                </div>
+                <div style="background:#f4f3ff; border-radius:8px; padding:12px 14px; font-size:0.86em; color:#555; border-left:3px solid #667eea;">
+                    <strong style="color:#333;">2. ConvOps Ingest</strong><br>
+                    SNS delivers to ConvOps via HTTPS. AI immediately pulls metrics, logs, and resource state.
+                </div>
+                <div style="background:#f4f3ff; border-radius:8px; padding:12px 14px; font-size:0.86em; color:#555; border-left:3px solid #667eea;">
+                    <strong style="color:#333;">3. Notification Sent</strong><br>
+                    You receive a WhatsApp/Slack message with root cause already analysed.
+                </div>
+                <div style="background:#f4f3ff; border-radius:8px; padding:12px 14px; font-size:0.86em; color:#555; border-left:3px solid #667eea;">
+                    <strong style="color:#333;">4. You Reply</strong><br>
+                    Reply 1 to act, 4 to investigate more, 2 to snooze, 5 to escalate.
+                </div>
+                <div style="background:#f0fff4; border-radius:8px; padding:12px 14px; font-size:0.86em; color:#555; border-left:3px solid #16a34a;">
+                    <strong style="color:#333;">5. Confirmed Action</strong><br>
+                    ConvOps asks for YES confirmation. All actions logged with timestamp + approver.
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 4. CUSTOMER STACK -->
+    <div class="section" id="customer-stack">
+        <div class="section-inner">
+            <h2>🏗️ Customer Stack — What Gets Deployed</h2>
+            <p>ConvOps deploys a single CloudFormation stack into your AWS account. Here is exactly what it creates — no surprises.</p>
+
+            <div class="notice blue">
+                🔗 <strong>One-click setup.</strong> Go to <strong>app.convops.io</strong>, enter your AWS Account ID, and click <em>Launch Stack</em>. CloudFormation handles everything below automatically.
+            </div>
+
+            <!-- IAM Role -->
+            <div class="iam-block">
+                <h3>🔑 IAM Role: <code>ConvOpsAccessRole</code></h3>
+                <ul>
+                    <li><strong>Trusted by:</strong> ConvOps AWS account <code>009001720832</code> — only ConvOps can assume this role.</li>
+                    <li><strong>ExternalId:</strong> A unique token generated per customer, stored in Secrets Manager. Prevents confused-deputy attacks — even if someone knows your role ARN, they cannot assume it without the ExternalId.</li>
+                    <li><strong>Managed policy attached:</strong> <code>arn:aws:iam::aws:policy/ReadOnlyAccess</code> — AWS-managed read-only access to all services. ConvOps can read metrics, logs, and resource state but cannot modify anything.</li>
+                </ul>
+                <p style="margin-top:10px; font-size:0.88em; color:#666;">Additionally, a separate inline policy <strong>ConvOpsRemediationPolicy</strong> grants the following write actions — <em>only executed when you explicitly confirm</em>:</p>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:8px; margin-top:10px;">
+                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
+                        <span style="font-weight:700; color:#333;">ecs:UpdateService</span><br>Restart or scale ECS services
+                    </div>
+                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
+                        <span style="font-weight:700; color:#333;">ec2:RebootInstances</span><br>Reboot EC2 instances
+                    </div>
+                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
+                        <span style="font-weight:700; color:#333;">rds:RebootDBInstance</span><br>Reboot RDS databases
+                    </div>
+                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
+                        <span style="font-weight:700; color:#333;">lambda:InvokeFunction</span><br>Invoke Lambda functions
+                    </div>
+                </div>
+            </div>
+
+            <!-- SNS Topic -->
+            <div class="iam-block">
+                <h3>📣 SNS Topic: <code>ConvOpsAlertTopic</code></h3>
+                <ul>
+                    <li>Receives CloudWatch alarm state change notifications.</li>
+                    <li>Subscribed to the ConvOps ingestion endpoint via <strong>HTTPS</strong>: <code>https://ewvdzp6c79.execute-api.eu-central-1.amazonaws.com/prod/ingest</code></li>
+                    <li>You attach this SNS topic as an action on your CloudWatch alarms — that's the only wiring needed.</li>
+                </ul>
+            </div>
+
+            <!-- EventBridge -->
+            <div class="iam-block">
+                <h3>📅 EventBridge Rule (optional)</h3>
+                <ul>
+                    <li>Catches CloudWatch alarm state changes automatically, without needing SNS actions on each alarm individually.</li>
+                    <li>Useful for accounts with many alarms — set-and-forget routing.</li>
+                </ul>
+            </div>
+
+            <h3>IAM Policy JSON (what gets deployed)</h3>
+            <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "// Note": "ReadOnlyAccess is attached as AWS managed policy (not inline)",
+      "// ManagedPolicyArns": ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+    }
+  ]
+}
+
+// Inline policy: ConvOpsRemediationPolicy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ConvOpsRemediation",
+      "Effect": "Allow",
+      "Action": [
+        "ecs:UpdateService",
+        "ec2:RebootInstances",
+        "rds:RebootDBInstance",
+        "lambda:InvokeFunction"
+      ],
+      "Resource": "*"
+    }
+  ]
+}</code></pre>
+
+            <h3>Trust Policy</h3>
+            <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::009001720832:root"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": "&lt;your-unique-registration-token&gt;"
+        }
+      }
+    }
+  ]
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- 5. SECURITY MODEL -->
+    <div class="section" id="security">
+        <div class="section-inner">
+            <h2>🔒 Security Model</h2>
+            <p>ConvOps has cross-account access to your AWS environment. Here's exactly what that means — no vague claims.</p>
+
+            <div class="sec-grid">
+                <div class="sec-card">
+                    <span class="sec-icon">🔑</span>
+                    <span class="sec-title">No stored AWS credentials</span>
+                    <p>ConvOps never stores your AWS credentials. Access works via <strong>STS AssumeRole</strong> — short-lived tokens with a <strong>15-minute TTL</strong>. Tokens expire automatically.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🛡️</span>
+                    <span class="sec-title">ExternalId protection</span>
+                    <p>Your IAM role requires a unique ExternalId (generated per customer, stored in Secrets Manager). Prevents confused-deputy attacks — nobody else can assume your role.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">👁️</span>
+                    <span class="sec-title">Read-only by default</span>
+                    <p>The <code>ReadOnlyAccess</code> managed policy covers all reads. Write actions (ecs:UpdateService, ec2:RebootInstances, rds:RebootDBInstance) require your <strong>explicit confirmation</strong> for every individual action.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">📱</span>
+                    <span class="sec-title">Phone binding</span>
+                    <p>Only the person who received the alert on their registered number/Slack account can confirm actions. Confirmation expires after 5 minutes.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">📋</span>
+                    <span class="sec-title">Audit log — 90 days</span>
+                    <p>Every investigation and action is logged: timestamp, resource ARN, who approved, outcome. Exportable on request. 90-day retention.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🗃️</span>
+                    <span class="sec-title">Minimal data storage</span>
+                    <p>We store only operational metadata: alarm events, conversation state. <strong>Never</strong> raw application logs, log content, secrets, or business data.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🇪🇺</span>
+                    <span class="sec-title">EU data residency</span>
+                    <p>All ConvOps infrastructure runs in <strong>eu-central-1</strong> (Frankfurt). Data does not leave the EU. GDPR compliant — see <a href="/privacy.html" style="color:#166534;">convops.io/privacy</a>.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🗑️</span>
+                    <span class="sec-title">Revoke instantly</span>
+                    <p>Delete the <code>ConvOpsAccessRole</code> from your AWS console. ConvOps loses all access immediately — no support ticket, no waiting period.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. ACTIONS AVAILABLE -->
+    <div class="section" id="actions">
+        <div class="section-inner">
+            <h2>🎬 Actions Available</h2>
+            <p>When you confirm an action (reply <span class="icode">1</span> + <span class="icode">YES</span>), ConvOps can execute the following remediation actions on your behalf. Every action requires two-step confirmation and is logged.</p>
+
+            <div class="act-grid">
+                <div class="act-card">
+                    <span class="act-icon">🔄</span>
+                    <span class="act-title">Restart ECS service</span>
+                    <div class="act-desc">Forces a new deployment — stops and replaces all running tasks. Clears hung containers, OOM state, connection pool saturation.</div>
+                </div>
+                <div class="act-card">
+                    <span class="act-icon">📈</span>
+                    <span class="act-title">Scale up ECS (+1 task)</span>
+                    <div class="act-desc">Increments desired count by 1. Absorbs traffic spikes without a full restart.</div>
+                </div>
+                <div class="act-card">
+                    <span class="act-icon">📉</span>
+                    <span class="act-title">Scale down ECS (-1 task)</span>
+                    <div class="act-desc">Decrements desired count by 1. Useful for cost reduction or isolating a bad task.</div>
+                </div>
+                <div class="act-card">
+                    <span class="act-icon">⏪</span>
+                    <span class="act-title">Rollback ECS</span>
+                    <div class="act-desc">Redeploys the previous task definition revision. Reverts a bad deploy without touching code.</div>
+                </div>
+                <div class="act-card">
+                    <span class="act-icon">🔌</span>
+                    <span class="act-title">Reboot EC2 instance</span>
+                    <div class="act-desc">Issues a soft reboot via AWS API. Useful for clearing transient kernel/OS issues without data loss.</div>
+                </div>
+                <div class="act-card">
+                    <span class="act-icon">🗄️</span>
+                    <span class="act-title">Reboot RDS instance</span>
+                    <div class="act-desc">Restarts the database engine. Clears connection pool saturation and recovers from transient DB failures.</div>
+                </div>
+            </div>
+
+            <div class="notice" style="margin-top:16px;">
+                ⏳ <strong>Action execution is coming in the Pro plan.</strong> The current free plan includes alerts + full AI investigation. Actions (restart, scale, reboot) are in active development.
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. SETTINGS -->
+    <div class="section" id="settings">
+        <div class="section-inner">
+            <h2>⚙️ Configurable Settings</h2>
+            <p>Adjust ConvOps behaviour per workspace from the app dashboard.</p>
+
+            <div class="set-list">
+                <div class="set-item">
+                    <span class="set-icon">🔁</span>
+                    <div>
+                        <div class="set-name"><span class="icode">repeat_alert_threshold</span></div>
+                        <div class="set-desc">How many times the same alarm must fire before ConvOps sends a repeat notification. <strong>Default: 5.</strong> Set lower for critical alarms, higher for noisy ones. Configured per workspace.</div>
+                    </div>
+                </div>
+                <div class="set-item">
+                    <span class="set-icon">📢</span>
+                    <div>
+                        <div class="set-name">Alert channels</div>
+                        <div class="set-desc">Choose <strong>WhatsApp</strong>, <strong>Slack</strong>, or <strong>both</strong>. You can route different alarm types to different channels (e.g., P1 to WhatsApp, P2/P3 to Slack).</div>
+                    </div>
+                </div>
+                <div class="set-item">
+                    <span class="set-icon">📞</span>
+                    <div>
+                        <div class="set-name">On-call routing</div>
+                        <div class="set-desc">Route alerts to specific users. Configure who gets <strong>action buttons</strong> (can confirm remediation) vs who gets <strong>read-only notifications</strong> (informed only). Useful for on-call rotations.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section">
+        <div class="section-inner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align:center; border-radius:12px; padding:44px 36px;">
+            <h2 style="color:white; font-size:1.5em; margin-bottom:12px;">Ready to try ConvOps?</h2>
+            <p style="color:rgba(255,255,255,0.9); font-size:0.95em; max-width:460px; margin:0 auto 22px;">Connect your AWS account in 2 minutes. Free plan includes alerts + full AI investigation. No credit card.</p>
+            <a href="https://app.convops.io/sign-up" style="display:inline-block; background:white; color:#667eea; padding:13px 32px; border-radius:8px; font-weight:700; font-size:1em; text-decoration:none; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                Get Started — Free →
+            </a>
+            <p style="color:rgba(255,255,255,0.6); font-size:0.82em; margin-top:14px;">or email <a href="mailto:info@convops.io" style="color:rgba(255,255,255,0.75);">info@convops.io</a> with questions</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <strong>ConvOps</strong>
+    <p style="margin-top:6px;">Find root cause faster. Fix incidents without opening AWS console.</p>
+    <p style="margin-top:16px;">© 2026 ConvOps. All rights reserved. · <a href="/privacy.html">Privacy Policy</a> · <a href="/onboarding-guide">Setup Guide</a> · <a href="/docs">Docs</a></p>
+    <p style="margin-top:10px; color:#aaa; font-size:0.85em;">Last updated: March 31, 2026</p>
+</footer>
+
+</body>
+</html>
