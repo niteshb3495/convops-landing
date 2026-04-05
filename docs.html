@@ -419,29 +419,86 @@
                 🔗 <strong>One-click setup.</strong> Go to <strong>app.convops.io</strong>, enter your AWS Account ID, and click <em>Launch Stack</em>. CloudFormation handles everything below automatically.
             </div>
 
-            <!-- IAM Role -->
-            <div class="iam-block">
-                <h3>🔑 IAM Role: <code>ConvOpsAccessRole</code></h3>
+            <!-- IAM Role: Free Tier -->
+            <div class="iam-block" style="background:#f0fff4; border-color:#86efac;">
+                <h3>🆓 Free Tier — IAM Role: <code>ConvOpsAccessRole</code></h3>
                 <ul>
                     <li><strong>Trusted by:</strong> ConvOps AWS account <code>009001720832</code> — only ConvOps can assume this role.</li>
                     <li><strong>ExternalId:</strong> A unique token generated per customer, stored in Secrets Manager. Prevents confused-deputy attacks — even if someone knows your role ARN, they cannot assume it without the ExternalId.</li>
-                    <li><strong>Managed policy attached:</strong> <code>arn:aws:iam::aws:policy/ReadOnlyAccess</code> — AWS-managed read-only access to all services. ConvOps can read metrics, logs, and resource state but cannot modify anything.</li>
+                    <li><strong>Managed policy attached:</strong> <code>arn:aws:iam::aws:policy/ReadOnlyAccess</code> — AWS-managed read-only access to all services. ConvOps can read metrics, logs, and resource state but <strong>cannot modify anything</strong>.</li>
                 </ul>
-                <p style="margin-top:10px; font-size:0.88em; color:#666;">Additionally, a separate inline policy <strong>ConvOpsRemediationPolicy</strong> grants the following write actions — <em>only executed when you explicitly confirm</em>:</p>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:8px; margin-top:10px;">
-                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
-                        <span style="font-weight:700; color:#333;">ecs:UpdateService</span><br>Restart or scale ECS services
-                    </div>
-                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
-                        <span style="font-weight:700; color:#333;">ec2:RebootInstances</span><br>Reboot EC2 instances
-                    </div>
-                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
-                        <span style="font-weight:700; color:#333;">rds:RebootDBInstance</span><br>Reboot RDS databases
-                    </div>
-                    <div style="background:#fff3cd; border-radius:6px; padding:8px 12px; font-size:0.84em; color:#555;">
-                        <span style="font-weight:700; color:#333;">lambda:InvokeFunction</span><br>Invoke Lambda functions
+                <p style="margin-top:10px; font-size:0.88em; color:#166534; font-weight:600;">✅ What you get: Real-time alerts + AI root cause analysis + full investigation. No write permissions.</p>
+            </div>
+
+            <!-- IAM Role: Pro/Enterprise -->
+            <div class="iam-block" style="background:#fffbeb; border-color:#fcd34d;">
+                <h3>💎 Pro / Enterprise — Custom Action Policy</h3>
+                <p style="margin-bottom:12px; font-size:0.92em; color:#555;">On Pro/Enterprise plans, you select which resources ConvOps can act on during onboarding. We generate a <strong>custom IAM policy</strong> scoped to only those resources. You review and approve before deployment.</p>
+                
+                <div style="margin:14px 0;">
+                    <strong style="color:#333; font-size:0.93em;">Available resource types:</strong>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">EC2</span>
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">ECS</span>
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">RDS</span>
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">ElastiCache (Redis)</span>
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">Lambda</span>
+                        <span class="badge" style="background:#fff3cd; border-color:#fbbf24; color:#78350f;">SSM</span>
                     </div>
                 </div>
+
+                <p style="margin-top:12px; font-size:0.88em; color:#555;"><strong>How it works:</strong></p>
+                <ol style="padding-left:20px; margin:8px 0; font-size:0.88em; color:#555;">
+                    <li>During onboarding, select resource types (EC2, ECS, RDS, Redis, Lambda, SSM)</li>
+                    <li>ConvOps generates a custom IAM policy scoped to those resources</li>
+                    <li>You review the policy JSON before deployment</li>
+                    <li>Every action still requires "YES" confirmation before execution</li>
+                </ol>
+
+                <p style="margin-top:12px; font-size:0.88em; color:#555;"><strong>Sample policy (EC2, ECS, RDS, Redis selected):</strong></p>
+                <pre style="margin-top:8px; font-size:0.75em; line-height:1.5;"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ConvOpsEC2Actions",
+      "Effect": "Allow",
+      "Action": ["ec2:RebootInstances", "ec2:StopInstances", "ec2:StartInstances"],
+      "Resource": "arn:aws:ec2:*:*:instance/*"
+    },
+    {
+      "Sid": "ConvOpsECSActions",
+      "Effect": "Allow",
+      "Action": ["ecs:UpdateService", "ecs:DescribeServices"],
+      "Resource": ["arn:aws:ecs:*:*:service/*/*", "arn:aws:ecs:*:*:task-definition/*"]
+    },
+    {
+      "Sid": "ConvOpsRDSActions",
+      "Effect": "Allow",
+      "Action": ["rds:RebootDBInstance", "rds:ModifyDBInstance"],
+      "Resource": "arn:aws:rds:*:*:db:*"
+    },
+    {
+      "Sid": "ConvOpsElastiCacheActions",
+      "Effect": "Allow",
+      "Action": ["elasticache:RebootCacheCluster", "elasticache:ModifyCacheCluster"],
+      "Resource": "arn:aws:elasticache:*:*:cluster:*"
+    }
+  ]
+}</code></pre>
+
+                <p style="margin-top:12px; font-size:0.88em; color:#555;"><strong>Tag-based scoping (optional):</strong></p>
+                <pre style="margin-top:8px; font-size:0.75em; line-height:1.5;"><code>{
+  "Sid": "ConvOpsECSActionsProductionOnly",
+  "Effect": "Allow",
+  "Action": ["ecs:UpdateService"],
+  "Resource": "arn:aws:ecs:*:*:service/*/*",
+  "Condition": {
+    "StringEquals": {
+      "aws:ResourceTag/Environment": "production"
+    }
+  }
+}</code></pre>
+                <p style="margin-top:8px; font-size:0.86em; color:#78350f;">↑ This limits ConvOps to only act on ECS services tagged <code>Environment=production</code>.</p>
             </div>
 
             <!-- SNS Topic -->
@@ -463,36 +520,7 @@
                 </ul>
             </div>
 
-            <h3>IAM Policy JSON (what gets deployed)</h3>
-            <pre><code>{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "// Note": "ReadOnlyAccess is attached as AWS managed policy (not inline)",
-      "// ManagedPolicyArns": ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
-    }
-  ]
-}
-
-// Inline policy: ConvOpsRemediationPolicy
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "ConvOpsRemediation",
-      "Effect": "Allow",
-      "Action": [
-        "ecs:UpdateService",
-        "ec2:RebootInstances",
-        "rds:RebootDBInstance",
-        "lambda:InvokeFunction"
-      ],
-      "Resource": "*"
-    }
-  ]
-}</code></pre>
-
-            <h3>Trust Policy</h3>
+            <h3>Trust Policy (applies to both Free and Pro/Enterprise)</h3>
             <pre><code>{
   "Version": "2012-10-17",
   "Statement": [
