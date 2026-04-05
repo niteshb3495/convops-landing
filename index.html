@@ -1639,7 +1639,13 @@
             <h2>FAQ</h2>
             <div class="faq-item">
                 <strong>Is this safe to connect to my AWS account?</strong>
-                ConvOps deploys a single CloudFormation template that creates: (1) an IAM role with AWS-managed ReadOnlyAccess policy (read-only across all services), (2) an SNS topic to receive CloudWatch alarm notifications, and (3) an EventBridge rule to route alarm state changes. It cannot modify, delete, or create any AWS resource in the free plan. The IAM role is protected by a unique ExternalId (prevents unauthorized access) and has a 1-hour max session duration. Action execution (Pro) requires explicit human approval for every action — ConvOps never runs anything autonomously. You can revoke access instantly by deleting the IAM role.
+                ConvOps deploys a single CloudFormation template that creates:
+                <ul style="margin: 8px 0 8px 20px; line-height: 1.7;">
+                    <li>An IAM role with AWS-managed ReadOnlyAccess policy (read-only across all services)</li>
+                    <li>An SNS topic to receive CloudWatch alarm notifications</li>
+                    <li>An EventBridge rule to route alarm state changes</li>
+                </ul>
+                It cannot modify, delete, or create any AWS resource in the free plan. The IAM role is protected by a unique ExternalId (prevents unauthorized access) and has a 1-hour max session duration. Action execution (Pro) requires explicit human approval for every action — ConvOps never runs anything autonomously. You can revoke access instantly by deleting the IAM role.
             </div>
             <div class="faq-item">
                 <strong>How long does the AI investigation take?</strong>
