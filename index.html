@@ -1638,20 +1638,32 @@
         <div class="section-inner">
             <h2>FAQ</h2>
             <div class="faq-item">
-                <strong>Is this safe?</strong>
-                ConvOps is read-only by default. It reads your CloudWatch metrics and logs — it cannot modify anything in your AWS account in the current free plan. Action execution (restart, reboot, scale) is coming in Pro.
+                <strong>Is this safe to connect to my AWS account?</strong>
+                ConvOps deploys a single CloudFormation template that creates a scoped IAM role with read-only permissions by default. It cannot modify, delete, or create any AWS resource in the free plan. Action execution (Pro) requires explicit human approval for every action — ConvOps never runs anything autonomously.
             </div>
             <div class="faq-item">
-                <strong>What if I don't trust AI?</strong>
-                You shouldn't blindly. That's why ConvOps shows you the evidence — exactly what it found in CloudWatch — before suggesting a fix. You decide what to do with it.
+                <strong>How long does the AI investigation take?</strong>
+                Under 60 seconds from when CloudWatch fires the alarm to when you receive the RCA on WhatsApp or Slack.
             </div>
             <div class="faq-item">
-                <strong>Can it break my infrastructure?</strong>
-                No — not in the current free plan. ConvOps only reads data. Action execution (with human approval required) is coming in Pro.
+                <strong>What happens when I hit the 50 incident limit on the free plan?</strong>
+                You stop receiving AI investigations for the rest of that month. Your CloudWatch alarms still fire normally — ConvOps just won't enrich them until the next billing cycle. You'll get a warning message when you're approaching the limit.
             </div>
             <div class="faq-item">
-                <strong>What clouds do you support?</strong>
-                AWS. GCP and Azure coming soon.
+                <strong>What if ConvOps has downtime during an incident?</strong>
+                Your CloudWatch alarms fire independently of ConvOps. If ConvOps is unavailable, you receive a standard CloudWatch notification via SNS as a fallback. Your monitoring doesn't depend on ConvOps being up.
+            </div>
+            <div class="faq-item">
+                <strong>Is this GDPR compliant? Where is my data stored?</strong>
+                ConvOps processes CloudWatch log data in the same AWS region as your account. Log content is not stored beyond the investigation window. A GDPR Data Processing Agreement is available on the Enterprise plan.
+            </div>
+            <div class="faq-item">
+                <strong>Do I need to configure my CloudWatch alarms differently?</strong>
+                No. ConvOps connects to your existing CloudWatch alarms via SNS. No changes to alarm thresholds, namespaces, or configurations required.
+            </div>
+            <div class="faq-item">
+                <strong>Can I disconnect ConvOps at any time?</strong>
+                Yes. Delete the IAM role from your AWS console and ConvOps immediately loses all access. No support ticket, no waiting period.
             </div>
         </div>
     </div>
