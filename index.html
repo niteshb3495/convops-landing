@@ -668,6 +668,9 @@
             flex: 1 1 auto;
             overflow-y: auto;
             color: #1f2937;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
         .phone-frame-bubbles .bubble {
             font-size: 0.78em;
@@ -1831,6 +1834,11 @@
     </div>
 
     <script>
+    window.addEventListener('load', () => {
+        const heroChat = document.getElementById('hero-phone-bubbles');
+        if (heroChat) heroChat.scrollTop = heroChat.scrollHeight;
+    });
+
     function handleEarlyAccess(e) {
         e.preventDefault();
         const email = document.getElementById("early-access-email").value;
