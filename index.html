@@ -646,7 +646,7 @@
             <h1>Stop debugging alerts for 45 minutes. Fix them in 2.</h1>
             <p class="subhead">ConvOps investigates your AWS alerts, finds the root cause, and lets you fix issues instantly — even at 2am, from your phone.</p>
             <div style="margin-top:24px;">
-                <a href="https://app.convops.io/sign-up" class="btn-white" style="font-size:1em; padding:13px 32px;">Try it free — takes 2 minutes (no credit card)</a>
+                <a href="https://app.convops.io/sign-up" class="btn-white" style="font-size:1em; padding:13px 32px;">Get Started Free</a>
             </div>
         </div>
     </header>
@@ -1200,7 +1200,7 @@
                 <p id="sim-resolved-msg" style="font-size:0.88em; color:#444; margin-bottom:14px;"></p>
                 <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                     <button onclick="simReset()" style="background:#f4f3ff; color:#667eea; border:1.5px solid #667eea; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; cursor:pointer;">Run again</button>
-                    <a href="https://app.convops.io/sign-up" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; text-decoration:none; display:inline-block;">Connect your real AWS →</a>
+                    <a href="https://app.convops.io/sign-up" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:7px; font-size:0.88em; font-weight:600; text-decoration:none; display:inline-block;">Get Started Free</a>
                 </div>
             </div>
 
@@ -1543,7 +1543,7 @@
                         <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Automation rules</li>
                         <li style="padding:7px 0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Team workflows</li>
                     </ul>
-                    <a href="https://app.convops.io/sign-up" style="display:block; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Try Pro free — no credit card</a>
+                    <a href="https://app.convops.io/sign-up" style="display:block; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Get Started Free</a>
                 </div>
 
             </div>
@@ -1571,7 +1571,7 @@
                         <li><span class="checkmark">✓</span> Suggested fixes</li>
                         <li style="color:#888;">~ 50 incidents/month</li>
                     </ul>
-                    <a href="https://app.convops.io/sign-up" class="btn-pricing">Get Started — Free</a>
+                    <a href="https://app.convops.io/sign-up" class="btn-pricing">Get Started Free</a>
                 </div>
 
                 <!-- Pro (featured) -->
@@ -1590,7 +1590,7 @@
                         <li style="color:#888;">⏳ Unlimited AWS accounts</li>
                         <li style="color:#888;">⏳ On-call routing + team access</li>
                     </ul>
-                    <a href="#early-access-form" class="btn-pricing btn-pricing-featured" onclick="document.getElementById('early-access-email').focus()">Join waitlist</a>
+                    <a href="#early-access-form" class="btn-pricing btn-pricing-featured" onclick="document.getElementById('early-access-email').focus()">Get notified when Pro launches</a>
                 </div>
 
                 <!-- Enterprise -->
@@ -1655,41 +1655,14 @@
         </div>
     </div>
 
-    <!-- CTA / EARLY ACCESS -->
+    <!-- CTA -->
     <div class="section">
         <div class="section-inner cta-section" style="text-align:center; border-radius:12px; padding:48px 40px;">
-            <h2>Try it free — 2 minutes to connect</h2>
-            <p style="font-size:1em; margin:12px 0; opacity:0.9">Connect your AWS account. Get your first real alert with root cause analysis. No credit card.</p>
-            <form id="early-access-form" onsubmit="handleEarlyAccess(event)" style="display:flex; flex-direction:column; align-items:center; gap:12px; max-width:400px; margin:24px auto 0;">
-                <input
-                    type="email"
-                    id="early-access-email"
-                    placeholder="you@yourcompany.com"
-                    required
-                    style="width:100%; padding:12px 16px; border-radius:8px; border:none; font-size:1em; background:#fff; color:#333; outline:none;"
-                />
-                <button type="submit" class="btn-white" style="width:100%; padding:13px 24px; font-size:1em;">
-                    Get Early Access — Free 14-Day Trial
-                </button>
-            </form>
-            <p id="early-access-success" style="display:none; margin-top:16px; font-size:1em; opacity:0.95;">✅ You're on the list! We'll be in touch within 24 hours.</p>
-            <p style="opacity:0.7; font-size:0.85em; margin-top:16px;">No credit card. No procurement. Takes 2 minutes.</p>
-            <p style="opacity:0.6; font-size:0.82em; margin-top:8px;">or send an email to <a href="mailto:info@convops.io" style="color:#c4b8ff; text-decoration:underline;">info@convops.io</a></p>
+            <h2>Ready to stop debugging alerts manually?</h2>
+            <p style="font-size:1em; margin:12px 0 20px; opacity:0.9">Connect your AWS account in 2 minutes. No credit card.</p>
+            <a href="https://app.convops.io/sign-up" class="btn-white">Get Started Free</a>
         </div>
     </div>
-
-    <script>
-    function handleEarlyAccess(e) {
-        e.preventDefault();
-        const email = document.getElementById("early-access-email").value;
-        const form = document.getElementById("early-access-form");
-        const success = document.getElementById("early-access-success");
-        window.location.href = "mailto:info@convops.io?subject=Early%20Access%20Request&body=Hi%2C%20I%27d%20like%20early%20access%20to%20ConvOps.%0A%0AMy%20email%3A%20" + encodeURIComponent(email);
-        form.style.display = "none";
-        success.style.display = "block";
-        if (typeof gtag !== "undefined") gtag("event", "early_access_signup", { email });
-    }
-    </script>
 
     <!-- FOOTER -->
     <footer>
