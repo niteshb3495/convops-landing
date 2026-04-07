@@ -639,56 +639,14 @@
                 <a href="/alerts-guide" style="font-size:0.9em; font-weight:600; color:rgba(255,255,255,0.85); text-decoration:none; border:1.5px solid rgba(255,255,255,0.4); border-radius:8px; padding:7px 18px; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='transparent'">Alerts Guide</a>
                 <a href="https://app.convops.io/sign-in" style="font-size:0.9em; font-weight:600; color:rgba(255,255,255,0.85); text-decoration:none; border:1.5px solid rgba(255,255,255,0.4); border-radius:8px; padding:7px 18px; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='transparent'">Log in →</a>
             </div>
-            <div class="hero-cols">
-                <!-- Left: headline, subheading, CTA -->
-                <div>
-                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
-                        <img src="/logo-white.svg" alt="ConvOps" style="width:60px; height:60px; filter:drop-shadow(0 2px 12px rgba(0,0,0,0.3));" />
-                        <span style="font-size:2.4em; font-weight:800; color:#fff; letter-spacing:-1px; text-shadow: 0 2px 8px rgba(0,0,0,0.15);">ConvOps</span>
-                    </div>
-                    <h1>Stop debugging alerts for 45 minutes. Fix them in 2.</h1>
-                    <p class="subhead">ConvOps investigates your AWS alerts, finds the root cause, and lets you fix issues instantly — even at 2am, from your phone.</p>
-                    <div style="margin-top:24px;">
-                        <a href="https://app.convops.io/sign-up" class="btn-white" style="font-size:1em; padding:13px 32px;">Try it free — takes 2 minutes (no credit card)</a>
-                    </div>
-                </div>
-                <!-- Right: phone frame with WhatsApp CPU alert -->
-                <div class="hero-phone">
-                    <div class="phone-frame">
-                        <div class="phone-frame-screen">
-                            <div class="chat-header">
-                                <div class="chat-avatar">🤖</div>
-                                <span>ConvOps Agent</span>
-                            </div>
-                            <div class="phone-frame-bubbles">
-                                <div class="bubble agent">
-                                    <strong>ConvOps Infrastructure Alert</strong><br>
-                                    ConvOps Alert:<br><br>
-                                    Resource: api-service<br>
-                                    Metric: ALARM - Threshold: &gt; 90%<br>
-                                    Env: production | Region: eu-central-1<br><br>
-                                    Analysis: CPU 96%, 3× traffic spike after deploy 12 min ago. No OOM errors. Likely traffic overload, not a memory leak.<br>
-                                    Impact: Service degraded. Response times rising. Risk of task failure if load continues.<br>
-                                    Causes: Deploy v2.4.1 triggered traffic spike. Tasks under-provisioned for current load.<br>
-                                    Suggested: Scale out — add 2 tasks to absorb traffic spike.<br>
-                                    Recommendation: ECS adds 2 tasks (~60s). CPU expected to drop from 96% → ~54%.<br><br>
-                                    Reply:<br>
-                                    1 - Take Action<br>
-                                    2 - Snooze<br>
-                                    3 - Ignore<br>
-                                    4 - Investigate<br>
-                                    5 - Escalate<br><br>
-                                    Alert ID: ALT-20260325-0214 | www.convops.io
-                                    <div class="time">02:14</div>
-                                </div>
-                                <div class="bubble user">
-                                    1
-                                    <div class="time">02:15</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px; justify-content:center; flex-wrap:wrap;">
+                <img src="/logo-white.svg" alt="ConvOps" style="width:60px; height:60px; filter:drop-shadow(0 2px 12px rgba(0,0,0,0.3));" />
+                <span style="font-size:2.4em; font-weight:800; color:#fff; letter-spacing:-1px; text-shadow: 0 2px 8px rgba(0,0,0,0.15);">ConvOps</span>
+            </div>
+            <h1>Stop debugging alerts for 45 minutes. Fix them in 2.</h1>
+            <p class="subhead">ConvOps investigates your AWS alerts, finds the root cause, and lets you fix issues instantly — even at 2am, from your phone.</p>
+            <div style="margin-top:24px;">
+                <a href="https://app.convops.io/sign-up" class="btn-white" style="font-size:1em; padding:13px 32px;">Try it free — takes 2 minutes (no credit card)</a>
             </div>
         </div>
     </header>
