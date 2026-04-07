@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Complete AWS CloudWatch Alerts Setup Guide &mdash; ConvOps</title>
+    <meta name="description" content="Every CloudWatch alarm your AWS infrastructure needs &mdash; ECS, EC2, RDS, Lambda, ALB, API Gateway, SQS, DynamoDB, ElastiCache. Free CloudFormation and Terraform examples." />
+    <meta property="og:title" content="The Complete AWS CloudWatch Alerts Setup Guide" />
+    <meta property="og:description" content="Every alarm your AWS infrastructure needs with CloudFormation and Terraform examples. Free to use." />
+    <meta property="og:url" content="https://convops.io/cloudwatch-alarm-setup-guide" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://convops.io/cloudwatch-alarm-setup-guide" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/hcl.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; }
+        header { text-align: center; padding: 60px 24px 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        h1 { font-size: 2.2em; margin-bottom: 0.4em; font-weight: 700; line-height: 1.25; }
+        .subhead { font-size: 1.05em; opacity: 0.92; font-weight: 300; max-width: 620px; margin: 0 auto; }
+        .nav-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; }
+        .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .nav-link { font-size: 0.87em; font-weight: 600; color: rgba(255,255,255,0.85); text-decoration: none; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 13px; transition: all 0.2s; }
+        .nav-link:hover { background: rgba(255,255,255,0.15); }
+        .nav-link.active { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.6); }
+        .nav-cta { font-size: 0.87em; font-weight: 700; color: #667eea; text-decoration: none; background: white; border-radius: 8px; padding: 7px 15px; }
+        .page-wrap { max-width: 1200px; margin: 0 auto; padding: 36px 24px 60px; display: flex; gap: 32px; align-items: flex-start; }
+        .toc-sidebar { width: 230px; flex-shrink: 0; position: sticky; top: 24px; }
+        .toc-box { background: white; border-radius: 12px; padding: 20px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e9ecef; }
+        .toc-title { color: #667eea; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 12px; }
+        .toc-box ol { padding-left: 16px; margin: 0; }
+        .toc-box li { margin: 5px 0; font-size: 0.86em; }
+        .toc-box a { color: #555; text-decoration: none; font-weight: 500; }
+        .toc-box a:hover { color: #667eea; }
+        .toc-mobile { display: none; background: #f4f3ff; border-radius: 10px; padding: 18px 22px; margin-bottom: 24px; }
+        .toc-mobile ol { padding-left: 16px; margin: 0; }
+        .toc-mobile li { margin: 4px 0; font-size: 0.88em; }
+        .toc-mobile a { color: #667eea; text-decoration: none; font-weight: 500; }
+        .main-content { flex: 1; min-width: 0; }
+        .global-toggle { background: white; border-radius: 12px; padding: 16px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e9ecef; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .toggle-btn { padding: 8px 18px; border-radius: 8px; border: 2px solid #667eea; background: white; color: #667eea; font-weight: 600; font-size: 0.88em; cursor: pointer; transition: all 0.2s; }
+        .toggle-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: transparent; }
+        .toggle-btn:hover:not(.active) { background: #f4f3ff; }
+        .params-box { background: white; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #667eea; margin-bottom: 32px; }
+        .params-box h2 { color: #667eea; font-size: 1.25em; margin-bottom: 14px; }
+        .params-box ul { padding-left: 20px; margin: 10px 0 16px; }
+        .params-box li { margin: 6px 0; font-size: 0.93em; color: #444; }
+        .icode { background: #f0effe; color: #5b21b6; padding: 2px 6px; border-radius: 4px; font-family: "SFMono-Regular","Consolas",monospace; font-size: 0.86em; }
+        .resource-section { background: white; border-radius: 12px; padding: 30px 34px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 28px; scroll-margin-top: 24px; }
+        .resource-header { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+        .resource-icon { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.25em; flex-shrink: 0; }
+        .resource-title { font-size: 1.4em; font-weight: 700; color: #333; }
+        .resource-why { font-size: 0.92em; color: #666; margin: 4px 0 20px; padding-left: 56px; }
+        .alerts-table-wrap { overflow-x: auto; margin: 14px 0 22px; border-radius: 8px; border: 1px solid #e9ecef; }
+        .alerts-table { width: 100%; border-collapse: collapse; font-size: 0.86em; }
+        .alerts-table th { background: #f4f3ff; color: #5b21b6; font-weight: 700; padding: 9px 12px; text-align: left; border-bottom: 2px solid #e0ddf8; white-space: nowrap; }
+        .alerts-table td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; color: #444; vertical-align: top; }
+        .alerts-table tr:last-child td { border-bottom: none; }
+        .alerts-table tr:hover td { background: #fafafa; }
+        .alerts-table code { background: #f0effe; color: #5b21b6; padding: 2px 5px; border-radius: 4px; font-size: 0.88em; font-family: "SFMono-Regular","Consolas",monospace; }
+        .badge-critical { display: inline-block; background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; border-radius: 20px; padding: 2px 9px; font-size: 0.76em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+        .badge-warn { display: inline-block; background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; border-radius: 20px; padding: 2px 9px; font-size: 0.76em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+        .code-block-group { margin: 18px 0; border-radius: 10px; overflow: hidden; border: 1px solid #3d3f43; }
+        .code-tabs { display: flex; background: #21252b; border-bottom: 1px solid #3d3f43; }
+        .code-tab { padding: 8px 16px; font-size: 0.82em; font-weight: 600; color: #888; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; user-select: none; }
+        .code-tab:hover { color: #ccc; }
+        .code-tab.active { color: #c4b8ff; border-bottom-color: #667eea; }
+        .lang-badge { display: inline-block; background: #3d3f43; border-radius: 4px; padding: 1px 5px; font-size: 0.8em; margin-left: 4px; color: #aaa; }
+        .code-tab.active .lang-badge { background: #4a3f6b; color: #c4b8ff; }
+        .code-panel { display: none; position: relative; }
+        .code-panel.active { display: block; }
+        .code-panel pre { margin: 0 !important; border-radius: 0 !important; max-height: 480px; overflow-y: auto; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); border-radius: 6px; padding: 3px 9px; font-size: 0.74em; font-weight: 600; cursor: pointer; z-index: 10; font-family: inherit; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        .copy-btn.copied { background: rgba(22,163,74,0.3); border-color: rgba(22,163,74,0.5); color: #86efac; }
+        .convops-tip { background: linear-gradient(135deg, #f4f3ff 0%, #fdf4ff 100%); border: 1px solid #c4b8ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 13px 17px; margin: 22px 0 4px; font-size: 0.9em; color: #444; }
+        .convops-tip a { color: #667eea; font-weight: 600; text-decoration: none; }
+        .convops-tip a:hover { text-decoration: underline; }
+        .info-box { background: #eff6ff; border: 1px solid #93c5fd; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 11px 15px; margin: 12px 0; font-size: 0.88em; color: #1e3a5f; }
+        .warn-box { background: #fffbeb; border: 1px solid #fcd34d; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 11px 15px; margin: 12px 0; font-size: 0.88em; color: #78350f; }
+        .lookup-wrap { overflow-x: auto; margin: 12px 0; border-radius: 8px; border: 1px solid #e9ecef; }
+        .lookup-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        .lookup-table th { background: #f4f3ff; color: #5b21b6; font-weight: 700; padding: 7px 12px; text-align: left; border-bottom: 2px solid #e0ddf8; }
+        .lookup-table td { padding: 7px 12px; border-bottom: 1px solid #f0f0f0; color: #444; }
+        .lookup-table tr:last-child td { border-bottom: none; }
+        footer { text-align: center; padding: 40px 24px; color: #888; font-size: 0.9em; }
+        footer strong { color: #444; font-size: 1.1em; }
+        footer a { color: #888; text-decoration: underline; }
+        p { margin-bottom: 10px; }
+        p:last-child { margin-bottom: 0; }
+        @media (max-width: 900px) { .toc-sidebar { display: none; } .toc-mobile { display: block; } .page-wrap { padding: 22px 14px 48px; } }
+        @media (max-width: 640px) { h1 { font-size: 1.65em; } .resource-section { padding: 20px 16px; } .resource-why { padding-left: 0; } }
+    </style>
+</head>
+<body>
+<header>
+    <div style="max-width:1200px; margin:0 auto; padding:0 24px;">
+        <div class="nav-top">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="/logo-white.svg" alt="ConvOps" style="width:32px;height:32px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));" />
+                <span style="font-size:1.3em; font-weight:800; color:#fff; letter-spacing:-0.5px;">ConvOps</span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/docs" class="nav-link">Docs</a>
+                <a href="/cloudwatch-alarm-setup-guide" class="nav-link active">Alerts Guide</a>
+                <a href="https://app.convops.io/sign-in" class="nav-link">Log in &rarr;</a>
+                <a href="https://app.convops.io/sign-up" class="nav-cta">Get Started</a>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
+            <img src="/logo-white.svg" alt="ConvOps" style="width:44px;height:44px;filter:drop-shadow(0 2px 12px rgba(0,0,0,0.3));" />
+        </div>
+        <h1>The Complete AWS CloudWatch<br>Alerts Setup Guide</h1>
+        <p class="subhead" style="margin-top:12px;">This guide covers every CloudWatch alarm your AWS infrastructure needs — ECS, EC2, RDS, Lambda, ALB, API Gateway, SQS, DynamoDB, ElastiCache, and cost alerts. All examples include both CloudFormation and Terraform. Free to use with or without ConvOps.</p>
+    </div>
+</header>
+<div class="page-wrap">
+    <aside class="toc-sidebar">
+        <div class="toc-box">
+            <div class="toc-title">&#128203; Contents</div>
+            <ol>
+                <li><a href="#setup-params">Setup Parameters</a></li>
+                <li><a href="#ecs">ECS</a></li>
+                <li><a href="#ec2">EC2</a></li>
+                <li><a href="#rds">RDS</a></li>
+                <li><a href="#lambda">Lambda</a></li>
+                <li><a href="#alb">ALB</a></li>
+                <li><a href="#apigw">API Gateway</a></li>
+                <li><a href="#sqs">SQS</a></li>
+                <li><a href="#dynamodb">DynamoDB</a></li>
+                <li><a href="#elasticache">ElastiCache</a></li>
+                <li><a href="#cost">Cost &amp; Budget</a></li>
+            </ol>
+        </div>
+    </aside>
+    <main class="main-content">
+        <div class="toc-mobile">
+            <div class="toc-title">&#128203; Contents</div>
+            <ol>
+                <li><a href="#setup-params">Setup Parameters</a></li>
+                <li><a href="#ecs">1. ECS</a></li><li><a href="#ec2">2. EC2</a></li><li><a href="#rds">3. RDS</a></li>
+                <li><a href="#lambda">4. Lambda</a></li><li><a href="#alb">5. ALB</a></li><li><a href="#apigw">6. API Gateway</a></li>
+                <li><a href="#sqs">7. SQS</a></li><li><a href="#dynamodb">8. DynamoDB</a></li>
+                <li><a href="#elasticache">9. ElastiCache</a></li><li><a href="#cost">10. Cost &amp; Budget</a></li>
+            </ol>
+        </div>
+        <div class="global-toggle">
+            <span style="font-weight:600;font-size:0.92em;color:#444;">Show all code as:</span>
+            <button class="toggle-btn active" id="btn-cf" onclick="switchGlobal('cf')">&#9729;&#65039; CloudFormation</button>
+            <button class="toggle-btn" id="btn-tf" onclick="switchGlobal('tf')">&#128995; Terraform</button>
+            <span style="font-size:0.82em;color:#999;margin-left:auto;">Switches all code blocks</span>
+        </div>
+        <!-- SETUP PARAMETERS -->
+        <div class="params-box" id="setup-params">
+            <h2>&#9881;&#65039; Setup Parameters &mdash; Read This First</h2>
+            <p style="color:#555; margin-bottom:10px;">Every snippet uses placeholder values. Replace them before deploying:</p>
+            <ul>
+                <li><span class="icode">YOUR_SNS_TOPIC_ARN</span> &mdash; ARN of your SNS topic (e.g. <span class="icode">arn:aws:sns:eu-central-1:123456789012:alerts</span>)</li>
+                <li><span class="icode">YOUR_CLUSTER_NAME</span> / <span class="icode">YOUR_SERVICE_NAME</span> &mdash; ECS cluster and service names</li>
+                <li><span class="icode">YOUR_INSTANCE_ID</span> &mdash; EC2 instance ID (e.g. <span class="icode">i-0abc123def456789</span>)</li>
+                <li><span class="icode">YOUR_DB_INSTANCE_ID</span> &mdash; RDS DB instance identifier</li>
+                <li><span class="icode">YOUR_FUNCTION_NAME</span> &mdash; Lambda function name</li>
+                <li><span class="icode">YOUR_ALB_SUFFIX</span> &mdash; Part after <span class="icode">loadbalancer/</span> in ALB ARN (e.g. <span class="icode">app/my-alb/abc123def456</span>)</li>
+                <li><span class="icode">YOUR_API_NAME</span> / <span class="icode">YOUR_STAGE</span> &mdash; API Gateway name and stage (e.g. <span class="icode">prod</span>)</li>
+                <li><span class="icode">YOUR_QUEUE_NAME</span> &mdash; SQS queue name</li>
+                <li><span class="icode">YOUR_TABLE_NAME</span> &mdash; DynamoDB table name</li>
+                <li><span class="icode">YOUR_CACHE_CLUSTER_ID</span> &mdash; ElastiCache cluster ID</li>
+                <li><span class="icode">YOUR_MONTHLY_BUDGET</span> &mdash; Your monthly AWS budget in USD</li>
+            </ul>
+            <p style="font-weight:700; color:#333; margin-top:18px; margin-bottom:10px;">&#128235; Create an SNS topic that emails you</p>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'sns-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'sns-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="sns-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AlertEmail:
+    Type: String
+    Description: Email address to receive CloudWatch alerts
+
+Resources:
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: infra-alerts
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlertEmail
+
+Outputs:
+  SnsTopicArn:
+    Value: !Ref AlertsTopic
+    Description: Use this ARN as YOUR_SNS_TOPIC_ARN in all alarm snippets below</code></pre>
+                </div>
+                <div class="code-panel" id="sns-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "alert_email" {
+  description = "Email address to receive alerts"
+  type        = string
+}
+
+resource "aws_sns_topic" "alerts" {
+  name = "infra-alerts"
+}
+
+resource "aws_sns_topic_subscription" "email" {
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+
+# Use aws_sns_topic.alerts.arn as var.sns_topic_arn in alarm resources below</code></pre>
+                </div>
+            </div>
+            <div class="info-box">&#128161; After deploying, AWS sends a confirmation email. <strong>Click &quot;Confirm subscription&quot;</strong> in that email &mdash; alarms won&apos;t deliver until you do.</div>
+        </div>
+
+        <!-- 1. ECS -->
+        <div class="resource-section" id="ecs">
+            <div class="resource-header">
+                <div class="resource-icon">&#128051;</div>
+                <div class="resource-title">1. ECS &mdash; Elastic Container Service</div>
+            </div>
+            <p class="resource-why">ECS containers can silently exhaust CPU/memory or stop running without the load balancer health check catching it in time. These alarms detect saturation and task crashes before users are impacted.</p>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 80%</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Sustained CPU pressure &mdash; scale before saturation</td></tr>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 95%</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Tasks CPU-throttled; latency spikes imminent</td></tr>
+                    <tr><td><code>MemoryUtilization</code></td><td>&gt; 85%</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Memory pressure building; OOM kill possible</td></tr>
+                    <tr><td><code>MemoryUtilization</code></td><td>&gt; 95%</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Near OOM; task will be killed and restarted</td></tr>
+                    <tr><td><code>RunningTaskCount</code></td><td>&lt; desired count</td><td>1 min</td><td>1</td><td><span class="badge-critical">CRITICAL</span></td><td>Tasks crashed and not recovering; service may be down</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'ecs-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'ecs-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="ecs-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  ClusterName:
+    Type: String
+    Default: YOUR_CLUSTER_NAME
+  ServiceName:
+    Type: String
+    Default: YOUR_SERVICE_NAME
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+  DesiredTaskCount:
+    Type: Number
+    Default: 2
+    Description: Alarm when running tasks fall below this number
+
+Resources:
+  EcsCpuWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ServiceName}-cpu-warn"
+      AlarmDescription: ECS CPU utilization above 80% for 10 minutes
+      Namespace: AWS/ECS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ClusterName
+        - Name: ServiceName
+          Value: !Ref ServiceName
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  EcsCpuCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ServiceName}-cpu-critical"
+      AlarmDescription: ECS CPU above 95% - tasks are throttled
+      Namespace: AWS/ECS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ClusterName
+        - Name: ServiceName
+          Value: !Ref ServiceName
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 95
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  EcsMemoryWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ServiceName}-memory-warn"
+      AlarmDescription: ECS memory utilization above 85%
+      Namespace: AWS/ECS
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ClusterName
+        - Name: ServiceName
+          Value: !Ref ServiceName
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 85
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  EcsMemoryCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ServiceName}-memory-critical"
+      AlarmDescription: ECS memory utilization above 95% - OOM kill imminent
+      Namespace: AWS/ECS
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ClusterName
+        - Name: ServiceName
+          Value: !Ref ServiceName
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 95
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  EcsRunningTasksCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ServiceName}-tasks-critical"
+      AlarmDescription: Running task count below desired - service may be down
+      Namespace: AWS/ECS
+      MetricName: RunningTaskCount
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ClusterName
+        - Name: ServiceName
+          Value: !Ref ServiceName
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: !Ref DesiredTaskCount
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="ecs-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "cluster_name"    { type = string }
+variable "service_name"    { type = string }
+variable "sns_topic_arn"   { type = string }
+variable "desired_count"   { type = number; default = 2 }
+
+resource "aws_cloudwatch_metric_alarm" "ecs_cpu_warn" {
+  alarm_name          = "${var.service_name}-cpu-warn"
+  alarm_description   = "ECS CPU above 80% for 10 minutes"
+  namespace           = "AWS/ECS"
+  metric_name         = "CPUUtilization"
+  dimensions          = { ClusterName = var.cluster_name, ServiceName = var.service_name }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 80
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ecs_cpu_critical" {
+  alarm_name          = "${var.service_name}-cpu-critical"
+  alarm_description   = "ECS CPU above 95% - tasks throttled"
+  namespace           = "AWS/ECS"
+  metric_name         = "CPUUtilization"
+  dimensions          = { ClusterName = var.cluster_name, ServiceName = var.service_name }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 95
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ecs_memory_warn" {
+  alarm_name          = "${var.service_name}-memory-warn"
+  alarm_description   = "ECS memory above 85%"
+  namespace           = "AWS/ECS"
+  metric_name         = "MemoryUtilization"
+  dimensions          = { ClusterName = var.cluster_name, ServiceName = var.service_name }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 85
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ecs_memory_critical" {
+  alarm_name          = "${var.service_name}-memory-critical"
+  alarm_description   = "ECS memory above 95% - OOM kill imminent"
+  namespace           = "AWS/ECS"
+  metric_name         = "MemoryUtilization"
+  dimensions          = { ClusterName = var.cluster_name, ServiceName = var.service_name }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 95
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ecs_running_tasks" {
+  alarm_name          = "${var.service_name}-tasks-critical"
+  alarm_description   = "Running tasks below desired count"
+  namespace           = "AWS/ECS"
+  metric_name         = "RunningTaskCount"
+  dimensions          = { ClusterName = var.cluster_name, ServiceName = var.service_name }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 1
+  threshold           = var.desired_count
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 2. EC2 -->
+        <div class="resource-section" id="ec2">
+            <div class="resource-header">
+                <div class="resource-icon">&#128421;&#65039;</div>
+                <div class="resource-title">2. EC2 &mdash; Elastic Compute Cloud</div>
+            </div>
+            <p class="resource-why">EC2 instances can become unresponsive due to hardware failures, runaway processes, or network issues. Status check alarms catch hard failures that Auto Scaling or ELB health checks may miss initially.</p>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 85%</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Sustained high CPU; investigate before saturation</td></tr>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 95%</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Instance at capacity; requests will queue or fail</td></tr>
+                    <tr><td><code>StatusCheckFailed</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Instance or system check failing &mdash; likely unresponsive</td></tr>
+                    <tr><td><code>StatusCheckFailed_System</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>AWS hardware issue &mdash; instance may need recovery</td></tr>
+                    <tr><td><code>NetworkIn</code></td><td>&lt; 1000 bytes/period</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Traffic dropped to near-zero &mdash; instance may be isolated</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'ec2-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'ec2-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="ec2-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  InstanceId:
+    Type: String
+    Default: YOUR_INSTANCE_ID
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+
+Resources:
+  Ec2CpuWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${InstanceId}-cpu-warn"
+      AlarmDescription: EC2 CPU above 85% for 15 minutes
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref InstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 85
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  Ec2CpuCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${InstanceId}-cpu-critical"
+      AlarmDescription: EC2 CPU above 95% for 10 minutes
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref InstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 95
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  Ec2StatusCheckFailed:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${InstanceId}-status-check-failed"
+      AlarmDescription: EC2 status check failed - instance may be unresponsive
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref InstanceId
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  Ec2StatusCheckFailedSystem:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${InstanceId}-status-check-system"
+      AlarmDescription: EC2 system status check failed - AWS hardware issue
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed_System
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref InstanceId
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  Ec2NetworkInDrop:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${InstanceId}-network-in-drop"
+      AlarmDescription: EC2 NetworkIn near zero - traffic may have stopped
+      Namespace: AWS/EC2
+      MetricName: NetworkIn
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref InstanceId
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 1000
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="ec2-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "instance_id"   { type = string }
+variable "sns_topic_arn" { type = string }
+
+resource "aws_cloudwatch_metric_alarm" "ec2_cpu_warn" {
+  alarm_name          = "${var.instance_id}-cpu-warn"
+  alarm_description   = "EC2 CPU above 85% for 15 minutes"
+  namespace           = "AWS/EC2"
+  metric_name         = "CPUUtilization"
+  dimensions          = { InstanceId = var.instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 85
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ec2_cpu_critical" {
+  alarm_name          = "${var.instance_id}-cpu-critical"
+  alarm_description   = "EC2 CPU above 95%"
+  namespace           = "AWS/EC2"
+  metric_name         = "CPUUtilization"
+  dimensions          = { InstanceId = var.instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 95
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ec2_status_check" {
+  alarm_name          = "${var.instance_id}-status-check"
+  alarm_description   = "EC2 status check failed"
+  namespace           = "AWS/EC2"
+  metric_name         = "StatusCheckFailed"
+  dimensions          = { InstanceId = var.instance_id }
+  statistic           = "Maximum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ec2_status_check_system" {
+  alarm_name          = "${var.instance_id}-status-check-system"
+  alarm_description   = "EC2 system status check failed - hardware issue"
+  namespace           = "AWS/EC2"
+  metric_name         = "StatusCheckFailed_System"
+  dimensions          = { InstanceId = var.instance_id }
+  statistic           = "Maximum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "ec2_network_in_drop" {
+  alarm_name          = "${var.instance_id}-network-in-drop"
+  alarm_description   = "EC2 NetworkIn near zero - traffic may have stopped"
+  namespace           = "AWS/EC2"
+  metric_name         = "NetworkIn"
+  dimensions          = { InstanceId = var.instance_id }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 1000
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 3. RDS -->
+        <div class="resource-section" id="rds">
+            <div class="resource-header">
+                <div class="resource-icon">&#128451;&#65039;</div>
+                <div class="resource-title">3. RDS &mdash; Relational Database Service</div>
+            </div>
+            <p class="resource-why">Databases fail silently &mdash; connections pile up, disk fills, replicas fall behind. By the time your app throws errors, it&apos;s already too late. These alarms give you a 10&ndash;30 minute warning window.</p>
+
+            <div class="warn-box">&#9432; <strong>max_connections lookup:</strong> Set DatabaseConnections threshold to 80% of your instance&apos;s max_connections value:</div>
+            <div class="lookup-wrap"><table class="lookup-table">
+                <thead><tr><th>Instance Class</th><th>max_connections</th><th>80% threshold</th></tr></thead>
+                <tbody>
+                    <tr><td>db.t3.micro</td><td>87</td><td>69</td></tr>
+                    <tr><td>db.t3.small</td><td>171</td><td>136</td></tr>
+                    <tr><td>db.t3.medium</td><td>341</td><td>272</td></tr>
+                    <tr><td>db.t3.large</td><td>648</td><td>518</td></tr>
+                    <tr><td>db.r5.large</td><td>1365</td><td>1092</td></tr>
+                    <tr><td>db.r5.xlarge</td><td>2730</td><td>2184</td></tr>
+                    <tr><td>db.r5.2xlarge</td><td>5460</td><td>4368</td></tr>
+                </tbody>
+            </table></div>
+
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 80%</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>DB under CPU load; queries slowing down</td></tr>
+                    <tr><td><code>DatabaseConnections</code></td><td>&gt; 80% of max</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Connection pool filling; new connections will fail soon</td></tr>
+                    <tr><td><code>FreeStorageSpace</code></td><td>&lt; 10 GB</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Disk filling; DB will stop accepting writes when full</td></tr>
+                    <tr><td><code>FreeStorageSpace</code></td><td>&lt; 2 GB</td><td>5 min</td><td>1</td><td><span class="badge-critical">CRITICAL</span></td><td>Critically low disk &mdash; DB failure imminent</td></tr>
+                    <tr><td><code>ReplicaLag</code></td><td>&gt; 300 s</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Read replica falling behind; stale reads possible</td></tr>
+                    <tr><td><code>FreeableMemory</code></td><td>&lt; 256 MB</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Low memory; buffer pool shrinking, queries slowing</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'rds-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'rds-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="rds-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  DbInstanceId:
+    Type: String
+    Default: YOUR_DB_INSTANCE_ID
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+  MaxConnectionsThreshold:
+    Type: Number
+    Default: 272
+    Description: 80% of max_connections for your instance class (see table above)
+
+Resources:
+  RdsCpuWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-cpu-warn"
+      AlarmDescription: RDS CPU above 80% for 15 minutes
+      Namespace: AWS/RDS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RdsConnectionsWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-connections-warn"
+      AlarmDescription: RDS connections above 80% of max_connections
+      Namespace: AWS/RDS
+      MetricName: DatabaseConnections
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: !Ref MaxConnectionsThreshold
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RdsDiskWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-disk-warn"
+      AlarmDescription: RDS free storage below 10 GB
+      Namespace: AWS/RDS
+      MetricName: FreeStorageSpace
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10737418240
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RdsDiskCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-disk-critical"
+      AlarmDescription: RDS free storage critically low (below 2 GB)
+      Namespace: AWS/RDS
+      MetricName: FreeStorageSpace
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 2147483648
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RdsReplicaLag:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-replica-lag"
+      AlarmDescription: RDS read replica lag above 5 minutes (read replicas only)
+      Namespace: AWS/RDS
+      MetricName: ReplicaLag
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 300
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RdsFreeMemoryWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${DbInstanceId}-memory-warn"
+      AlarmDescription: RDS freeable memory below 256 MB
+      Namespace: AWS/RDS
+      MetricName: FreeableMemory
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DbInstanceId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 268435456
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="rds-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "db_instance_id"          { type = string }
+variable "sns_topic_arn"            { type = string }
+variable "max_connections_threshold" { type = number; default = 272 }
+# Set max_connections_threshold to 80% of your instance's max_connections
+# db.t3.micro=69, db.t3.small=136, db.t3.medium=272, db.r5.large=1092
+
+resource "aws_cloudwatch_metric_alarm" "rds_cpu_warn" {
+  alarm_name          = "${var.db_instance_id}-cpu-warn"
+  alarm_description   = "RDS CPU above 80% for 15 minutes"
+  namespace           = "AWS/RDS"
+  metric_name         = "CPUUtilization"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 80
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_connections_warn" {
+  alarm_name          = "${var.db_instance_id}-connections-warn"
+  alarm_description   = "RDS connections above 80% of max_connections"
+  namespace           = "AWS/RDS"
+  metric_name         = "DatabaseConnections"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = var.max_connections_threshold
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_disk_warn" {
+  alarm_name          = "${var.db_instance_id}-disk-warn"
+  alarm_description   = "RDS free storage below 10 GB"
+  namespace           = "AWS/RDS"
+  metric_name         = "FreeStorageSpace"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 10737418240  # 10 GB in bytes
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_disk_critical" {
+  alarm_name          = "${var.db_instance_id}-disk-critical"
+  alarm_description   = "RDS free storage critically low (below 2 GB)"
+  namespace           = "AWS/RDS"
+  metric_name         = "FreeStorageSpace"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 1
+  threshold           = 2147483648  # 2 GB in bytes
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_replica_lag" {
+  # Apply only to read replicas
+  alarm_name          = "${var.db_instance_id}-replica-lag"
+  alarm_description   = "RDS replica lag above 5 minutes"
+  namespace           = "AWS/RDS"
+  metric_name         = "ReplicaLag"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 300
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "rds_memory_warn" {
+  alarm_name          = "${var.db_instance_id}-memory-warn"
+  alarm_description   = "RDS freeable memory below 256 MB"
+  namespace           = "AWS/RDS"
+  metric_name         = "FreeableMemory"
+  dimensions          = { DBInstanceIdentifier = var.db_instance_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 268435456  # 256 MB in bytes
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 4. Lambda -->
+        <div class="resource-section" id="lambda">
+            <div class="resource-header">
+                <div class="resource-icon">&#955;</div>
+                <div class="resource-title">4. Lambda</div>
+            </div>
+            <p class="resource-why">Lambda errors are silent by default &mdash; your function fails and nothing tells you. Throttles mean requests are being dropped. Duration alerts catch runaway executions before they eat your budget.</p>
+            <div class="warn-box">&#9432; <strong>Duration threshold:</strong> Set the Duration alarm threshold to 80% of your function&apos;s configured timeout. For example, if your timeout is 30 seconds, set threshold to 24000ms (24 seconds). You must set this manually &mdash; there is no automatic way to reference the function timeout in a CloudWatch alarm.</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Errors</code></td><td>&gt; 0</td><td>1 min</td><td>1</td><td><span class="badge-warn">WARN</span></td><td>Any function error &mdash; investigate immediately</td></tr>
+                    <tr><td><code>Errors</code></td><td>&gt; 5</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Repeated errors &mdash; function may be completely broken</td></tr>
+                    <tr><td><code>Throttles</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Requests being dropped due to concurrency limit</td></tr>
+                    <tr><td><code>Duration</code></td><td>&gt; 80% of timeout</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Function nearing timeout; will fail if trend continues</td></tr>
+                    <tr><td><code>ConcurrentExecutions</code></td><td>&gt; 800 (80% of default 1000)</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Approaching account concurrency limit; throttles incoming</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'lambda-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'lambda-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="lambda-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  FunctionName:
+    Type: String
+    Default: YOUR_FUNCTION_NAME
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+  DurationThresholdMs:
+    Type: Number
+    Default: 24000
+    Description: |
+      80% of your function timeout in ms.
+      e.g. 30s timeout -> 24000ms, 15s timeout -> 12000ms, 5s timeout -> 4000ms
+
+Resources:
+  LambdaErrorsWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${FunctionName}-errors-warn"
+      AlarmDescription: Lambda function errors detected
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref FunctionName
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  LambdaErrorsCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${FunctionName}-errors-critical"
+      AlarmDescription: Lambda function errors above 5 - may be completely broken
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref FunctionName
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  LambdaThrottlesWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${FunctionName}-throttles"
+      AlarmDescription: Lambda throttles detected - requests being dropped
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref FunctionName
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  LambdaDurationWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${FunctionName}-duration-warn"
+      AlarmDescription: !Sub "Lambda duration above 80% of timeout (${DurationThresholdMs}ms)"
+      Namespace: AWS/Lambda
+      MetricName: Duration
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref FunctionName
+      ExtendedStatistic: p99
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: !Ref DurationThresholdMs
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  LambdaConcurrencyWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${FunctionName}-concurrency-warn"
+      AlarmDescription: Lambda concurrent executions above 800 (80% of default limit 1000)
+      Namespace: AWS/Lambda
+      MetricName: ConcurrentExecutions
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref FunctionName
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 800
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="lambda-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "function_name"       { type = string }
+variable "sns_topic_arn"        { type = string }
+variable "duration_threshold_ms" {
+  type        = number
+  default     = 24000
+  description = "80% of function timeout in ms. e.g. 30s timeout -> 24000"
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_errors_warn" {
+  alarm_name          = "${var.function_name}-errors-warn"
+  alarm_description   = "Lambda errors detected"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  dimensions          = { FunctionName = var.function_name }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 1
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_errors_critical" {
+  alarm_name          = "${var.function_name}-errors-critical"
+  alarm_description   = "Lambda errors above 5"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  dimensions          = { FunctionName = var.function_name }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 5
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
+  alarm_name          = "${var.function_name}-throttles"
+  alarm_description   = "Lambda throttles - requests being dropped"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Throttles"
+  dimensions          = { FunctionName = var.function_name }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_duration_warn" {
+  alarm_name          = "${var.function_name}-duration-warn"
+  alarm_description   = "Lambda p99 duration above 80% of timeout"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Duration"
+  dimensions          = { FunctionName = var.function_name }
+  extended_statistic  = "p99"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = var.duration_threshold_ms
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_concurrency_warn" {
+  alarm_name          = "${var.function_name}-concurrency-warn"
+  alarm_description   = "Lambda concurrent executions above 800 (80% of default limit)"
+  namespace           = "AWS/Lambda"
+  metric_name         = "ConcurrentExecutions"
+  dimensions          = { FunctionName = var.function_name }
+  statistic           = "Maximum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 800
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 5. ALB -->
+        <div class="resource-section" id="alb">
+            <div class="resource-header">
+                <div class="resource-icon">&#9878;</div>
+                <div class="resource-title">5. ALB &mdash; Application Load Balancer</div>
+            </div>
+            <p class="resource-why">Your load balancer is the front door to your application. 5XX errors mean backends are failing. Unhealthy hosts mean containers are crashing. These alarms catch both.</p>
+            <div class="info-box">&#9432; <strong>Finding your ALB suffix:</strong> In the AWS console, go to EC2 &rarr; Load Balancers, click your ALB, and copy the ARN. The suffix is everything after <span class="icode">loadbalancer/</span> (e.g. <span class="icode">app/my-alb/abc123def456</span>).</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>HTTPCode_Target_5XX_Count</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Backend returning server errors</td></tr>
+                    <tr><td><code>HTTPCode_Target_5XX_Count</code></td><td>&gt; 10</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>High rate of 5XX &mdash; backend likely down</td></tr>
+                    <tr><td><code>TargetResponseTime</code></td><td>&gt; 2 s</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Slow responses &mdash; users experiencing latency</td></tr>
+                    <tr><td><code>TargetResponseTime</code></td><td>&gt; 5 s</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Very slow responses &mdash; likely timing out for users</td></tr>
+                    <tr><td><code>UnHealthyHostCount</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Targets failing health checks &mdash; service degraded</td></tr>
+                    <tr><td><code>RejectedConnectionCount</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>ALB at max connections &mdash; requests being dropped</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'alb-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'alb-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="alb-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  AlbSuffix:
+    Type: String
+    Default: YOUR_ALB_SUFFIX
+    Description: e.g. app/my-alb/abc123def456 (after "loadbalancer/" in the ARN)
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+
+Resources:
+  Alb5xxWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-5xx-warn-${AlbSuffix}"
+      AlarmDescription: ALB backend 5XX errors detected
+      Namespace: AWS/ApplicationELB
+      MetricName: HTTPCode_Target_5XX_Count
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  Alb5xxCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-5xx-critical-${AlbSuffix}"
+      AlarmDescription: ALB backend 5XX errors above 10 per minute
+      Namespace: AWS/ApplicationELB
+      MetricName: HTTPCode_Target_5XX_Count
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  AlbLatencyWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-latency-warn-${AlbSuffix}"
+      AlarmDescription: ALB target response time above 2 seconds
+      Namespace: AWS/ApplicationELB
+      MetricName: TargetResponseTime
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      ExtendedStatistic: p99
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 2
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  AlbLatencyCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-latency-critical-${AlbSuffix}"
+      AlarmDescription: ALB target response time above 5 seconds
+      Namespace: AWS/ApplicationELB
+      MetricName: TargetResponseTime
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      ExtendedStatistic: p99
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  AlbUnhealthyHosts:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-unhealthy-hosts-${AlbSuffix}"
+      AlarmDescription: ALB unhealthy target count above zero
+      Namespace: AWS/ApplicationELB
+      MetricName: UnHealthyHostCount
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  AlbRejectedConnections:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "alb-rejected-connections-${AlbSuffix}"
+      AlarmDescription: ALB rejected connections - load balancer at max capacity
+      Namespace: AWS/ApplicationELB
+      MetricName: RejectedConnectionCount
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref AlbSuffix
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="alb-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "alb_suffix"    { type = string }  # e.g. "app/my-alb/abc123def456"
+variable "sns_topic_arn" { type = string }
+
+resource "aws_cloudwatch_metric_alarm" "alb_5xx_warn" {
+  alarm_name          = "alb-5xx-warn"
+  alarm_description   = "ALB 5XX errors detected"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "HTTPCode_Target_5XX_Count"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "alb_5xx_critical" {
+  alarm_name          = "alb-5xx-critical"
+  alarm_description   = "ALB 5XX errors above 10/min"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "HTTPCode_Target_5XX_Count"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 10
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "alb_latency_warn" {
+  alarm_name          = "alb-latency-warn"
+  alarm_description   = "ALB p99 response time above 2 seconds"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "TargetResponseTime"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  extended_statistic  = "p99"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 2
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "alb_latency_critical" {
+  alarm_name          = "alb-latency-critical"
+  alarm_description   = "ALB p99 response time above 5 seconds"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "TargetResponseTime"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  extended_statistic  = "p99"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 5
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_hosts" {
+  alarm_name          = "alb-unhealthy-hosts"
+  alarm_description   = "ALB unhealthy targets detected"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "UnHealthyHostCount"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  statistic           = "Maximum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "alb_rejected_connections" {
+  alarm_name          = "alb-rejected-connections"
+  alarm_description   = "ALB at max connections - requests being dropped"
+  namespace           = "AWS/ApplicationELB"
+  metric_name         = "RejectedConnectionCount"
+  dimensions          = { LoadBalancer = var.alb_suffix }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 6. API Gateway -->
+        <div class="resource-section" id="apigw">
+            <div class="resource-header">
+                <div class="resource-icon">&#127760;</div>
+                <div class="resource-title">6. API Gateway</div>
+            </div>
+            <p class="resource-why">API Gateway has a hard 29-second timeout limit. If your backends are slow, requests will silently time out. 5XX and 4XX errors can indicate broken integrations or client misconfigurations at scale.</p>
+            <div class="warn-box">&#9432; <strong>Traffic drop detection:</strong> Detecting a sudden drop in request Count requires metric math (comparing current Count to a rolling average). Standard CloudWatch alarms can&apos;t do this natively &mdash; use CloudWatch Anomaly Detection or external monitoring for this alarm. The snippets below cover the simpler threshold-based alarms.</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>5XXError</code></td><td>&gt; 5 count</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Backend integration errors; Lambda or HTTP backend failing</td></tr>
+                    <tr><td><code>4XXError</code></td><td>&gt; high rate</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>High client error rate; API misuse or broken client</td></tr>
+                    <tr><td><code>Latency</code></td><td>&gt; 3000 ms p99</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Slow backend responses; users experiencing delays</td></tr>
+                    <tr><td><code>Latency</code></td><td>&gt; 10000 ms</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Near 29s timeout; requests will start failing</td></tr>
+                    <tr><td><code>Count</code></td><td>sudden drop &gt; 50%</td><td>&mdash;</td><td>&mdash;</td><td><span class="badge-warn">WARN</span></td><td>Requires metric math / anomaly detection (see note above)</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'apigw-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'apigw-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="apigw-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  ApiName:
+    Type: String
+    Default: YOUR_API_NAME
+  Stage:
+    Type: String
+    Default: prod
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+
+Resources:
+  ApiGw5xxWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ApiName}-${Stage}-5xx-warn"
+      AlarmDescription: API Gateway 5XX errors above 5 per minute
+      Namespace: AWS/ApiGateway
+      MetricName: 5XXError
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref ApiName
+        - Name: Stage
+          Value: !Ref Stage
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  ApiGw4xxWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ApiName}-${Stage}-4xx-warn"
+      AlarmDescription: API Gateway 4XX errors above 50 per 5 minutes
+      Namespace: AWS/ApiGateway
+      MetricName: 4XXError
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref ApiName
+        - Name: Stage
+          Value: !Ref Stage
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 50
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  ApiGwLatencyWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ApiName}-${Stage}-latency-warn"
+      AlarmDescription: API Gateway p99 latency above 3 seconds
+      Namespace: AWS/ApiGateway
+      MetricName: Latency
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref ApiName
+        - Name: Stage
+          Value: !Ref Stage
+      ExtendedStatistic: p99
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 3000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  ApiGwLatencyCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${ApiName}-${Stage}-latency-critical"
+      AlarmDescription: API Gateway latency above 10 seconds - near 29s timeout
+      Namespace: AWS/ApiGateway
+      MetricName: Latency
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref ApiName
+        - Name: Stage
+          Value: !Ref Stage
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="apigw-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "api_name"      { type = string }
+variable "stage"         { type = string; default = "prod" }
+variable "sns_topic_arn" { type = string }
+
+resource "aws_cloudwatch_metric_alarm" "apigw_5xx_warn" {
+  alarm_name          = "${var.api_name}-${var.stage}-5xx-warn"
+  alarm_description   = "API Gateway 5XX errors above 5/min"
+  namespace           = "AWS/ApiGateway"
+  metric_name         = "5XXError"
+  dimensions          = { ApiName = var.api_name, Stage = var.stage }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 5
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "apigw_4xx_warn" {
+  alarm_name          = "${var.api_name}-${var.stage}-4xx-warn"
+  alarm_description   = "API Gateway 4XX high volume"
+  namespace           = "AWS/ApiGateway"
+  metric_name         = "4XXError"
+  dimensions          = { ApiName = var.api_name, Stage = var.stage }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 50
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "apigw_latency_warn" {
+  alarm_name          = "${var.api_name}-${var.stage}-latency-warn"
+  alarm_description   = "API Gateway p99 latency above 3 seconds"
+  namespace           = "AWS/ApiGateway"
+  metric_name         = "Latency"
+  dimensions          = { ApiName = var.api_name, Stage = var.stage }
+  extended_statistic  = "p99"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 3000
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "apigw_latency_critical" {
+  alarm_name          = "${var.api_name}-${var.stage}-latency-critical"
+  alarm_description   = "API Gateway latency above 10s - near 29s timeout"
+  namespace           = "AWS/ApiGateway"
+  metric_name         = "Latency"
+  dimensions          = { ApiName = var.api_name, Stage = var.stage }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 10000
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 7. SQS -->
+        <div class="resource-section" id="sqs">
+            <div class="resource-header">
+                <div class="resource-icon">&#128233;</div>
+                <div class="resource-title">7. SQS &mdash; Simple Queue Service</div>
+            </div>
+            <p class="resource-why">A backed-up SQS queue means your consumers have stopped or are too slow. Old messages indicate processing failures. Left unattended, queues can grow to millions of messages and take hours to drain.</p>
+            <div class="warn-box">&#9432; <strong>Traffic drop detection:</strong> Detecting a sudden drop in <code>NumberOfMessagesSent</code> requires metric math (comparing to a rolling baseline). Use CloudWatch Anomaly Detection alarms for this &mdash; the standard alarm snippets below cover threshold-based alarms only.</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>ApproximateNumberOfMessagesNotVisible</code></td><td>&gt; 1000</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Queue building up; consumers may be slow or failing</td></tr>
+                    <tr><td><code>ApproximateNumberOfMessagesNotVisible</code></td><td>&gt; 10000</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Severe queue backup; consumers definitely failing</td></tr>
+                    <tr><td><code>ApproximateAgeOfOldestMessage</code></td><td>&gt; 300 s</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Messages sitting unprocessed for 5+ minutes</td></tr>
+                    <tr><td><code>ApproximateAgeOfOldestMessage</code></td><td>&gt; 900 s</td><td>5 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>Messages 15+ minutes old; SLA likely being breached</td></tr>
+                    <tr><td><code>NumberOfMessagesSent</code></td><td>sudden drop</td><td>&mdash;</td><td>&mdash;</td><td><span class="badge-warn">WARN</span></td><td>Requires anomaly detection / metric math (see note above)</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'sqs-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'sqs-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="sqs-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  QueueName:
+    Type: String
+    Default: YOUR_QUEUE_NAME
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+
+Resources:
+  SqsQueueDepthWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${QueueName}-depth-warn"
+      AlarmDescription: SQS queue depth above 1000 - consumers may be lagging
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesNotVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 1000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
+  SqsQueueDepthCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${QueueName}-depth-critical"
+      AlarmDescription: SQS queue depth above 10000 - severe consumer failure
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesNotVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 10000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  SqsMessageAgeWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${QueueName}-age-warn"
+      AlarmDescription: SQS oldest message age above 5 minutes
+      Namespace: AWS/SQS
+      MetricName: ApproximateAgeOfOldestMessage
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 300
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  SqsMessageAgeCritical:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${QueueName}-age-critical"
+      AlarmDescription: SQS oldest message age above 15 minutes - SLA breach
+      Namespace: AWS/SQS
+      MetricName: ApproximateAgeOfOldestMessage
+      Dimensions:
+        - Name: QueueName
+          Value: !Ref QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 900
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="sqs-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "queue_name"    { type = string }
+variable "sns_topic_arn" { type = string }
+
+resource "aws_cloudwatch_metric_alarm" "sqs_depth_warn" {
+  alarm_name          = "${var.queue_name}-depth-warn"
+  alarm_description   = "SQS queue depth above 1000"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesNotVisible"
+  dimensions          = { QueueName = var.queue_name }
+  statistic           = "Maximum"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 1000
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+  ok_actions          = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_depth_critical" {
+  alarm_name          = "${var.queue_name}-depth-critical"
+  alarm_description   = "SQS queue depth above 10000 - severe consumer failure"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesNotVisible"
+  dimensions          = { QueueName = var.queue_name }
+  statistic           = "Maximum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 10000
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_message_age_warn" {
+  alarm_name          = "${var.queue_name}-age-warn"
+  alarm_description   = "SQS oldest message above 5 minutes old"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  dimensions          = { QueueName = var.queue_name }
+  statistic           = "Maximum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 300
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs_message_age_critical" {
+  alarm_name          = "${var.queue_name}-age-critical"
+  alarm_description   = "SQS oldest message above 15 minutes - SLA breach"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  dimensions          = { QueueName = var.queue_name }
+  statistic           = "Maximum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 900
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 8. DynamoDB -->
+        <div class="resource-section" id="dynamodb">
+            <div class="resource-header">
+                <div class="resource-icon">&#9889;</div>
+                <div class="resource-title">8. DynamoDB</div>
+            </div>
+            <p class="resource-why">DynamoDB throttling is silent and cumulative. Throttled requests are retried with exponential backoff, which means your application slows down before it starts failing. Catch throttles early.</p>
+            <div class="info-box">&#9432; <strong>On-demand vs provisioned mode:</strong> If you use on-demand (PAY_PER_REQUEST) mode, skip the ConsumedReadCapacityUnits and ConsumedWriteCapacityUnits alarms &mdash; there is no provisioned limit to alarm against. Keep ThrottledRequests and SystemErrors for all modes.</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>SystemErrors</code></td><td>&gt; 0</td><td>1 min</td><td>2</td><td><span class="badge-critical">CRITICAL</span></td><td>AWS-side DynamoDB errors; likely service issue</td></tr>
+                    <tr><td><code>UserErrors</code></td><td>&gt; 0</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Client-side errors (bad requests, auth issues)</td></tr>
+                    <tr><td><code>ConsumedReadCapacityUnits</code></td><td>&gt; 80% of provisioned</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Read capacity filling up (provisioned mode only)</td></tr>
+                    <tr><td><code>ConsumedWriteCapacityUnits</code></td><td>&gt; 80% of provisioned</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Write capacity filling up (provisioned mode only)</td></tr>
+                    <tr><td><code>ThrottledRequests</code></td><td>&gt; 0</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Requests being throttled; app latency increasing</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'dynamodb-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'dynamodb-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="dynamodb-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  TableName:
+    Type: String
+    Default: YOUR_TABLE_NAME
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+  ProvisionedReadCapacity:
+    Type: Number
+    Default: 100
+    Description: Your table's provisioned RCU (skip for on-demand mode)
+  ProvisionedWriteCapacity:
+    Type: Number
+    Default: 100
+    Description: Your table's provisioned WCU (skip for on-demand mode)
+
+Resources:
+  DynamoDbSystemErrors:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${TableName}-system-errors"
+      AlarmDescription: DynamoDB system errors detected - possible AWS service issue
+      Namespace: AWS/DynamoDB
+      MetricName: SystemErrors
+      Dimensions:
+        - Name: TableName
+          Value: !Ref TableName
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  DynamoDbUserErrors:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${TableName}-user-errors"
+      AlarmDescription: DynamoDB user errors - bad requests or auth issues
+      Namespace: AWS/DynamoDB
+      MetricName: UserErrors
+      Dimensions:
+        - Name: TableName
+          Value: !Ref TableName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  DynamoDbReadCapacityWarn:
+    # Remove this resource if using on-demand mode
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${TableName}-read-capacity-warn"
+      AlarmDescription: DynamoDB read capacity above 80% of provisioned
+      Namespace: AWS/DynamoDB
+      MetricName: ConsumedReadCapacityUnits
+      Dimensions:
+        - Name: TableName
+          Value: !Ref TableName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: !Sub "${ProvisionedReadCapacity * 0.8 * 300}"
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  DynamoDbWriteCapacityWarn:
+    # Remove this resource if using on-demand mode
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${TableName}-write-capacity-warn"
+      AlarmDescription: DynamoDB write capacity above 80% of provisioned
+      Namespace: AWS/DynamoDB
+      MetricName: ConsumedWriteCapacityUnits
+      Dimensions:
+        - Name: TableName
+          Value: !Ref TableName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: !Sub "${ProvisionedWriteCapacity * 0.8 * 300}"
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  DynamoDbThrottledRequests:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${TableName}-throttled"
+      AlarmDescription: DynamoDB throttled requests - requests being delayed
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !Ref TableName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="dynamodb-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "table_name"                { type = string }
+variable "sns_topic_arn"              { type = string }
+variable "provisioned_read_capacity"  { type = number; default = 100 }
+variable "provisioned_write_capacity" { type = number; default = 100 }
+# Set provisioned_read/write_capacity to 0 if using on-demand mode and remove capacity alarms
+
+resource "aws_cloudwatch_metric_alarm" "dynamodb_system_errors" {
+  alarm_name          = "${var.table_name}-system-errors"
+  alarm_description   = "DynamoDB system errors - possible AWS service issue"
+  namespace           = "AWS/DynamoDB"
+  metric_name         = "SystemErrors"
+  dimensions          = { TableName = var.table_name }
+  statistic           = "Sum"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "dynamodb_user_errors" {
+  alarm_name          = "${var.table_name}-user-errors"
+  alarm_description   = "DynamoDB user errors - bad requests or auth issues"
+  namespace           = "AWS/DynamoDB"
+  metric_name         = "UserErrors"
+  dimensions          = { TableName = var.table_name }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "dynamodb_read_capacity_warn" {
+  # Remove this block if using on-demand mode
+  alarm_name          = "${var.table_name}-read-capacity-warn"
+  alarm_description   = "DynamoDB consumed read capacity above 80% of provisioned"
+  namespace           = "AWS/DynamoDB"
+  metric_name         = "ConsumedReadCapacityUnits"
+  dimensions          = { TableName = var.table_name }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 2
+  # Threshold = 80% of provisioned RCU * period seconds
+  threshold           = var.provisioned_read_capacity * 0.8 * 300
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "dynamodb_write_capacity_warn" {
+  # Remove this block if using on-demand mode
+  alarm_name          = "${var.table_name}-write-capacity-warn"
+  alarm_description   = "DynamoDB consumed write capacity above 80% of provisioned"
+  namespace           = "AWS/DynamoDB"
+  metric_name         = "ConsumedWriteCapacityUnits"
+  dimensions          = { TableName = var.table_name }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = var.provisioned_write_capacity * 0.8 * 300
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "dynamodb_throttled" {
+  alarm_name          = "${var.table_name}-throttled"
+  alarm_description   = "DynamoDB requests being throttled"
+  namespace           = "AWS/DynamoDB"
+  metric_name         = "ThrottledRequests"
+  dimensions          = { TableName = var.table_name }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 9. ElastiCache -->
+        <div class="resource-section" id="elasticache">
+            <div class="resource-header">
+                <div class="resource-icon">&#128262;</div>
+                <div class="resource-title">9. ElastiCache (Redis)</div>
+            </div>
+            <p class="resource-why">Redis is often invisible until it fails &mdash; then everything that depends on it slows down or crashes. Low cache hit rate means your backend database is absorbing all the traffic Redis should be handling.</p>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Metric</th><th>Threshold</th><th>Period</th><th>Eval Periods</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CPUUtilization</code></td><td>&gt; 80%</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Redis single-threaded; high CPU causes latency spikes</td></tr>
+                    <tr><td><code>FreeableMemory</code></td><td>&lt; 100 MB</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Redis evicting keys; cache effectiveness dropping</td></tr>
+                    <tr><td><code>CacheHitRate</code></td><td>&lt; 0.8 (80%)</td><td>5 min</td><td>3</td><td><span class="badge-warn">WARN</span></td><td>Cache not effective; DB taking excessive load</td></tr>
+                    <tr><td><code>CurrConnections</code></td><td>&gt; 1000</td><td>5 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>High connection count; connection pool exhaustion possible</td></tr>
+                    <tr><td><code>ReplicationLag</code></td><td>&gt; 60 s</td><td>1 min</td><td>2</td><td><span class="badge-warn">WARN</span></td><td>Replica falling behind primary; stale reads from replica</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'elasticache-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'elasticache-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="elasticache-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  CacheClusterId:
+    Type: String
+    Default: YOUR_CACHE_CLUSTER_ID
+  SnsTopicArn:
+    Type: String
+    Default: YOUR_SNS_TOPIC_ARN
+
+Resources:
+  RedisCpuWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${CacheClusterId}-cpu-warn"
+      AlarmDescription: ElastiCache CPU above 80%
+      Namespace: AWS/ElastiCache
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: CacheClusterId
+          Value: !Ref CacheClusterId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RedisFreeMemoryWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${CacheClusterId}-memory-warn"
+      AlarmDescription: ElastiCache freeable memory below 100 MB - keys may be evicted
+      Namespace: AWS/ElastiCache
+      MetricName: FreeableMemory
+      Dimensions:
+        - Name: CacheClusterId
+          Value: !Ref CacheClusterId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 104857600
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RedisCacheHitRateWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${CacheClusterId}-hit-rate-warn"
+      AlarmDescription: ElastiCache cache hit rate below 80% - DB taking excessive load
+      Namespace: AWS/ElastiCache
+      MetricName: CacheHitRate
+      Dimensions:
+        - Name: CacheClusterId
+          Value: !Ref CacheClusterId
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 0.8
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RedisCurrConnectionsWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${CacheClusterId}-connections-warn"
+      AlarmDescription: ElastiCache connections above 1000
+      Namespace: AWS/ElastiCache
+      MetricName: CurrConnections
+      Dimensions:
+        - Name: CacheClusterId
+          Value: !Ref CacheClusterId
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 1000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+
+  RedisReplicationLagWarn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${CacheClusterId}-replication-lag"
+      AlarmDescription: ElastiCache replication lag above 60 seconds
+      Namespace: AWS/ElastiCache
+      MetricName: ReplicationLag
+      Dimensions:
+        - Name: CacheClusterId
+          Value: !Ref CacheClusterId
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 60
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]</code></pre>
+                </div>
+                <div class="code-panel" id="elasticache-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "cache_cluster_id" { type = string }
+variable "sns_topic_arn"     { type = string }
+
+resource "aws_cloudwatch_metric_alarm" "redis_cpu_warn" {
+  alarm_name          = "${var.cache_cluster_id}-cpu-warn"
+  alarm_description   = "ElastiCache CPU above 80%"
+  namespace           = "AWS/ElastiCache"
+  metric_name         = "CPUUtilization"
+  dimensions          = { CacheClusterId = var.cache_cluster_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 80
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "redis_memory_warn" {
+  alarm_name          = "${var.cache_cluster_id}-memory-warn"
+  alarm_description   = "ElastiCache freeable memory below 100 MB"
+  namespace           = "AWS/ElastiCache"
+  metric_name         = "FreeableMemory"
+  dimensions          = { CacheClusterId = var.cache_cluster_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 104857600  # 100 MB in bytes
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "redis_hit_rate_warn" {
+  alarm_name          = "${var.cache_cluster_id}-hit-rate-warn"
+  alarm_description   = "ElastiCache cache hit rate below 80%"
+  namespace           = "AWS/ElastiCache"
+  metric_name         = "CacheHitRate"
+  dimensions          = { CacheClusterId = var.cache_cluster_id }
+  statistic           = "Average"
+  period              = 300
+  evaluation_periods  = 3
+  threshold           = 0.8
+  comparison_operator = "LessThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "redis_connections_warn" {
+  alarm_name          = "${var.cache_cluster_id}-connections-warn"
+  alarm_description   = "ElastiCache connections above 1000"
+  namespace           = "AWS/ElastiCache"
+  metric_name         = "CurrConnections"
+  dimensions          = { CacheClusterId = var.cache_cluster_id }
+  statistic           = "Maximum"
+  period              = 300
+  evaluation_periods  = 2
+  threshold           = 1000
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "redis_replication_lag" {
+  alarm_name          = "${var.cache_cluster_id}-replication-lag"
+  alarm_description   = "ElastiCache replication lag above 60 seconds"
+  namespace           = "AWS/ElastiCache"
+  metric_name         = "ReplicationLag"
+  dimensions          = { CacheClusterId = var.cache_cluster_id }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 60
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_topic_arn]
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- 10. Cost & Budget -->
+        <div class="resource-section" id="cost">
+            <div class="resource-header">
+                <div class="resource-icon">&#128176;</div>
+                <div class="resource-title">10. Cost &amp; Budget Alerts</div>
+            </div>
+            <p class="resource-why">Cost alerts use <strong>AWS Budgets</strong>, not CloudWatch. They notify you when actual or forecasted spend crosses a threshold &mdash; giving you time to investigate before the bill arrives.</p>
+            <div class="info-box">&#9432; <strong>This is AWS Budgets, not CloudWatch.</strong> The resources below are <span class="icode">AWS::Budgets::Budget</span> (CloudFormation) and <span class="icode">aws_budgets_budget</span> (Terraform), not CloudWatch alarms. They still send alerts to email or SNS.</div>
+            <div class="alerts-table-wrap"><table class="alerts-table">
+                <thead><tr><th>Alert Type</th><th>Threshold</th><th>Type</th><th>Severity</th><th>Why It Matters</th></tr></thead>
+                <tbody>
+                    <tr><td>Monthly spend actual</td><td>80% of budget</td><td>ACTUAL</td><td><span class="badge-warn">WARN</span></td><td>Early warning to review usage before hitting budget</td></tr>
+                    <tr><td>Monthly spend actual</td><td>100% of budget</td><td>ACTUAL</td><td><span class="badge-critical">CRITICAL</span></td><td>Budget exceeded &mdash; take action now</td></tr>
+                    <tr><td>Monthly spend forecasted</td><td>100% of budget</td><td>FORECASTED</td><td><span class="badge-warn">WARN</span></td><td>Projected to exceed budget by month end</td></tr>
+                    <tr><td>Anomaly detection</td><td>$50 above expected</td><td>ANOMALY</td><td><span class="badge-warn">WARN</span></td><td>Unusual spending pattern &mdash; runaway resource possible</td></tr>
+                </tbody>
+            </table></div>
+            <div class="code-block-group">
+                <div class="code-tabs">
+                    <div class="code-tab active" onclick="switchTab(this,'cost-cf')">&#9729;&#65039; CloudFormation <span class="lang-badge">YAML</span></div>
+                    <div class="code-tab" onclick="switchTab(this,'cost-tf')">&#128995; Terraform <span class="lang-badge">HCL</span></div>
+                </div>
+                <div class="code-panel active" id="cost-cf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-yaml">Parameters:
+  MonthlyBudgetAmount:
+    Type: Number
+    Default: 100
+    Description: Monthly AWS budget in USD
+  AlertEmail:
+    Type: String
+    Default: you@yourcompany.com
+    Description: Email for budget alerts
+
+Resources:
+  MonthlyBudget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: monthly-aws-budget
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: !Ref MonthlyBudgetAmount
+          Unit: USD
+      NotificationsWithSubscribers:
+        # 80% actual spend warning
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+        # 100% actual spend - critical
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+        # Forecasted to exceed 100%
+        - Notification:
+            NotificationType: FORECASTED
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+
+  # Cost Anomaly Detection
+  # Note: AWS::CE::AnomalyMonitor and AnomalySubscription are separate resources
+  CostAnomalyMonitor:
+    Type: AWS::CE::AnomalyMonitor
+    Properties:
+      MonitorName: aws-cost-anomaly-monitor
+      MonitorType: DIMENSIONAL
+      MonitorDimension: SERVICE
+
+  CostAnomalySubscription:
+    Type: AWS::CE::AnomalySubscription
+    Properties:
+      SubscriptionName: cost-anomaly-alerts
+      MonitorArnList:
+        - !GetAtt CostAnomalyMonitor.MonitorArn
+      Subscribers:
+        - Address: !Ref AlertEmail
+          Type: EMAIL
+      Threshold: 50
+      Frequency: DAILY</code></pre>
+                </div>
+                <div class="code-panel" id="cost-tf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-hcl">variable "monthly_budget_amount" {
+  type        = number
+  default     = 100
+  description = "Monthly AWS budget in USD"
+}
+
+variable "alert_email" {
+  type        = string
+  description = "Email for budget alerts"
+}
+
+resource "aws_budgets_budget" "monthly" {
+  name         = "monthly-aws-budget"
+  budget_type  = "COST"
+  limit_amount = var.monthly_budget_amount
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
+
+  # 80% actual spend - warning
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 80
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
+    subscriber_email_addresses = [var.alert_email]
+  }
+
+  # 100% actual spend - critical
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 100
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
+    subscriber_email_addresses = [var.alert_email]
+  }
+
+  # Forecasted to exceed budget
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 100
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "FORECASTED"
+    subscriber_email_addresses = [var.alert_email]
+  }
+}
+
+# Cost Anomaly Detection
+resource "aws_ce_anomaly_monitor" "main" {
+  name         = "aws-cost-anomaly-monitor"
+  monitor_type = "DIMENSIONAL"
+
+  monitor_dimension = "SERVICE"
+}
+
+resource "aws_ce_anomaly_subscription" "main" {
+  name      = "cost-anomaly-alerts"
+  frequency = "DAILY"
+
+  monitor_arn_list = [aws_ce_anomaly_monitor.main.arn]
+
+  subscriber {
+    address = var.alert_email
+    type    = "EMAIL"
+  }
+
+  # Alert when spend is $50 above expected
+  threshold_expression {
+    dimension {
+      key           = "ANOMALY_TOTAL_IMPACT_ABSOLUTE"
+      values        = ["50"]
+      match_options = ["GREATER_THAN_OR_EQUAL"]
+    }
+  }
+}</code></pre>
+                </div>
+            </div>
+            <div class="convops-tip">&#128161; <strong>ConvOps tip:</strong> Once these alarms fire, ConvOps sends them to WhatsApp or Slack and lets you investigate &amp; act without leaving your phone. <a href="https://convops.io">Get started &rarr;</a></div>
+        </div>
+
+        <!-- CTA SECTION -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 44px 36px; text-align: center; margin-bottom: 32px;">
+            <h2 style="color: white; font-size: 1.6em; margin-bottom: 12px;">Alarms set up. What happens when they fire?</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1em; max-width: 500px; margin: 0 auto 22px;">ConvOps sends CloudWatch alarms to WhatsApp or Slack with AI root cause analysis. Investigate and act from your phone &mdash; no laptop needed.</p>
+            <a href="https://app.convops.io/sign-up" style="display:inline-block; background:white; color:#667eea; padding:13px 32px; border-radius:8px; font-weight:700; font-size:1em; text-decoration:none;">
+                Try ConvOps Free &mdash; 2 minutes to connect
+            </a>
+            <p style="color:rgba(255,255,255,0.6); font-size:0.82em; margin-top:14px;">No credit card. Works with the alarms you just set up.</p>
+        </div>
+
+    </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <strong>ConvOps</strong>
+    <p style="margin-top:6px;">Find root cause faster. Fix incidents without opening AWS console.</p>
+    <p style="margin-top:16px;">&#169; 2026 ConvOps. All rights reserved. &middot; <a href="/privacy.html">Privacy Policy</a> &middot; <a href="/onboarding-guide">Setup Guide</a> &middot; <a href="/docs">Docs</a> &middot; <a href="/cloudwatch-alarm-setup-guide">Alerts Guide</a></p>
+    <p style="margin-top:10px; color:#aaa; font-size:0.85em;">Last updated: March 31, 2026</p>
+</footer>
+
+<script>
+    // ── Tab switching (per code block) ──
+    function switchTab(tabEl, panelId) {
+        var group = tabEl.closest('.code-block-group');
+        group.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
+        group.querySelectorAll('.code-panel').forEach(function(p) { p.classList.remove('active'); });
+        tabEl.classList.add('active');
+        document.getElementById(panelId).classList.add('active');
+    }
+
+    // ── Global toggle (switches all blocks) ──
+    var globalMode = 'cf';
+    function switchGlobal(mode) {
+        globalMode = mode;
+        document.getElementById('btn-cf').classList.toggle('active', mode === 'cf');
+        document.getElementById('btn-tf').classList.toggle('active', mode === 'tf');
+
+        document.querySelectorAll('.code-block-group').forEach(function(group) {
+            var tabs = group.querySelectorAll('.code-tab');
+            var panels = group.querySelectorAll('.code-panel');
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            panels.forEach(function(p) { p.classList.remove('active'); });
+
+            // Find the tab that matches the mode
+            tabs.forEach(function(t) {
+                var isCf = t.textContent.indexOf('CloudFormation') !== -1;
+                var isTf = t.textContent.indexOf('Terraform') !== -1;
+                if ((mode === 'cf' && isCf) || (mode === 'tf' && isTf)) {
+                    t.classList.add('active');
+                    // Get panel id from onclick attribute
+                    var match = t.getAttribute('onclick').match(/switchTab\(this,'([^']+)'\)/);
+                    if (match) {
+                        var panel = document.getElementById(match[1]);
+                        if (panel) panel.classList.add('active');
+                    }
+                }
+            });
+        });
+    }
+
+    // ── Copy button ──
+    function copyCode(btn) {
+        var panel = btn.closest('.code-panel');
+        var code = panel.querySelector('code');
+        navigator.clipboard.writeText(code.innerText).then(function() {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(function() {
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+
+    // ── Initialize highlight.js ──
+    document.addEventListener('DOMContentLoaded', function() {
+        hljs.highlightAll();
+    });
+</script>
+</body>
+</html>
