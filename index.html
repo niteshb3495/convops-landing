@@ -451,8 +451,15 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
+        .pricing-grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         @media (max-width: 700px) {
             .pricing-grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .pricing-grid-2 {
                 grid-template-columns: 1fr;
             }
         }
@@ -1513,7 +1520,7 @@
     <div class="section">
         <div class="section-inner">
             <h2>What's free vs paid</h2>
-            <p style="color:#555; margin-bottom:24px; font-size:0.95em;">See what's wrong for free. Fix it instantly with Pro.</p>
+            <p style="color:#555; margin-bottom:24px; font-size:0.95em;">Free: triage in Slack or WhatsApp in minutes — no card. Pro: unlimited volume and actions from chat — invite-only; we onboard every team by hand.</p>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
 
@@ -1522,28 +1529,30 @@
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
                         <span style="font-size:1.1em;">🔍</span>
                         <span style="font-weight:700; font-size:1em; color:#333;">Free</span>
-                        <span style="font-size:0.75em; background:#f0f0f0; color:#666; padding:2px 8px; border-radius:20px; font-weight:600;">Always free</span>
+                        <span style="font-size:0.75em; background:#f0f0f0; color:#666; padding:2px 8px; border-radius:20px; font-weight:600;">$0 · self-serve</span>
                     </div>
-                    <ul style="list-style:none; padding:0; margin:0; space-y:8px;">
-                        <li style="padding:7px 0; border-bottom:1px solid #f0f0f0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#28a745; font-weight:700;">✓</span> Alert analysis</li>
-                        <li style="padding:7px 0; border-bottom:1px solid #f0f0f0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#28a745; font-weight:700;">✓</span> Root cause insights</li>
-                        <li style="padding:7px 0; font-size:0.92em; color:#777; display:flex; align-items:center; gap:8px;"><span style="color:#999; font-weight:700;">~</span> 50 incidents/month</li>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="padding:7px 0; border-bottom:1px solid #f0f0f0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#28a745; font-weight:700;">✓</span> Full alert + RCA-style triage in Slack/WhatsApp</li>
+                        <li style="padding:7px 0; border-bottom:1px solid #f0f0f0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#28a745; font-weight:700;">✓</span> 50 incidents/month cap</li>
+                        <li style="padding:7px 0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#28a745; font-weight:700;">✓</span> No credit card — start instantly</li>
                     </ul>
+                    <a href="https://app.convops.io/sign-up" style="display:block; text-align:center; margin-top:16px; border:2px solid #667eea; color:#667eea; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Start free</a>
                 </div>
 
                 <!-- Pro -->
                 <div style="border:1.5px solid #667eea; border-radius:12px; padding:24px; background:#f4f3ff;">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
                         <span style="font-size:1.1em;">⚡</span>
                         <span style="font-weight:700; font-size:1em; color:#333;">Pro</span>
-                        <span style="font-size:0.75em; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:2px 8px; border-radius:20px; font-weight:600;">$49/mo</span>
+                        <span style="font-size:0.75em; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:2px 8px; border-radius:20px; font-weight:600;">$49/mo · invite-only</span>
                     </div>
                     <ul style="list-style:none; padding:0; margin:0 0 16px;">
-                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Execute fixes from chat</li>
-                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Automation rules</li>
-                        <li style="padding:7px 0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Team workflows</li>
+                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Unlimited incidents, investigations &amp; actions</li>
+                        <li style="padding:7px 0; border-bottom:1px solid #e0ddf8; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Approve fixes from Slack/WhatsApp</li>
+                        <li style="padding:7px 0; font-size:0.92em; color:#333; display:flex; align-items:center; gap:8px;"><span style="color:#667eea; font-weight:700;">✓</span> Early perks: founder WhatsApp + lifetime discount + your requests ship next</li>
                     </ul>
-                    <a href="https://app.convops.io/sign-up" style="display:block; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Get Started Free</a>
+                    <p style="font-size:0.78em; color:#666; margin:0 0 10px; text-align:center;">No checkout — talk first.</p>
+                    <a href="mailto:info@convops.io?subject=ConvOps%20Pro%20%E2%80%94%20Talk%20to%20founder" style="display:block; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:9px 20px; border-radius:8px; font-size:0.88em; font-weight:600; text-decoration:none;">Talk to founder</a>
                 </div>
 
             </div>
@@ -1551,69 +1560,66 @@
     </div>
 
     <!-- PRICING -->
-    <div class="section">
+    <div class="section" id="pricing">
         <div class="section-inner">
             <h2>Pricing</h2>
-            <p style="margin-bottom:6px">Start free. Alerts + full AI investigation included. No card required.</p>
-            <p style="margin-bottom:4px; font-size:0.9em; color:#888;">Pro &amp; Enterprise with action execution coming soon. Free plan available now.</p>
-            <p style="margin-bottom:28px; font-size:0.88em; color:#aaa; font-style:italic;">Pro costs less than 1 hour of engineer time per month.</p>
+            <p style="margin-bottom:8px; font-size:1.02em; color:#333;">
+                $49/mo is less than one hour of on-call debugging. Cheaper than a single deep incident investigation you do in the console at 2am.
+            </p>
+            <p style="margin-bottom:6px; font-size:0.92em; color:#666;">
+                We onboard a <strong>limited number of teams each week</strong> for Pro — early access only, no self-serve checkout yet.
+            </p>
+            <p style="margin-bottom:28px; font-size:0.9em; color:#888;">
+                Free tier is self-serve: no credit card, start instantly. Pro is invite-only — you talk to the founder first.
+            </p>
 
-            <div class="pricing-grid pricing-grid-3">
+            <div class="pricing-grid pricing-grid-2">
                 <!-- Free -->
                 <div class="pricing-card">
                     <h3>Free</h3>
                     <div class="amount">$0<span class="amount-period">/mo</span></div>
-                    <p class="desc">No credit card required</p>
+                    <p class="desc">No credit card. Start instantly.</p>
                     <ul class="pricing-features">
                         <li><span class="checkmark">✓</span> 50 incidents/month</li>
                         <li><span class="checkmark">✓</span> 10 investigations/month</li>
                         <li><span class="checkmark">✓</span> 10 actions/month</li>
-                        <li><span class="checkmark">✓</span> Connect 1 AWS account</li>
-                        <li><span class="checkmark">✓</span> CloudWatch alerts via WhatsApp or Slack</li>
-                        <li><span class="checkmark">✓</span> Full AI triage</li>
+                        <li><span class="checkmark">✓</span> 1 AWS account</li>
+                        <li><span class="checkmark">✓</span> CloudWatch → Slack or WhatsApp</li>
+                        <li><span class="checkmark">✓</span> Full AI triage on every alert</li>
                     </ul>
-                    <a href="https://app.convops.io/sign-up" class="btn-pricing">Get Started Free</a>
+                    <a href="https://app.convops.io/sign-up" class="btn-pricing">Start free</a>
                 </div>
 
-                <!-- Pro (featured) -->
+                <!-- Pro — invite-only -->
                 <div class="pricing-card featured">
-                    <div class="badge-popular">Coming Soon</div>
+                    <div class="badge-popular">Invite-only · early access</div>
                     <h3>Pro</h3>
                     <div class="amount">$49<span class="amount-period">/mo</span></div>
-                    <p class="desc">For solo engineers &amp; small teams</p>
+                    <p class="desc">For engineers who want incidents investigated and fixes executed from chat — without babysitting dashboards.</p>
                     <ul class="pricing-features">
                         <li><span class="checkmark">✓</span> Everything in Free</li>
-                        <li><span class="checkmark">✓</span> Unlimited incidents</li>
-                        <li><span class="checkmark">✓</span> Unlimited investigations</li>
-                        <li><span class="checkmark">✓</span> Unlimited actions</li>
-                        <li style="color:#888;">⏳ AI-generated RCA on resolved incidents</li>
-                        <li style="color:#888;">⏳ Execute actions from WhatsApp &amp; Slack</li>
-                        <li style="color:#888;">⏳ Automation rules</li>
-                        <li style="color:#888;">⏳ Unlimited AWS accounts</li>
-                        <li style="color:#888;">⏳ On-call routing + team access</li>
+                        <li><span class="checkmark">✓</span> Unlimited incidents, investigations &amp; actions</li>
+                        <li><span class="checkmark">✓</span> Approve and run fixes from Slack &amp; WhatsApp</li>
+                        <li><span class="checkmark">✓</span> RCA on resolved incidents (where supported)</li>
+                        <li><span class="checkmark">✓</span> Multiple AWS accounts &amp; team routing (as shipped)</li>
+                        <li><span class="checkmark">✓</span> <strong>Early user deal:</strong> lifetime discount locked in at signup</li>
+                        <li><span class="checkmark">✓</span> <strong>Direct WhatsApp line to the founder</strong> for setup and production issues</li>
+                        <li><span class="checkmark">✓</span> <strong>Your feature requests directly shape what we build next</strong> — prioritized in the next release cycle, not a backlog black hole</li>
                     </ul>
-                    <a href="#early-access-form" class="btn-pricing btn-pricing-featured" onclick="document.getElementById('early-access-email').focus()">Get notified when Pro launches</a>
-                </div>
-
-                <!-- Enterprise -->
-                <div class="pricing-card">
-                    <h3>Enterprise</h3>
-                    <div class="amount">Custom</div>
-                    <p class="desc">For companies with compliance needs</p>
-                    <ul class="pricing-features">
-                        <li><span class="checkmark">✓</span> Everything in Free</li>
-                        <li style="color:#888;">⏳ Everything in Pro</li>
-                        <li style="color:#888;">⏳ RCA export to PDF/Jira/Confluence</li>
-                        <li style="color:#888;">⏳ Audit logs + SSO + SCPs</li>
-                        <li style="color:#888;">⏳ SLA + dedicated support</li>
-                        <li style="color:#888;">⏳ Custom integrations</li>
-                        <li style="color:#888;">⏳ GDPR DPA included</li>
-                    </ul>
-                    <a href="mailto:info@convops.io?subject=ConvOps Enterprise" class="btn-pricing">Contact Us</a>
+                    <p style="font-size:0.8em; color:#666; margin:0 0 12px; text-align:center;">No self-serve upgrade yet — we onboard you by hand.</p>
+                    <a href="mailto:info@convops.io?subject=ConvOps%20Pro%20%E2%80%94%20Talk%20to%20founder" class="btn-pricing btn-pricing-featured">Talk to founder</a>
+                    <a href="mailto:info@convops.io?subject=ConvOps%20%E2%80%94%20Book%2015-min%20call" class="btn-pricing" style="margin-top:10px;">Book 15-min call</a>
                 </div>
             </div>
+
+            <div class="saas-note" style="margin-top:32px; text-align:left; max-width:640px; margin-left:auto; margin-right:auto;">
+                <p style="margin:0 0 10px; font-weight:700; color:#333;">Need something heavier than Pro?</p>
+                <p style="margin:0 0 12px; color:#555; font-size:0.92em;">
+                    Custom integrations, higher scale and volume, dedicated support — talk to the founder. We’ll wire it up if it’s a fit.
+                </p>
+                <a href="mailto:info@convops.io?subject=ConvOps%20%E2%80%94%20Custom%20%2F%20scale%20%2F%20enterprise" class="btn-pricing" style="display:inline-block; margin-top:0;">Talk to founder</a>
+            </div>
         </div>
-        <p style="text-align:center; margin-top:20px; font-size:0.95em; color:#666;">Free now — alerts &amp; AI investigation. Pro &amp; Enterprise with action execution coming soon.</p>
     </div>
 
     <!-- FAQ -->
@@ -1644,7 +1650,7 @@
             </div>
             <div class="faq-item">
                 <strong>Is this GDPR compliant? Where is my data stored?</strong>
-                ConvOps processes CloudWatch log data in the same AWS region as your account. Log content is not stored beyond the investigation window. A GDPR Data Processing Agreement is available on the Enterprise plan.
+                ConvOps processes CloudWatch log data in the same AWS region as your account. Log content is not stored beyond the investigation window. Need a GDPR Data Processing Agreement or other compliance paperwork — <a href="mailto:info@convops.io?subject=ConvOps%20%E2%80%94%20GDPR%20%2F%20compliance">talk to the founder</a>.
             </div>
             <div class="faq-item">
                 <strong>Do I need to configure my CloudWatch alarms differently?</strong>
