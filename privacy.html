@@ -4,193 +4,485 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy — ConvOps</title>
+    <meta name="description" content="ConvOps Privacy Policy — how we collect, store, and protect your data." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.7;
-            color: #333;
-            background: #f8f9fa;
+        /* ── PRIVACY LAYOUT ─────────────────────────────────── */
+        .privacy-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 48px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+        @media (max-width: 720px) {
+            .privacy-layout { grid-template-columns: 1fr; }
+            .privacy-sidebar { display: none; }
         }
 
-        header {
-            text-align: center;
-            padding: 50px 24px 56px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        /* TOC Sidebar */
+        .privacy-sidebar {
+            position: sticky;
+            top: 72px;
+            height: fit-content;
+            max-height: calc(100vh - 88px);
+            overflow-y: auto;
         }
-
-        header h1 { font-size: 2em; font-weight: 700; margin-bottom: 0.3em; }
-        header p { font-size: 1em; opacity: 0.85; }
-
-        .container {
-            max-width: 760px;
-            margin: -40px auto 60px;
-            padding: 0 24px;
+        .toc-title {
+            font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-3); margin-bottom: 10px;
         }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            padding: 48px 52px;
+        .toc-link {
+            display: block; font-size: 0.78rem;
+            color: var(--text-3); text-decoration: none;
+            padding: 4px 0 4px 10px;
+            border-left: 2px solid transparent;
+            transition: all 0.15s; line-height: 1.4;
         }
-
-        @media (max-width: 600px) {
-            .card { padding: 28px 20px; }
+        .toc-link:hover { color: var(--text-2); border-color: var(--border-2); }
+        .toc-link.active { color: var(--text-2); border-color: var(--indigo); }
+        .toc-updated {
+            margin-top: 20px; padding: 10px 12px;
+            background: var(--s2); border: 1px solid var(--border);
+            border-radius: 8px;
         }
+        .toc-updated-label { font-size: 0.65rem; color: var(--text-3); margin-bottom: 4px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
+        .toc-updated-date  { font-size: 0.78rem; color: var(--text-2); }
 
-        h2 {
-            color: #667eea;
-            font-size: 1.25em;
-            margin: 32px 0 10px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #f0eeff;
+        /* Privacy content */
+        .privacy-content { min-width: 0; }
+        .privacy-section { margin-bottom: 48px; }
+        .privacy-section:last-child { margin-bottom: 0; }
+        .section-anchor { display: block; height: 80px; margin-top: -80px; }
+
+        .privacy-h2 {
+            font-size: 1.25rem; font-weight: 700; color: #fff;
+            letter-spacing: -0.4px; margin-bottom: 14px; line-height: 1.2;
+            padding-bottom: 12px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
         }
-
-        h2:first-of-type { margin-top: 0; }
-
-        p { margin-bottom: 12px; font-size: 0.97em; }
-        p:last-child { margin-bottom: 0; }
-
-        ul { padding-left: 20px; margin-bottom: 12px; }
-        li { margin: 6px 0; font-size: 0.97em; }
-
-        .updated {
-            font-size: 0.85em;
-            color: #888;
-            margin-bottom: 28px;
+        .privacy-h2-num {
+            font-size: 0.68rem; font-weight: 700; font-family: var(--mono);
+            color: var(--text-3); background: var(--s2);
+            border: 1px solid var(--border); border-radius: 5px;
+            padding: 2px 7px; flex-shrink: 0;
         }
-
-        .highlight-box {
-            background: #f4f3ff;
-            border-left: 4px solid #667eea;
-            border-radius: 0 8px 8px 0;
-            padding: 16px 20px;
-            margin: 16px 0;
-            font-size: 0.95em;
+        .privacy-p {
+            font-size: 0.9rem; color: var(--text-2);
+            line-height: 1.8; margin-bottom: 14px;
         }
+        .privacy-p:last-child { margin-bottom: 0; }
+        .privacy-p strong { color: var(--text); }
+        .privacy-p a { color: var(--indigo); text-decoration: none; }
+        .privacy-p a:hover { text-decoration: underline; }
 
-        footer-nav {
-            display: block;
-            text-align: center;
-            margin-top: 32px;
-            font-size: 0.9em;
-            color: #888;
+        .privacy-list { list-style: none; margin: 8px 0 14px; }
+        .privacy-list li {
+            font-size: 0.9rem; color: var(--text-2);
+            padding: 5px 0; display: flex; gap: 8px;
+            align-items: flex-start; line-height: 1.65;
         }
+        .privacy-list li::before { content: '›'; color: var(--indigo); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .privacy-list li strong { color: var(--text); }
 
-        footer-nav a {
-            color: #667eea;
-            text-decoration: none;
+        /* Special "not collected" list */
+        .not-list { list-style: none; margin: 8px 0 14px; }
+        .not-list li {
+            font-size: 0.9rem; color: var(--text-2);
+            padding: 5px 0; display: flex; gap: 8px;
+            align-items: flex-start; line-height: 1.65;
         }
+        .not-list li::before { content: '✗'; color: var(--red); font-weight: 700; flex-shrink: 0; }
 
-        footer-nav a:hover { text-decoration: underline; }
+        /* GDPR legal basis table */
+        .gdpr-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+        .gdpr-table th {
+            padding: 10px 14px; text-align: left; font-weight: 600;
+            color: var(--text-2); border-bottom: 1px solid var(--border);
+            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;
+            background: var(--s2);
+        }
+        .gdpr-table th:first-child { border-radius: 8px 0 0 0; }
+        .gdpr-table th:last-child  { border-radius: 0 8px 0 0; }
+        .gdpr-table td {
+            padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.875rem; color: var(--text-2); vertical-align: top;
+        }
+        .gdpr-table tr:last-child td { border-bottom: none; }
+        .gdpr-table td:first-child { color: var(--text); font-weight: 500; white-space: nowrap; }
+        .gdpr-table td code { font-family: var(--mono); font-size: 0.8em; color: var(--indigo); }
+
+        /* Third parties */
+        .third-party-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+        .third-party-item {
+            background: var(--s2); border: 1px solid var(--border);
+            border-radius: 8px; padding: 12px 16px;
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .tp-name { font-size: 0.875rem; font-weight: 700; color: #fff; min-width: 80px; flex-shrink: 0; }
+        .tp-desc { font-size: 0.82rem; color: var(--text-2); line-height: 1.55; margin-bottom: 0; }
+
+        /* Rights grid */
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px; margin: 12px 0;
+        }
+        .right-card {
+            background: var(--s2); border: 1px solid var(--border);
+            border-radius: 8px; padding: 14px;
+        }
+        .right-title { font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .right-desc  { font-size: 0.78rem; color: var(--text-2); line-height: 1.55; margin-bottom: 0; }
+
+        /* Contact card */
+        .contact-card {
+            background: var(--s2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 24px;
+            margin-top: 16px;
+        }
+        .contact-detail { font-size: 0.875rem; color: var(--text-2); margin-bottom: 6px; }
+        .contact-detail a { color: var(--indigo); text-decoration: none; }
+        .contact-detail a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Privacy Policy</h1>
-    <p>ConvOps — Conversational Ops for Engineering Teams</p>
-</header>
+<!-- Grain -->
+<svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
 
-<div class="container">
-    <div class="card">
-        <p class="updated">Last updated: March 2026</p>
-
-        <h2>1. Who We Are</h2>
-        <p>ConvOps ("we", "our", "us") is operated by Nitesh Bhavsar, Berlin, Germany. We provide a conversational infrastructure management platform that connects your AWS environment to messaging channels (WhatsApp, Slack).</p>
-        <p>Contact: <a href="mailto:nitesh@convops.io">nitesh@convops.io</a></p>
-
-        <h2>2. What Data We Collect</h2>
-        <p>We collect only what is necessary to provide the service:</p>
-        <ul>
-            <li><strong>Account information</strong> — name, email address, company name (where applicable)</li>
-            <li><strong>Messaging channel identifiers</strong> — WhatsApp phone number and/or Slack workspace ID, used solely to route alerts to you</li>
-            <li><strong>AWS account identifiers</strong> — account IDs and IAM role ARNs you provide during setup; we do not store credentials</li>
-            <li><strong>Action audit logs</strong> — timestamps, action types, approval/rejection decisions, and the IAM principal used; required for security and accountability</li>
-            <li><strong>Usage data</strong> — anonymised, aggregate metrics (e.g. number of alerts processed) to improve reliability</li>
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1Z" stroke="white" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="white"/></svg>
+            </div>
+            ConvOps
+        </a>
+        <ul class="nav-links">
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="onboarding-guide.html">Setup Guide</a></li>
         </ul>
-        <p>We do <strong>not</strong> collect: long-lived AWS credentials, the content of your workloads, training data from your infrastructure, or any sensitive personal data beyond what is listed above.</p>
+        <div class="nav-actions">
+            <a href="https://app.convops.io/sign-in" class="btn-ghost">Log in</a>
+            <a href="https://app.convops.io/sign-up" class="btn-primary-sm">Start free</a>
+        </div>
+    </div>
+</nav>
 
-        <h2>3. Individual / Solo Users</h2>
-        <div class="highlight-box">
-            <strong>Solo plan users</strong> connect their own personal or individual AWS account to ConvOps. The same data practices described in this policy apply equally to Solo, Team, and Enterprise users. Specifically:
-            <ul style="margin-top:10px; margin-bottom:0">
-                <li>Your AWS account is accessed exclusively via the IAM role you create — no credentials are stored by ConvOps.</li>
-                <li>Alert data and action logs are retained only as long as necessary to provide the service (or up to 12 months, whichever is shorter), unless you request earlier deletion.</li>
-                <li>Your personal contact details (e.g. WhatsApp number) are used only for delivering alerts to you and are never sold or shared with third parties.</li>
-                <li>You can request deletion of your account and all associated data at any time by emailing nitesh@convops.io.</li>
+<!-- PAGE HERO -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span>›</span>
+            <span>Privacy Policy</span>
+        </div>
+        <h1>Privacy Policy</h1>
+        <p>ConvOps — Conversational Ops for Engineering Teams. Last updated: March 2026.</p>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="privacy-layout">
+
+    <!-- TOC SIDEBAR -->
+    <aside class="privacy-sidebar">
+        <div class="toc-title">Contents</div>
+        <a href="#s1"  class="toc-link active">1. Who We Are</a>
+        <a href="#s2"  class="toc-link">2. What Data We Collect</a>
+        <a href="#s3"  class="toc-link">3. Individual / Solo Users</a>
+        <a href="#s4"  class="toc-link">4. Legal Basis (GDPR)</a>
+        <a href="#s5"  class="toc-link">5. How We Use Your Data</a>
+        <a href="#s6"  class="toc-link">6. Data Storage &amp; Security</a>
+        <a href="#s7"  class="toc-link">7. Data Retention</a>
+        <a href="#s8"  class="toc-link">8. Third-Party Services</a>
+        <a href="#s9"  class="toc-link">9. Your Rights</a>
+        <a href="#s10" class="toc-link">10. Cookies</a>
+        <a href="#s11" class="toc-link">11. Changes to Policy</a>
+        <a href="#s12" class="toc-link">12. Contact</a>
+        <div class="toc-updated">
+            <div class="toc-updated-label">Last updated</div>
+            <div class="toc-updated-date">March 2026</div>
+        </div>
+    </aside>
+
+    <!-- POLICY CONTENT -->
+    <main class="privacy-content">
+
+        <!-- 1 -->
+        <div class="privacy-section">
+            <span id="s1" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">1</span> Who We Are</div>
+            <p class="privacy-p">ConvOps ("we", "our", "us") is operated by <strong>Nitesh Bhavsar</strong>, Berlin, Germany. We provide a conversational infrastructure management platform that connects your AWS environment to messaging channels (WhatsApp, Slack).</p>
+            <p class="privacy-p">Contact: <a href="mailto:nitesh@convops.io">nitesh@convops.io</a></p>
+        </div>
+
+        <!-- 2 -->
+        <div class="privacy-section">
+            <span id="s2" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">2</span> What Data We Collect</div>
+            <p class="privacy-p">We collect only what is necessary to provide the service:</p>
+            <ul class="privacy-list">
+                <li><strong>Account information</strong> — name, email address, company name (where applicable)</li>
+                <li><strong>Messaging channel identifiers</strong> — WhatsApp phone number and/or Slack workspace ID, used solely to route alerts to you</li>
+                <li><strong>AWS account identifiers</strong> — account IDs and IAM role ARNs you provide during setup; we do not store credentials</li>
+                <li><strong>Action audit logs</strong> — timestamps, action types, approval/rejection decisions, and the IAM principal used; required for security and accountability</li>
+                <li><strong>Usage data</strong> — anonymised, aggregate metrics (e.g. number of alerts processed) to improve reliability</li>
+            </ul>
+            <p class="privacy-p">We do <strong>not</strong> collect:</p>
+            <ul class="not-list">
+                <li>Long-lived AWS credentials</li>
+                <li>The content of your workloads</li>
+                <li>Training data from your infrastructure</li>
+                <li>Any sensitive personal data beyond what is listed above</li>
             </ul>
         </div>
 
-        <h2>4. Legal Basis for Processing (GDPR)</h2>
-        <p>For users in the European Economic Area (EEA) and UK, we process personal data under the following legal bases:</p>
-        <ul>
-            <li><strong>Contract performance (Art. 6(1)(b) GDPR)</strong> — to provide the service you signed up for</li>
-            <li><strong>Legitimate interests (Art. 6(1)(f) GDPR)</strong> — security logging, fraud prevention, and service improvement</li>
-            <li><strong>Legal obligation (Art. 6(1)(c) GDPR)</strong> — where retention is required by applicable law</li>
-        </ul>
+        <!-- 3 -->
+        <div class="privacy-section">
+            <span id="s3" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">3</span> Individual / Solo Users</div>
+            <p class="privacy-p"><strong>Solo plan users</strong> connect their own personal or individual AWS account to ConvOps. The same data practices described in this policy apply equally to Solo, Team, and Enterprise users. Specifically:</p>
+            <ul class="privacy-list">
+                <li>Your AWS account is accessed exclusively via the IAM role you create — no credentials are stored by ConvOps.</li>
+                <li>Alert data and action logs are retained only as long as necessary to provide the service (or up to 12 months, whichever is shorter), unless you request earlier deletion.</li>
+                <li>Your personal contact details (e.g. WhatsApp number) are used only for delivering alerts to you and are never sold or shared with third parties.</li>
+                <li>You can request deletion of your account and all associated data at any time by emailing <a href="mailto:nitesh@convops.io">nitesh@convops.io</a>.</li>
+            </ul>
+        </div>
 
-        <h2>5. How We Use Your Data</h2>
-        <ul>
-            <li>Delivering infrastructure alerts to your chosen messaging channel</li>
-            <li>Executing approved actions in your AWS account on your behalf</li>
-            <li>Maintaining the action audit log for your own security review</li>
-            <li>Providing customer support</li>
-            <li>Sending service-related notifications (e.g. outages, security advisories)</li>
-        </ul>
-        <p>We do not use your data for advertising or sell it to third parties.</p>
+        <!-- 4 -->
+        <div class="privacy-section">
+            <span id="s4" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">4</span> Legal Basis for Processing (GDPR)</div>
+            <p class="privacy-p">For users in the European Economic Area (EEA) and UK, we process personal data under the following legal bases:</p>
+            <table class="gdpr-table">
+                <thead>
+                    <tr><th>Legal Basis</th><th>Article</th><th>Purpose</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Contract performance</td>
+                        <td><code>Art. 6(1)(b) GDPR</code></td>
+                        <td>To provide the service you signed up for</td>
+                    </tr>
+                    <tr>
+                        <td>Legitimate interests</td>
+                        <td><code>Art. 6(1)(f) GDPR</code></td>
+                        <td>Security logging, fraud prevention, and service improvement</td>
+                    </tr>
+                    <tr>
+                        <td>Legal obligation</td>
+                        <td><code>Art. 6(1)(c) GDPR</code></td>
+                        <td>Where retention is required by applicable law</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <h2>6. Data Storage and Security</h2>
-        <ul>
-            <li>Data is stored in AWS (EU-West-1, Ireland) by default</li>
-            <li>All data in transit is encrypted with TLS 1.2+</li>
-            <li>All data at rest is encrypted with AES-256</li>
-            <li>AWS access uses short-lived session tokens via IAM role assumption — no long-lived credentials stored</li>
-            <li>ConvOps runs within your own AWS account; your infrastructure data does not leave your cloud environment</li>
-        </ul>
+        <!-- 5 -->
+        <div class="privacy-section">
+            <span id="s5" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">5</span> How We Use Your Data</div>
+            <ul class="privacy-list">
+                <li>Delivering infrastructure alerts to your chosen messaging channel</li>
+                <li>Executing approved actions in your AWS account on your behalf</li>
+                <li>Maintaining the action audit log for your own security review</li>
+                <li>Providing customer support</li>
+                <li>Sending service-related notifications (e.g. outages, security advisories)</li>
+            </ul>
+            <div class="callout callout-green" style="margin-top:4px;">
+                <div class="callout-icon">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--green)"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+                </div>
+                <div>We do <strong>not</strong> use your data for advertising or sell it to third parties.</div>
+            </div>
+        </div>
 
-        <h2>7. Data Retention</h2>
-        <p>We retain personal data for as long as your account is active or as needed to provide the service. Action audit logs are retained for up to 12 months. You may request deletion at any time; see Section 9.</p>
+        <!-- 6 -->
+        <div class="privacy-section">
+            <span id="s6" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">6</span> Data Storage and Security</div>
+            <ul class="privacy-list">
+                <li>Data is stored in <strong>AWS (EU-West-1, Ireland)</strong> by default</li>
+                <li>All data in transit is encrypted with <strong>TLS 1.2+</strong></li>
+                <li>All data at rest is encrypted with <strong>AES-256</strong></li>
+                <li>AWS access uses short-lived session tokens via IAM role assumption — no long-lived credentials stored</li>
+                <li>ConvOps runs within your own AWS account; your infrastructure data does not leave your cloud environment</li>
+            </ul>
+        </div>
 
-        <h2>8. Third-Party Services</h2>
-        <p>We use a small number of sub-processors to operate the service:</p>
-        <ul>
-            <li><strong>AWS</strong> — infrastructure hosting (EEA region)</li>
-            <li><strong>WhatsApp / Meta</strong> — message delivery via the WhatsApp Business API (subject to Meta's privacy policy)</li>
-            <li><strong>Slack Technologies</strong> — message delivery via the Slack API (subject to Slack's privacy policy)</li>
-        </ul>
-        <p>No other personal data is shared with third parties.</p>
+        <!-- 7 -->
+        <div class="privacy-section">
+            <span id="s7" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">7</span> Data Retention</div>
+            <p class="privacy-p">We retain personal data for as long as your account is active or as needed to provide the service. <strong>Action audit logs are retained for up to 12 months.</strong> You may request deletion at any time; see Section 9.</p>
+        </div>
 
-        <h2>9. Your Rights</h2>
-        <p>Under GDPR and applicable law, you have the right to:</p>
-        <ul>
-            <li><strong>Access</strong> the personal data we hold about you</li>
-            <li><strong>Rectification</strong> of inaccurate data</li>
-            <li><strong>Erasure</strong> ("right to be forgotten") — we will delete your data within 30 days of request</li>
-            <li><strong>Portability</strong> — receive your data in a machine-readable format</li>
-            <li><strong>Objection</strong> to processing based on legitimate interests</li>
-            <li><strong>Restriction</strong> of processing in certain circumstances</li>
-        </ul>
-        <p>To exercise any right, email <a href="mailto:nitesh@convops.io">nitesh@convops.io</a>. We will respond within 30 days. You also have the right to lodge a complaint with your local data protection authority (in Germany: the Berliner Beauftragte für Datenschutz und Informationsfreiheit).</p>
+        <!-- 8 -->
+        <div class="privacy-section">
+            <span id="s8" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">8</span> Third-Party Services</div>
+            <p class="privacy-p">We use a small number of sub-processors to operate the service. No other personal data is shared with third parties.</p>
+            <div class="third-party-list">
+                <div class="third-party-item">
+                    <div class="tp-name">AWS</div>
+                    <p class="tp-desc">Infrastructure hosting (EEA region)</p>
+                </div>
+                <div class="third-party-item">
+                    <div class="tp-name">WhatsApp / Meta</div>
+                    <p class="tp-desc">Message delivery via the WhatsApp Business API (subject to Meta's privacy policy)</p>
+                </div>
+                <div class="third-party-item">
+                    <div class="tp-name">Slack Technologies</div>
+                    <p class="tp-desc">Message delivery via the Slack API (subject to Slack's privacy policy)</p>
+                </div>
+            </div>
+        </div>
 
-        <h2>10. Cookies</h2>
-        <p>Our marketing website (convops.io) does not use tracking cookies. No third-party analytics are loaded on this page.</p>
+        <!-- 9 -->
+        <div class="privacy-section">
+            <span id="s9" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">9</span> Your Rights</div>
+            <p class="privacy-p">Under GDPR and applicable law, you have the right to:</p>
+            <div class="rights-grid">
+                <div class="right-card">
+                    <div class="right-title">Access</div>
+                    <p class="right-desc">Request the personal data we hold about you.</p>
+                </div>
+                <div class="right-card">
+                    <div class="right-title">Rectification</div>
+                    <p class="right-desc">Correction of inaccurate data.</p>
+                </div>
+                <div class="right-card">
+                    <div class="right-title">Erasure</div>
+                    <p class="right-desc">"Right to be forgotten" — we will delete your data within 30 days of request.</p>
+                </div>
+                <div class="right-card">
+                    <div class="right-title">Portability</div>
+                    <p class="right-desc">Receive your data in a machine-readable format.</p>
+                </div>
+                <div class="right-card">
+                    <div class="right-title">Objection</div>
+                    <p class="right-desc">Object to processing based on legitimate interests.</p>
+                </div>
+                <div class="right-card">
+                    <div class="right-title">Restriction</div>
+                    <p class="right-desc">Restriction of processing in certain circumstances.</p>
+                </div>
+            </div>
+            <p class="privacy-p" style="margin-top:14px;">To exercise any right, email <a href="mailto:nitesh@convops.io">nitesh@convops.io</a>. We will respond within 30 days. You also have the right to lodge a complaint with your local data protection authority (in Germany: the <strong>Berliner Beauftragte für Datenschutz und Informationsfreiheit</strong>).</p>
+        </div>
 
-        <h2>11. Changes to This Policy</h2>
-        <p>We may update this policy periodically. Material changes will be notified via email or an in-app notice at least 14 days before taking effect. The "Last updated" date at the top reflects the most recent revision.</p>
+        <!-- 10 -->
+        <div class="privacy-section">
+            <span id="s10" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">10</span> Cookies</div>
+            <div class="callout callout-green">
+                <div class="callout-icon">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--green)"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+                </div>
+                <div>Our marketing website (convops.io) does <strong>not use tracking cookies</strong>. No third-party analytics are loaded on this page.</div>
+            </div>
+        </div>
 
-        <h2>12. Contact</h2>
-        <p>Questions or requests: <a href="mailto:nitesh@convops.io">nitesh@convops.io</a></p>
-        <p>Nitesh Bhavsar · Berlin, Germany</p>
-    </div>
+        <!-- 11 -->
+        <div class="privacy-section">
+            <span id="s11" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">11</span> Changes to This Policy</div>
+            <p class="privacy-p">We may update this policy periodically. <strong>Material changes will be notified via email or an in-app notice at least 14 days before taking effect.</strong> The "Last updated" date at the top reflects the most recent revision.</p>
+        </div>
 
-    <footer-nav>
-        <a href="/">&larr; Back to ConvOps</a> &nbsp;·&nbsp; <a href="/#pricing">Pricing</a> &nbsp;·&nbsp; © 2026 ConvOps. All rights reserved.
-    </footer-nav>
+        <!-- 12 -->
+        <div class="privacy-section">
+            <span id="s12" class="section-anchor"></span>
+            <div class="privacy-h2"><span class="privacy-h2-num">12</span> Contact</div>
+            <p class="privacy-p">Questions or requests about your data, GDPR rights, or our privacy practices:</p>
+            <div class="contact-card">
+                <div class="contact-detail"><strong style="color:var(--text);">Name:</strong> Nitesh Bhavsar</div>
+                <div class="contact-detail"><strong style="color:var(--text);">Email:</strong> <a href="mailto:nitesh@convops.io">nitesh@convops.io</a></div>
+                <div class="contact-detail"><strong style="color:var(--text);">Location:</strong> Berlin, Germany</div>
+                <div class="contact-detail" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+                    <span style="font-size:0.82rem; color:var(--text-2);">We typically respond within a few hours during business days.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACK LINK -->
+        <div style="margin-top:48px; padding-top:24px; border-top:1px solid var(--border);">
+            <a href="index.html" style="display:inline-flex; align-items:center; gap:6px; font-size:0.875rem; color:var(--text-2); text-decoration:none; transition:color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-2)'">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+                Back to convops.io
+            </a>
+        </div>
+
+    </main>
 </div>
 
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <div class="footer-logo">
+                <div class="footer-logo-icon">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1Z" stroke="white" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="white"/></svg>
+                </div>
+                <span>ConvOps</span>
+            </div>
+            <p class="footer-tagline">Find root cause faster. Fix incidents without opening the AWS console.</p>
+            <p class="footer-copy">© 2026 ConvOps. All rights reserved.</p>
+        </div>
+        <div>
+            <div class="footer-col-title">Links</div>
+            <ul class="footer-links">
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="onboarding-guide.html">Setup Guide</a></li>
+                <li><a href="index.html#pricing">Pricing</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="index.html">Back to convops.io</a></li>
+            </ul>
+        </div>
+        <div>
+            <div class="footer-col-title">Contact</div>
+            <p style="font-size:0.82rem; color:var(--text-2); margin-bottom:6px;"><a href="mailto:nitesh@convops.io" style="color:var(--indigo); text-decoration:none;">nitesh@convops.io</a></p>
+            <p style="font-size:0.78rem; color:var(--text-3); line-height:1.6;">
+                Nitesh Bhavsar<br>
+                Berlin, Germany<br>
+                GDPR DPA available on request
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Active TOC on scroll
+var sections = document.querySelectorAll('.section-anchor');
+var links    = document.querySelectorAll('.toc-link');
+var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+        if (e.isIntersecting) {
+            var id = e.target.id;
+            links.forEach(function(l) {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+            });
+        }
+    });
+}, { rootMargin: '-60px 0px -70% 0px' });
+sections.forEach(function(s) { obs.observe(s); });
+</script>
 </body>
 </html>
