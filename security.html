@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security — ConvOps</title>
+    <meta name="description" content="How ConvOps accesses AWS, handles credentials, retention, and third parties — for security reviews." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        pre.policy-json {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 18px;
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-2);
+            overflow-x: auto;
+            line-height: 1.55;
+            margin: 14px 0 24px;
+        }
+        details.sec-expand {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+        details.sec-expand summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        details.sec-expand p {
+            margin-top: 12px;
+            font-size: 0.88rem;
+            color: var(--text-2);
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+        ul.action-list { list-style: none; margin: 10px 0 0; }
+        ul.action-list li {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--amber);
+            padding: 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+<svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1Z" stroke="white" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="white"/></svg>
+            </div>
+            ConvOps
+        </a>
+        <ul class="nav-links">
+            <li><a href="https://app.convops.io/demo">Demo</a></li>
+            <li><a href="https://app.convops.io/roi">ROI</a></li>
+            <li><a href="for-managers.html">For Managers</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="onboarding-guide.html">Setup Guide</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="https://app.convops.io/sign-in" class="btn-ghost">Log in</a>
+            <a href="https://app.convops.io/sign-up" class="btn-primary-sm">Start free</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span>›</span>
+            <span>Security</span>
+        </div>
+        <h1>Security at ConvOps</h1>
+        <p>What we access, how credentials work, how to revoke us, and where data goes — written for security reviewers and CTOs.</p>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="content-prose">
+
+        <h2>IAM access model</h2>
+        <p>By default ConvOps uses <strong>read-only</strong> AWS API calls to investigate alarms (CloudWatch metrics and alarms, logs, ECS/RDS/Lambda describe APIs). Optional <strong>Pro remediation</strong> adds explicit write actions — each requires a human confirmation in chat before execution.</p>
+
+        <details class="sec-expand" open>
+            <summary>Read-only actions (baseline)</summary>
+            <p>Includes: <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">cloudwatch:GetMetricData</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">DescribeAlarms</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">GetMetricStatistics</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">ListMetrics</code>, log read APIs (<code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">FilterLogEvents</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">GetLogEvents</code>, describe groups/streams), <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">ec2:Describe*</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">ecs:Describe*</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">ecs:List*</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">rds:Describe*</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">lambda:Get*</code>, <code style="font-family:var(--mono);font-size:0.82rem;color:var(--indigo);">lambda:ListFunctions</code>.</p>
+        </details>
+
+        <details class="sec-expand">
+            <summary>Pro write actions (human-approved only)</summary>
+            <p>These are issued only after an engineer confirms in WhatsApp or Slack. They are scoped in our published CloudFormation template:</p>
+            <ul class="action-list">
+                <li>ecs:UpdateService</li>
+                <li>ec2:RebootInstances</li>
+                <li>rds:RebootDBInstance</li>
+                <li>lambda:InvokeFunction</li>
+            </ul>
+        </details>
+
+        <p>The customer CloudFormation template ships an IAM <strong>role</strong> (not long-lived users). Review the full JSON here:</p>
+        <p><a href="cloudformation/convops-setup.yaml" style="color:var(--indigo);font-weight:600;text-decoration:none;">cloudformation/convops-setup.yaml</a> — your team can diff this in minutes.</p>
+
+        <pre class="policy-json" aria-label="IAM snippet">{ "Read": [
+  "cloudwatch:GetMetricData", "cloudwatch:DescribeAlarms",
+  "cloudwatch:GetMetricStatistics", "cloudwatch:ListMetrics",
+  "logs:FilterLogEvents", "logs:GetLogEvents",
+  "logs:DescribeLogGroups", "logs:DescribeLogStreams",
+  "ec2:DescribeInstances", "ec2:DescribeInstanceStatus",
+  "ecs:DescribeTasks", "ecs:DescribeServices", "ecs:ListTasks", "ecs:ListServices",
+  "rds:DescribeDBInstances", "rds:DescribeEvents",
+  "lambda:ListFunctions", "lambda:GetFunctionConfiguration", "lambda:GetFunction"
+],
+  "ProWrites": [
+  "ecs:UpdateService", "ec2:RebootInstances",
+  "rds:RebootDBInstance", "lambda:InvokeFunction"
+] }</pre>
+
+        <h2>How credentials work</h2>
+        <p>ConvOps assumes <strong>IAM roles</strong> in your account via <code style="font-family:var(--mono);font-size:0.85rem;">sts:AssumeRole</code> — we do <strong>not</strong> ask for IAM users or static access keys. Your stack sets <strong>ExternalId</strong> to your <strong>RegistrationToken</strong>, which mitigates confused-deputy attacks. Our service obtains short <strong>STS sessions</strong> (typically up to <strong>15 minutes</strong> for operational calls). <strong>We never see your access keys.</strong> You create and own the role; we only assume it when investigating or executing an approved action.</p>
+
+        <h2>How to revoke access</h2>
+        <p><strong>Delete the IAM role from your AWS account. Done.</strong> ConvOps loses the ability to assume that role immediately. No ticket queue required.</p>
+
+        <h2>Data retention &amp; subprocessors</h2>
+        <p>Operational records use a <strong>90-day TTL</strong> on DynamoDB tables where applicable. Phone numbers are <strong>masked in logs</strong>; we retain routing identifiers only as needed for delivery. Data is <strong>not sold</strong> or used for ads.</p>
+        <p>Third-party processing is limited to: <strong>Anthropic Claude API</strong> (alarm and log context for triage and RCA — no marketing use), and <strong>WhatsApp / Slack</strong> APIs for message delivery only.</p>
+
+        <h2>SOC 2 roadmap</h2>
+        <p><strong>Type II audit planned for Q4 2026.</strong> Detailed control narratives are available on request for procurement.</p>
+
+        <p style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border);font-size:0.92rem;color:var(--text-2);">
+            Questions? Email <a href="mailto:security@convops.io" style="color:var(--indigo);text-decoration:none;font-weight:600;">security@convops.io</a>
+        </p>
+    </div>
+</div>
+
+<footer style="border-top:1px solid var(--border); padding:32px 24px; margin-top:48px;">
+    <div style="max-width:1040px;margin:0 auto;text-align:center;">
+        <p style="font-size:0.82rem;color:var(--text-3);margin:0;">© 2026 ConvOps · <a href="index.html" style="color:var(--text-2);text-decoration:none;">Home</a></p>
+    </div>
+</footer>
+
+</body>
+</html>

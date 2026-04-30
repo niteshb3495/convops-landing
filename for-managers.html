@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Managers — ConvOps</title>
+    <meta name="description" content="Reliability metrics for engineering leadership — MTTR, on-call burden, and AI effectiveness without adding headcount." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 28px 0 36px;
+        }
+        .pillar-card {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .pillar-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+        .pillar-card p { font-size: 0.9rem; color: var(--text-2); line-height: 1.7; margin-bottom: 0; }
+        .pillar-stat {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--indigo);
+            margin-top: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .dash-list {
+            list-style: none;
+            margin: 16px 0 0;
+        }
+        .dash-list li {
+            font-size: 0.9rem;
+            color: var(--text-2);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .dash-list li:last-child { border-bottom: none; }
+        .dash-list li::before { content: '›'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+        .price-strip {
+            background: var(--s2);
+            border: 1px solid var(--border-2);
+            border-radius: 12px;
+            padding: 22px 24px;
+            margin-top: 28px;
+        }
+        .price-strip strong { color: #fff; font-size: 1.05rem; }
+    </style>
+</head>
+<body>
+
+<svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1Z" stroke="white" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="white"/></svg>
+            </div>
+            ConvOps
+        </a>
+        <ul class="nav-links">
+            <li><a href="https://app.convops.io/demo">Demo</a></li>
+            <li><a href="https://app.convops.io/roi">ROI</a></li>
+            <li><a href="for-managers.html" class="active">For Managers</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="onboarding-guide.html">Setup Guide</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="https://app.convops.io/sign-in" class="btn-ghost">Log in</a>
+            <a href="https://app.convops.io/sign-up" class="btn-primary-sm">Start free</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span>›</span>
+            <span>For Managers</span>
+        </div>
+        <h1>ConvOps gives you the reliability metrics your board is asking for — without adding headcount</h1>
+        <p>Your engineers are already firefighting. ConvOps shows you who is burning out, which services keep breaking, and whether the AI is helping.</p>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="content-prose">
+        <h2>Three outcomes that matter to leadership</h2>
+
+        <div class="pillar-grid">
+            <div class="pillar-card">
+                <h3>MTTR you can report</h3>
+                <p>Industry median time to restore service is about <strong style="color:var(--text);">51 minutes</strong>. Teams that adopt AI-assisted triage consistently shave meaningful time off that path — fewer dead-end investigations, faster root cause.</p>
+                <p class="pillar-stat">New Relic State of Observability 2024</p>
+            </div>
+            <div class="pillar-card">
+                <h3>Burnout prevention</h3>
+                <p><strong style="color:var(--text);">65% of on-call engineers</strong> report burnout symptoms. ConvOps flags engineers above a <strong style="color:var(--text);">20% after-hours</strong> alert burden so you can rotate before someone quits.</p>
+                <p class="pillar-stat">New Relic / PagerDuty industry surveys 2024</p>
+            </div>
+            <div class="pillar-card">
+                <h3>Toil visibility</h3>
+                <p>About <strong style="color:var(--text);">30% of engineering time</strong> is lost to disruptions and rework. ConvOps maps recurring root causes so you can fund permanent fixes instead of endless pages.</p>
+                <p class="pillar-stat">New Relic 2024</p>
+            </div>
+        </div>
+
+        <h2>What you see in the manager dashboard</h2>
+        <ul class="dash-list">
+            <li><strong style="color:var(--text);">Reliability Overview</strong> — incidents, MTTR vs industry median, triage mix, top noisy alarms.</li>
+            <li><strong style="color:var(--text);">On-Call Burden</strong> — pages per engineer, after-hours share, threshold warnings.</li>
+            <li><strong style="color:var(--text);">Toil Map</strong> — repeated root causes, recurrence counts, where engineering hours go.</li>
+        </ul>
+
+        <p style="margin-top:28px;">
+            <a href="https://app.convops.io/demo" class="btn-primary-sm" style="display:inline-block;padding:10px 22px;font-size:0.9rem;">See the full demo →</a>
+        </p>
+
+        <div class="price-strip">
+            <p style="margin-bottom:10px;"><strong>$49/month.</strong> Less than 30 minutes of your team's time.</p>
+            <p style="margin-bottom:0;font-size:0.88rem;color:var(--text-2);">Most teams see ROI in the first month.
+                <a href="https://app.convops.io/roi?teamSize=4&amp;incidents=19&amp;mttr=51&amp;cost=100" style="color:var(--indigo);text-decoration:none;font-weight:600;">Calculate yours →</a>
+            </p>
+        </div>
+
+        <p style="margin-top:24px;font-size:0.88rem;color:var(--text-3);">
+            Need approval from your CTO? Share <a href="approval.html" style="color:var(--indigo);">How to get ConvOps approved</a> or our <a href="security.html" style="color:var(--indigo);">security overview</a>.
+        </p>
+    </div>
+</div>
+
+<footer style="border-top:1px solid var(--border); padding:32px 24px; margin-top:48px;">
+    <div style="max-width:1040px;margin:0 auto;text-align:center;">
+        <p style="font-size:0.82rem;color:var(--text-3);margin:0;">© 2026 ConvOps · <a href="index.html" style="color:var(--text-2);text-decoration:none;">Home</a></p>
+    </div>
+</footer>
+
+</body>
+</html>

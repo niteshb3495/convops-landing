@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to get ConvOps approved</title>
+    <meta name="description" content="Pre-written pitch, ROI link generator, and security links for internal approval." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .pitch-area {
+            width: 100%;
+            min-height: 220px;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 18px;
+            font-family: var(--font);
+            font-size: 0.88rem;
+            color: var(--text);
+            line-height: 1.65;
+            resize: vertical;
+            margin: 14px 0 20px;
+        }
+        .mini-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 640px) {
+            .mini-form { grid-template-columns: 1fr; }
+        }
+        .mini-form label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-3);
+            margin-bottom: 6px;
+        }
+        .mini-form input {
+            width: 100%;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .mini-form button {
+            background: var(--indigo);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: var(--font);
+            white-space: nowrap;
+        }
+        .mini-form button:hover { filter: brightness(1.08); }
+        .roi-out {
+            width: 100%;
+            margin-top: 12px;
+            background: var(--bg);
+            border: 1px dashed var(--border-2);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--green);
+            word-break: break-all;
+        }
+        .link-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+        .link-row a { color: var(--indigo); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+        .link-row a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<svg class="grain-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1Z" stroke="white" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="white"/></svg>
+            </div>
+            ConvOps
+        </a>
+        <ul class="nav-links">
+            <li><a href="https://app.convops.io/demo">Demo</a></li>
+            <li><a href="https://app.convops.io/roi">ROI</a></li>
+            <li><a href="for-managers.html">For Managers</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="onboarding-guide.html">Setup Guide</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="https://app.convops.io/sign-in" class="btn-ghost">Log in</a>
+            <a href="https://app.convops.io/sign-up" class="btn-primary-sm">Start free</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span>›</span>
+            <span>Approval</span>
+        </div>
+        <h1>How to get ConvOps approved</h1>
+        <p>Copy the pitch below, generate a shareable ROI link for your team size, and forward security reviewers to our one-pager.</p>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="content-prose">
+
+        <h2>Pre-written internal pitch</h2>
+        <p>Copy everything in the box — customize names and paste into Slack or email.</p>
+        <textarea class="pitch-area" id="pitch-text" readonly aria-label="Internal pitch copy">Hey [Manager], I'd like to add ConvOps to our incident response stack. It connects to our CloudWatch alarms and delivers AI-triaged alerts to WhatsApp/Slack — plus a manager dashboard with MTTR tracking, on-call burden reports, and a weekly digest. Cost: $49/month. ROI calculator: https://app.convops.io/roi — Demo: https://app.convops.io/demo — Security review: https://convops.io/security.html — Happy to set up a 15-minute call.</textarea>
+
+        <h2>Generate your ROI link</h2>
+        <p>Enter team size and incidents per month. We pre-fill hourly cost ($100) and MTTR baseline (51 min) so your manager sees an instant estimate.</p>
+        <div class="mini-form">
+            <div>
+                <label for="teamSize">Team size</label>
+                <input type="number" id="teamSize" min="1" max="500" value="4" />
+            </div>
+            <div>
+                <label for="incidents">Incidents / month</label>
+                <input type="number" id="incidents" min="1" max="9999" value="19" />
+            </div>
+            <button type="button" id="genRoi">Generate link</button>
+        </div>
+        <label for="roiOut" style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-3);">Shareable URL</label>
+        <input type="text" class="roi-out" id="roiOut" readonly placeholder="Click Generate link…" />
+
+        <div class="link-row">
+            <a href="security.html">Forward to security team →</a>
+            <a href="https://app.convops.io/demo">See the demo →</a>
+        </div>
+    </div>
+</div>
+
+<footer style="border-top:1px solid var(--border); padding:32px 24px; margin-top:48px;">
+    <div style="max-width:1040px;margin:0 auto;text-align:center;">
+        <p style="font-size:0.82rem;color:var(--text-3);margin:0;">© 2026 ConvOps · <a href="index.html" style="color:var(--text-2);text-decoration:none;">Home</a></p>
+    </div>
+</footer>
+
+<script>
+(function () {
+    var base = 'https://app.convops.io/roi';
+    function gen() {
+        var ts = parseInt(document.getElementById('teamSize').value, 10);
+        var inc = parseInt(document.getElementById('incidents').value, 10);
+        if (isNaN(ts) || ts < 1) ts = 4;
+        if (isNaN(inc) || inc < 1) inc = 10;
+        var url = base + '?teamSize=' + encodeURIComponent(ts) + '&incidents=' + encodeURIComponent(inc) + '&mttr=51&cost=100';
+        document.getElementById('roiOut').value = url;
+        try {
+            document.getElementById('roiOut').select();
+            document.execCommand('copy');
+        } catch (e) {}
+    }
+    document.getElementById('genRoi').addEventListener('click', gen);
+    gen();
+})();
+</script>
+
+</body>
+</html>

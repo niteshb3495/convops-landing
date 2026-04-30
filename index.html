@@ -917,6 +917,40 @@
         /* ── UTILITY ───────────────────────────────────────── */
         .mt-8  { margin-top: 8px; }
         .mt-16 { margin-top: 16px; }
+
+        /* ── For managers / CTO strip ─────────────────────── */
+        .cto-section-inner { max-width: 1040px; margin: 0 auto; }
+        .cto-outcome-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 28px;
+        }
+        .cto-outcome-card {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+        }
+        .cto-outcome-card p {
+            font-size: 0.875rem;
+            color: var(--text-2);
+            margin-bottom: 0;
+            line-height: 1.65;
+        }
+        .cto-outcome-source {
+            font-size: 0.72rem;
+            color: var(--text-3);
+            margin-top: 12px;
+            font-family: var(--mono);
+        }
+        .cto-cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 32px;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -943,6 +977,9 @@
             ConvOps
         </a>
         <ul class="nav-links">
+            <li><a href="https://app.convops.io/demo">Demo</a></li>
+            <li><a href="https://app.convops.io/roi">ROI</a></li>
+            <li><a href="for-managers.html">For Managers</a></li>
             <li><a href="https://convops.io/docs">Docs</a></li>
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="https://convops.io/onboarding-guide">Setup Guide</a></li>
@@ -1446,6 +1483,33 @@
                 <p>Pro is <strong style="color:var(--green);">$49/mo for the first 20 users</strong> — $99 after. Unlimited incidents, actions, and multi-account. Price locks in at pro signup, forever.</p>
                 <a href="#pricing" style="display:inline-block; background:var(--green); color:#000; padding:9px 20px; border-radius:8px; font-size:0.85rem; font-weight:700; text-decoration:none;">Claim early access →</a>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOR MANAGERS / CTO ─────────────────────────────────── -->
+<section class="section" style="border-top:1px solid var(--border);">
+    <div class="cto-section-inner" style="padding: 0 24px;">
+        <div class="section-label">Leadership</div>
+        <h2 class="section-title" style="max-width:640px;">Give your CTO the visibility they've been asking for</h2>
+        <p class="section-sub">Reliability metrics, on-call health, and AI effectiveness — without another enterprise tool.</p>
+        <div class="cto-outcome-grid">
+            <div class="cto-outcome-card">
+                <p><strong style="color:#fff;">MTTR reduced 30–40% with AI-assisted triage.</strong></p>
+                <p class="cto-outcome-source">Source: New Relic 2024</p>
+            </div>
+            <div class="cto-outcome-card">
+                <p><strong style="color:#fff;">After-hours alerts flagged before burnout</strong> — track the 20% threshold.</p>
+                <p class="cto-outcome-source">ConvOps On-Call Burden dashboard</p>
+            </div>
+            <div class="cto-outcome-card">
+                <p><strong style="color:#fff;">One weekly digest</strong> with everything a manager needs.</p>
+                <p class="cto-outcome-source">Email digest — Mondays</p>
+            </div>
+        </div>
+        <div class="cto-cta-row">
+            <a href="https://app.convops.io/demo" class="btn-hero">See the manager dashboard →</a>
+            <a href="https://app.convops.io/roi" class="btn-hero-ghost">Calculate your ROI →</a>
         </div>
     </div>
 </section>
